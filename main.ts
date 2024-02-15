@@ -1,6 +1,8 @@
-/**
- * -----------------------------------
- */
+
+//Project Microbit Link plus LCD (show pin) แยกกลุ่ม
+
+//----------------------------------
+// joystick df
 enum joymove {
     //% blockId="Nostate" block="stop"
     Stop,
@@ -13,6 +15,7 @@ enum joymove {
     //% block="Right"
     Right,
 }
+
 enum dfButton {
     //% block="red"
     P15,
@@ -31,6 +34,7 @@ let enButtonChannels: { [key: number]: DigitalPin } = {
     [dfButton.P14]: DigitalPin.P14,
 
 }
+// joystick ghbit
 enum enRocker {
     //% blockId="Nostate" block="Nostate"
     Nostate = 0,
@@ -45,12 +49,14 @@ enum enRocker {
     //% blockId="Press" block="Press"
     Press
 }
+
 enum enButtonState {
     //% blockId="Press" block="Press"
     Press = 0,
     //% blockId="Realse" block="Realse"
     Realse = 1
 }
+
 enum enButton {
 
     B1 = 0,
@@ -58,6 +64,9 @@ enum enButton {
     B3,
     B4
 }
+
+
+// บล็อกคำสั่งสำหรับควบคุมมอเตอร์
 enum motorChannel {
     //% block="E (P15,P16)"
     E,
@@ -87,6 +96,9 @@ let motorChannels: { [key: number]: DigitalPin } = {
     [motorChannel.G]: DigitalPin.P12,
     [motorChannel.H]: DigitalPin.P1,
 }
+
+//----------------------------------
+//led
 enum lEDChannel {
     //% block="A (P19)"
     A,
@@ -122,6 +134,8 @@ enum lEDShaftonoff {
     HIGH,
 
 }
+//----------------------------------
+//button
 enum buttonChannel {
     //% block="A (P20)"
     A,
@@ -142,6 +156,9 @@ let buttonChannels: { [key: number]: DigitalPin } = {
     [buttonChannel.H]: DigitalPin.P8,
 
 }
+//----------------------------------
+
+//อ่านค่าเซ็นเซอร์
 enum sensorChannel {
     //% block="P1"
     P1,
@@ -170,6 +187,9 @@ let sensorChannels: { [key: number]: DigitalPin } = {
     [sensorChannel.P15]: DigitalPin.P15,
     [sensorChannel.P16]: DigitalPin.P16,
 }
+//----------------------------------
+
+//อ่านค่าเซ็นเซอร์
 enum blackChannel {
     //% block="P1"
     P1,
@@ -198,6 +218,8 @@ let blackChannels: { [key: number]: DigitalPin } = {
     [blackChannel.P15]: DigitalPin.P15,
     [blackChannel.P16]: DigitalPin.P16,
 }
+//----------------------------------
+//servo180
 enum servoChannel {
     //% block="P1"
     P1,
@@ -226,6 +248,8 @@ let servoChannels: { [key: number]: AnalogPin } = {
     [servoChannel.P15]: AnalogPin.P15,
     [servoChannel.P16]: AnalogPin.P16,
 }
+//----------------------------------
+//servoCon
 enum servoconChannel {
     //% block="P1"
     P1,
@@ -269,6 +293,8 @@ let degreesCon: { [key: number]: number } = {
     [svconShaft.Stop]: 90,
 
 }
+//----------------------------------
+//sonar
 enum pingUnit {
     //% block="μs"
     MicroSeconds,
@@ -299,12 +325,15 @@ let echoChanel: { [key: number]: DigitalPin } = {
     [sonarPort.G]: DigitalPin.P12,
     [sonarPort.H]: DigitalPin.P1,
 }
+//MLX90614 IR thermometer
+
 enum mLX90614_TEMPERATURE_ORIGIN {
     //% block="object"
     OBJECT = 0x07,
     //% block="ambient"
     AMBIENT = 0x06,
 }
+// บล็อกคำสั่งสำหรับควบคุมมอเตอร์ 2024/05/1
 enum ggMotorChannel {
     //% block="A (P1,P2)"
     A,
@@ -334,6 +363,7 @@ let ggmotorChannels: { [key: number]: DigitalPin } = {
     [ggMotorChannel.C]: DigitalPin.P14,
     [ggMotorChannel.D]: DigitalPin.P16,
 }
+
 enum gigoMotorChannel {
     //% block="A"
     MotorA = 1,
@@ -387,6 +417,9 @@ let ggechoChanel: { [key: number]: DigitalPin } = {
     [ggsonarPort.C]: DigitalPin.P14,
     [ggsonarPort.D]: DigitalPin.P16,
 }
+
+
+//% weight=0 color=#3CB371 icon="\uf135" block=Gigotools groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
 namespace Gigotools {
 
     ////////////////////////////////
@@ -464,11 +497,11 @@ namespace Gigotools {
     //% group="Motor for workshop"
 
     export function motorControltest(channel: ggMotorChannel, direction: number, speed: number): void {
-        let dirPin2 = ggmotorChannels[channel];
-        let speedPin2 = ggmotorSpeedPins[channel];
+        let dirPin = ggmotorChannels[channel];
+        let speedPin = ggmotorSpeedPins[channel];
 
-        pins.digitalWritePin(dirPin2, direction);
-        pins.analogWritePin(speedPin2, pins.map(speed, 0, 255, 0, 1023));
+        pins.digitalWritePin(dirPin, direction);
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
 
     //% group="Motor for workshop"
@@ -477,11 +510,11 @@ namespace Gigotools {
     //% speed.defl=100
     //% direction.defl=ggMotorShaftDirection.HIGH
     export function motorControl(channel: ggMotorChannel, direction: ggMotorShaftDirection, speed: number): void {
-        let dirPin3 = ggmotorChannels[channel];
-        let speedPin3 = ggmotorSpeedPins[channel];
+        let dirPin = ggmotorChannels[channel];
+        let speedPin = ggmotorSpeedPins[channel];
 
-        pins.digitalWritePin(dirPin3, direction);
-        pins.analogWritePin(speedPin3, pins.map(speed, 0, 255, 0, 1023));
+        pins.digitalWritePin(dirPin, direction);
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
 
     //-------------------------------------------------
@@ -536,12 +569,12 @@ namespace Gigotools {
         pins.digitalWritePin(trig, 0);
 
         // read pulse
-        const e = pins.pulseIn(echo, PulseValue.High, maxCmDistance * 58);
+        const d = pins.pulseIn(echo, PulseValue.High, maxCmDistance * 58);
 
         switch (unit) {
-            case pingUnit.Centimeters: return Math.idiv(e, 58);
-            case pingUnit.Inches: return Math.idiv(e, 148);
-            default: return e;
+            case pingUnit.Centimeters: return Math.idiv(d, 58);
+            case pingUnit.Inches: return Math.idiv(d, 148);
+            default: return d;
         }
     }
     ////////////////////////////////
@@ -667,11 +700,11 @@ namespace Gigotools {
 
             pixeloffset = (pixeloffset + this.start) * 3;
 
-            let red2 = unpackR(rgb);
-            let green2 = unpackG(rgb);
-            let blue2 = unpackB(rgb);
+            let red = unpackR(rgb);
+            let green = unpackG(rgb);
+            let blue = unpackB(rgb);
 
-            this.setBufferRGB(pixeloffset, red2, green2, blue2)
+            this.setBufferRGB(pixeloffset, red, green, blue)
         }
     }
 
@@ -772,18 +805,18 @@ namespace Gigotools {
     }
     //Separates red value from combined number
     function unpackR(rgb: number): number {
-        let s = (rgb >> 16) & 0xFF;
-        return s;
+        let r = (rgb >> 16) & 0xFF;
+        return r;
     }
     //Separates green value from combined number
     function unpackG(rgb: number): number {
-        let h = (rgb >> 8) & 0xFF;
-        return h;
+        let g = (rgb >> 8) & 0xFF;
+        return g;
     }
     //Separates blue value from combined number
     function unpackB(rgb: number): number {
-        let c = (rgb) & 0xFF;
-        return c;
+        let b = (rgb) & 0xFF;
+        return b;
     }
 
     /**
@@ -797,32 +830,32 @@ namespace Gigotools {
         h = h % 360;
         s = Math.clamp(0, 99, s);
         l = Math.clamp(0, 99, l);
-        let f = Math.idiv((((100 - Math.abs(2 * l - 100)) * s) << 8), 10000); //chroma, [0,255]
+        let c = Math.idiv((((100 - Math.abs(2 * l - 100)) * s) << 8), 10000); //chroma, [0,255]
         let h1 = Math.idiv(h, 60);//[0,6]
         let h2 = Math.idiv((h - h1 * 60) * 256, 60);//[0,255]
         let temp = Math.abs((((h1 % 2) << 8) + h2) - 256);
-        let x = (f * (256 - (temp))) >> 8;//[0,255], second largest component of this color
+        let x = (c * (256 - (temp))) >> 8;//[0,255], second largest component of this color
         let r$: number;
         let g$: number;
         let b$: number;
         if (h1 == 0) {
-            r$ = f; g$ = x; b$ = 0;
+            r$ = c; g$ = x; b$ = 0;
         } else if (h1 == 1) {
-            r$ = x; g$ = f; b$ = 0;
+            r$ = x; g$ = c; b$ = 0;
         } else if (h1 == 2) {
-            r$ = 0; g$ = f; b$ = x;
+            r$ = 0; g$ = c; b$ = x;
         } else if (h1 == 3) {
-            r$ = 0; g$ = x; b$ = f;
+            r$ = 0; g$ = x; b$ = c;
         } else if (h1 == 4) {
-            r$ = x; g$ = 0; b$ = f;
+            r$ = x; g$ = 0; b$ = c;
         } else if (h1 == 5) {
-            r$ = f; g$ = 0; b$ = x;
+            r$ = c; g$ = 0; b$ = x;
         }
-        let m = Math.idiv((Math.idiv((l * 2 << 8), 100) - f), 2);
-        let t = r$ + m;
-        let j = g$ + m;
-        let k = b$ + m;
-        return packRGB(t, j, k);
+        let m = Math.idiv((Math.idiv((l * 2 << 8), 100) - c), 2);
+        let r = r$ + m;
+        let g = g$ + m;
+        let b = b$ + m;
+        return packRGB(r, g, b);
     }
 
     /**
@@ -888,22 +921,22 @@ namespace Gigotools {
         pins.i2cWriteNumber(41, 179, NumberFormat.Int8LE, false)
 
         pins.i2cWriteNumber(41, 182, NumberFormat.Int8LE, true)
-        let TCS_RED2 = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
+        let TCS_RED = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
         pins.i2cWriteNumber(41, 184, NumberFormat.Int8LE, true)
-        let TCS_GREEN2 = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
+        let TCS_GREEN = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
         pins.i2cWriteNumber(41, 186, NumberFormat.Int8LE, true)
-        let TCS_BLUE2 = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
+        let TCS_BLUE = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
 
         let RdCl = 0
         switch (channel) {
             case 1:
-                RdCl = Math.round(Math.map(TCS_RED2, 0, 65535, 0, 255))
+                RdCl = Math.round(Math.map(TCS_RED, 0, 65535, 0, 255))
                 break;
             case 2:
-                RdCl = Math.round(Math.map(TCS_GREEN2, 0, 65535, 0, 255))
+                RdCl = Math.round(Math.map(TCS_GREEN, 0, 65535, 0, 255))
                 break;
             case 3:
-                RdCl = Math.round(Math.map(TCS_BLUE2, 0, 65535, 0, 255))
+                RdCl = Math.round(Math.map(TCS_BLUE, 0, 65535, 0, 255))
                 break;
         }
 
@@ -947,38 +980,38 @@ namespace Gigotools {
         pins.i2cWriteNumber(41, 179, NumberFormat.Int8LE, false)
 
         pins.i2cWriteNumber(41, 182, NumberFormat.Int8LE, true)
-        let TCS_RED3 = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
+        let TCS_RED = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
         pins.i2cWriteNumber(41, 184, NumberFormat.Int8LE, true)
-        let TCS_GREEN3 = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
+        let TCS_GREEN = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
         pins.i2cWriteNumber(41, 186, NumberFormat.Int8LE, true)
-        let TCS_BLUE3 = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
-        TCS_RED3 = Math.round(Math.map(TCS_RED3, 0, 65535, 0, 255))
-        TCS_GREEN3 = Math.round(Math.map(TCS_GREEN3, 0, 65535, 0, 255))
-        TCS_BLUE3 = Math.round(Math.map(TCS_BLUE3, 0, 65535, 0, 255))
+        let TCS_BLUE = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
+        TCS_RED = Math.round(Math.map(TCS_RED, 0, 65535, 0, 255))
+        TCS_GREEN = Math.round(Math.map(TCS_GREEN, 0, 65535, 0, 255))
+        TCS_BLUE = Math.round(Math.map(TCS_BLUE, 0, 65535, 0, 255))
         switch (colorpart) {
             case 1:
-                ReadRedColor = [TCS_RED3, TCS_GREEN3, TCS_BLUE3]
+                ReadRedColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
                 break;
             case 2:
-                ReadGreenColor = [TCS_RED3, TCS_GREEN3, TCS_BLUE3]
+                ReadGreenColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
                 break;
             case 3:
-                ReadBlueColor = [TCS_RED3, TCS_GREEN3, TCS_BLUE3]
+                ReadBlueColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
                 break;
             case 4:
-                ReadYellowColor = [TCS_RED3, TCS_GREEN3, TCS_BLUE3]
+                ReadYellowColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
                 break;
             case 5:
-                ReadPurpleColor = [TCS_RED3, TCS_GREEN3, TCS_BLUE3]
+                ReadPurpleColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
                 break;
             case 6:
-                ReadCustom1Color = [TCS_RED3, TCS_GREEN3, TCS_BLUE3]
+                ReadCustom1Color = [TCS_RED, TCS_GREEN, TCS_BLUE]
                 break;
             case 7:
-                ReadCustom2Color = [TCS_RED3, TCS_GREEN3, TCS_BLUE3]
+                ReadCustom2Color = [TCS_RED, TCS_GREEN, TCS_BLUE]
                 break;
             case 8:
-                ReadCustom3Color = [TCS_RED3, TCS_GREEN3, TCS_BLUE3]
+                ReadCustom3Color = [TCS_RED, TCS_GREEN, TCS_BLUE]
                 break;
         }
     }
@@ -1108,6 +1141,11 @@ namespace Gigotools {
     }
 
 }
+
+
+
+//----------------------------------
+//% color=#E7734B icon="\uf021" 
 namespace Command {
 
     //% block color=#007ACC
@@ -1141,13 +1179,14 @@ namespace Command {
         // pad data to the 32 byte boundary
         // to ensure apps receive the packet
         if (writeLinePadding > 0) {
-            let u = (writeLinePadding - (text.length + NEW_LINE.length) % writeLinePadding) % writeLinePadding;
-            for (let l = 0; l < u; ++l)
+            let r = (writeLinePadding - (text.length + NEW_LINE.length) % writeLinePadding) % writeLinePadding;
+            for (let i = 0; i < r; ++i)
                 serial.writeString(" ");
         }
         serial.writeString(NEW_LINE);
     }
 }
+//% color=#E7734B icon="\uf2db"
 namespace Sensor {
 
     //% color=#000000
@@ -1164,10 +1203,10 @@ namespace Sensor {
     //% block="Analog Sensor $pin (0-1023) "
     //% group="Read Sensor"
     export function lightSensor(pin: sensorChannel): number {
-        let read2 = servoconChannels[pin];
-        let reading2 = pins.analogReadPin(read2);
+        let read = servoconChannels[pin];
+        let reading = pins.analogReadPin(read);
         //let mappin = pins.map(reading, 0, 1023, 0, 10); // แปลงค่าจาก 0-1023 เป็น 0-10
-        return Math.round(reading2);
+        return Math.round(reading);
     }
 
     //% color=#000000    
@@ -1175,16 +1214,16 @@ namespace Sensor {
     //% block="Digital Sensor $pin (0-1)"
     //% group="Read Sensor"
     export function Sensor(pin: sensorChannel): number {
-        let read3 = sensorChannels[pin];
-        let reading3 = pins.digitalReadPin(read3);
-        return (reading3);
+        let read = sensorChannels[pin];
+        let reading = pins.digitalReadPin(read);
+        return (reading);
     }
 
 
     function signal_dht11(pin: DigitalPin): void {
         pins.digitalWritePin(pin, 0);
         basic.pause(18);
-        let n = pins.digitalReadPin(pin);
+        let i = pins.digitalReadPin(pin);
         pins.setPull(pin, PinPullMode.PullUp);
     }
 
@@ -1194,16 +1233,16 @@ namespace Sensor {
     //% block="Track Line $pin Black Color"
     //% group="Logic Sensor"
     export function isblack(pin: blackChannel): boolean {
-        let read4 = blackChannels[pin];
-        return pins.digitalReadPin(read4) == 1;
+        let read = blackChannels[pin];
+        return pins.digitalReadPin(read) == 1;
     }
     //% color=#636262
     //สำหรับ Track Line
     //% block="Track Line $pin Not Black"
     //% group="Logic Sensor"
     export function notblack(pin: blackChannel): boolean {
-        let read5 = blackChannels[pin];
-        return pins.digitalReadPin(read5) == 0;
+        let read = blackChannels[pin];
+        return pins.digitalReadPin(read) == 0;
     }
 
 
@@ -1213,8 +1252,8 @@ namespace Sensor {
     //% group="Logic Sensor"
     export function isButtonPressed(pin: buttonChannel): boolean {
         pins.setPull(buttonChannels[pin], PinPullMode.PullUp);
-        let read6 = buttonChannels[pin];
-        return pins.digitalReadPin(read6) == 0;
+        let read = buttonChannels[pin];
+        return pins.digitalReadPin(read) == 0;
     }
 
 
@@ -1234,14 +1273,14 @@ namespace Sensor {
         let value = 0;
         let counter = 0;
 
-        for (let o = 0; o <= 32 - 1; o++) {
+        for (let i = 0; i <= 32 - 1; i++) {
             while (pins.digitalReadPin(pin) == 0);
             counter = 0
             while (pins.digitalReadPin(pin) == 1) {
                 counter += 1;
             }
             if (counter > 4) {
-                value = value + (1 << (31 - o));
+                value = value + (1 << (31 - i));
             }
         }
         return value;
@@ -1288,8 +1327,8 @@ namespace Sensor {
     //% weight=80 blockGap=8
     //% group="MLX90614 IR thermometer"
     export function temperature(temperature_origin: mLX90614_TEMPERATURE_ORIGIN): number {
-        let v = read_reg_uint16(temperature_origin);
-        return v * 0.02 - 273.15;
+        let t = read_reg_uint16(temperature_origin);
+        return t * 0.02 - 273.15;
     }
 
     //% color=#76dbb1
@@ -1298,23 +1337,23 @@ namespace Sensor {
     //% group="ect"
     //% unit.defl=PingUnit.Centimeters
     export function ping(channel: sonarPort, unit: pingUnit, maxCmDistance = 500): number {
-        let trig2 = trigChanel[channel];
-        let echo2 = echoChanel[channel];
+        let trig = trigChanel[channel];
+        let echo = echoChanel[channel];
         // send pulse
-        pins.setPull(trig2, PinPullMode.PullNone);
-        pins.digitalWritePin(trig2, 0);
+        pins.setPull(trig, PinPullMode.PullNone);
+        pins.digitalWritePin(trig, 0);
         control.waitMicros(2);
-        pins.digitalWritePin(trig2, 1);
+        pins.digitalWritePin(trig, 1);
         control.waitMicros(10);
-        pins.digitalWritePin(trig2, 0);
+        pins.digitalWritePin(trig, 0);
 
         // read pulse
-        const p = pins.pulseIn(echo2, PulseValue.High, maxCmDistance * 58);
+        const d = pins.pulseIn(echo, PulseValue.High, maxCmDistance * 58);
 
         switch (unit) {
-            case pingUnit.Centimeters: return Math.idiv(p, 58);
-            case pingUnit.Inches: return Math.idiv(p, 148);
-            default: return p;
+            case pingUnit.Centimeters: return Math.idiv(d, 58);
+            case pingUnit.Inches: return Math.idiv(d, 148);
+            default: return d;
         }
     }
 
@@ -1336,12 +1375,12 @@ namespace Sensor {
         pins.digitalWritePin(trig, 0);
 
         // read pulse
-        const q = pins.pulseIn(echo, PulseValue.High, maxCmDistance * 58);
+        const d = pins.pulseIn(echo, PulseValue.High, maxCmDistance * 58);
 
         switch (unit) {
-            case pingUnit.Centimeters: return q / 58;
-            case pingUnit.Inches: return q / 148;
-            default: return q;
+            case pingUnit.Centimeters: return d / 58;
+            case pingUnit.Inches: return d / 148;
+            default: return d;
         }
     }
     //% group="ect"
@@ -1351,14 +1390,19 @@ namespace Sensor {
     //% block="motion detector at pin %p"    
 
     export function PIR(p: sensorChannel): boolean {
-        let w = sensorChannels[p];
-        let a: number = pins.digitalReadPin(w);
+        let b = sensorChannels[p];
+        let a: number = pins.digitalReadPin(b);
         if (a == 1) {
             return true;
         } else return false;
     }
 
 }
+
+
+
+//% color=#E7734B icon="\uf48b"
+//% groups="['Motor','Servo','Led', 'Read Sensor','MLX90614 IR thermometer','Logic Sensor','I2C LCD 1602']"
 namespace Motor {
 
     //สำหรับ motor
@@ -1368,11 +1412,11 @@ namespace Motor {
     //% block="Stop Motor $channel"
     //% group="Motor"
     export function motorStop(channel: motorChannel): void {
-        let dirPin4 = motorChannels[channel];
-        let speedPin4 = motorSpeedPins[channel];
+        let dirPin = motorChannels[channel];
+        let speedPin = motorSpeedPins[channel];
 
-        pins.digitalWritePin(dirPin4, 0);
-        pins.analogWritePin(speedPin4, 0);
+        pins.digitalWritePin(dirPin, 0);
+        pins.analogWritePin(speedPin, 0);
     }
 
     //% color=#E7734B
@@ -1383,11 +1427,11 @@ namespace Motor {
     //% group="Motor"
     //% color=#E7734B
     export function motorControltest(channel: motorChannel, direction: number, speed: number): void {
-        let dirPin5 = motorChannels[channel];
-        let speedPin5 = motorSpeedPins[channel];
+        let dirPin = motorChannels[channel];
+        let speedPin = motorSpeedPins[channel];
 
-        pins.digitalWritePin(dirPin5, direction);
-        pins.analogWritePin(speedPin5, pins.map(speed, 0, 255, 0, 1023));
+        pins.digitalWritePin(dirPin, direction);
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
 
     //% color=#E7734B
@@ -1398,11 +1442,11 @@ namespace Motor {
     //% group="Motor"
     //% color=#E7734B
     export function motorControl(channel: motorChannel, direction: motorShaftDirection, speed: number): void {
-        let dirPin6 = motorChannels[channel];
-        let speedPin6 = motorSpeedPins[channel];
+        let dirPin = motorChannels[channel];
+        let speedPin = motorSpeedPins[channel];
 
-        pins.digitalWritePin(dirPin6, direction);
-        pins.analogWritePin(speedPin6, pins.map(speed, 0, 255, 0, 1023));
+        pins.digitalWritePin(dirPin, direction);
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
     //% color=#E84E19
     //สำหรับ servo180
@@ -1426,6 +1470,7 @@ namespace Motor {
 
     }
 }
+//% weight=5 color=#E7734B icon="\uf110"
 namespace GigoLED {
     //% color=#FACB09
     //สำหรับ Led
@@ -1447,9 +1492,9 @@ namespace GigoLED {
     //% leds.defl=lEDChannel.D
     //% group="Led"
     export function led(leds: lEDChannel, Status: lEDShaftonoff): void {
-        let ledg2 = lEDChannels[leds];
+        let ledg = lEDChannels[leds];
 
-        pins.digitalWritePin(ledg2, Status);
+        pins.digitalWritePin(ledg, Status);
 
     }
     //% color=#FACB09
@@ -1466,12 +1511,14 @@ namespace GigoLED {
 
         }
         else {
-            let pinled2 = lEDChannels[pin];
-            pins.digitalWritePin(pinled2, 0);
+            let pinled = lEDChannels[pin];
+            pins.digitalWritePin(pinled, 0);
 
         }
     }
 }
+
+//% color=#E7734B icon="\uf26c"
 namespace LCD1602 {
     //LCD i2c
 
@@ -1511,29 +1558,29 @@ namespace LCD1602 {
 
     // auto get LCD address
     function AutoAddr() {
-        let k2 = true
+        let k = true
         let addr = 0x20
         let d1 = 0, d2 = 0
-        while (k2 && (addr < 0x28)) {
+        while (k && (addr < 0x28)) {
             pins.i2cWriteNumber(addr, -1, NumberFormat.Int32LE)
             d1 = pins.i2cReadNumber(addr, NumberFormat.Int8LE) % 16
             pins.i2cWriteNumber(addr, 0, NumberFormat.Int16LE)
             d2 = pins.i2cReadNumber(addr, NumberFormat.Int8LE)
-            if ((d1 == 7) && (d2 == 0)) k2 = false
+            if ((d1 == 7) && (d2 == 0)) k = false
             else addr += 1
         }
-        if (!k2) return addr
+        if (!k) return addr
 
         addr = 0x38
-        while (k2 && (addr < 0x40)) {
+        while (k && (addr < 0x40)) {
             pins.i2cWriteNumber(addr, -1, NumberFormat.Int32LE)
             d1 = pins.i2cReadNumber(addr, NumberFormat.Int8LE) % 16
             pins.i2cWriteNumber(addr, 0, NumberFormat.Int16LE)
             d2 = pins.i2cReadNumber(addr, NumberFormat.Int8LE)
-            if ((d1 == 7) && (d2 == 0)) k2 = false
+            if ((d1 == 7) && (d2 == 0)) k = false
             else addr += 1
         }
-        if (!k2) return addr
+        if (!k) return addr
         else return 0
 
     }
@@ -1569,8 +1616,8 @@ namespace LCD1602 {
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
     export function ShowNumber(n: number, x: number, y: number): void {
-        let s2 = n.toString()
-        ShowString(s2, x, y)
+        let s = n.toString()
+        ShowString(s, x, y)
     }
 
     //% color=#045F14
@@ -1581,17 +1628,17 @@ namespace LCD1602 {
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
     export function ShowString(s: string, x: number, y: number): void {
-        let a2: number
+        let a: number
 
         if (y > 0)
-            a2 = 0xC0
+            a = 0xC0
         else
-            a2 = 0x80
-        a2 += x
-        cmd(a2)
+            a = 0x80
+        a += x
+        cmd(a)
 
-        for (let i2 = 0; i2 < s.length; i2++) {
-            dat(s.charCodeAt(i2))
+        for (let i = 0; i < s.length; i++) {
+            dat(s.charCodeAt(i))
         }
     }
 
@@ -1645,6 +1692,9 @@ namespace LCD1602 {
 
 
 }
+
+
+//% color=#E7734B icon="\uf11b"
 namespace joystick {
 
     //% group="DFrobot"
@@ -1652,30 +1702,30 @@ namespace joystick {
     //% block="Button %pin is pressed"
     export function joystickbuttonpressed(pin: dfButton): boolean {
         pins.setPull(enButtonChannels[pin], PinPullMode.PullUp);
-        let read7 = enButtonChannels[pin];
-        return pins.digitalReadPin(read7) == 0;
+        let read = enButtonChannels[pin];
+        return pins.digitalReadPin(read) == 0;
     }
     //% color=#383838
     //% block="joystick is pressed"
     //% group="DFrobot"
     export function joypressed(): boolean {
         pins.setPull(DigitalPin.P8, PinPullMode.PullUp);
-        let read8 = DigitalPin.P8;
-        return pins.digitalReadPin(read8) == 0;
+        let read = DigitalPin.P8;
+        return pins.digitalReadPin(read) == 0;
     }
     //% color=#383838
     //% block="joystick is %pin"
     //% group="DFrobot"
     export function joystickmove(pin: joymove): boolean {
-        let x2 = pins.analogReadPin(AnalogPin.P1);
+        let x = pins.analogReadPin(AnalogPin.P1);
         let y = pins.analogReadPin(AnalogPin.P2);
         let now_state = joymove.Stop;
-        if (x2 < 300) {
+        if (x < 300) {
 
             now_state = joymove.Left;
 
         }
-        else if (x2 > 600) {
+        else if (x > 600) {
 
             now_state = joymove.Right;
         }
@@ -1705,36 +1755,36 @@ namespace joystick {
     export function Rocker(value: enRocker): boolean {
 
         pins.setPull(DigitalPin.P8, PinPullMode.PullUp);
-        let x3 = pins.analogReadPin(AnalogPin.P1);
-        let y2 = pins.analogReadPin(AnalogPin.P2);
+        let x = pins.analogReadPin(AnalogPin.P1);
+        let y = pins.analogReadPin(AnalogPin.P2);
         let z = pins.digitalReadPin(DigitalPin.P8);
-        let now_state2 = enRocker.Nostate;
+        let now_state = enRocker.Nostate;
 
-        if (x3 < 200) // 上
+        if (x < 200) // 上
         {
 
-            now_state2 = enRocker.Up;
+            now_state = enRocker.Up;
 
         }
-        else if (x3 > 730) //下 900 -> 730
+        else if (x > 730) //下 900 -> 730
         {
 
-            now_state2 = enRocker.Down;
+            now_state = enRocker.Down;
         }
         else  // 左右
         {
-            if (y2 < 200) //右
+            if (y < 200) //右
             {
-                now_state2 = enRocker.Right;
+                now_state = enRocker.Right;
             }
-            else if (y2 > 730) //左 900 -> 730
+            else if (y > 730) //左 900 -> 730
             {
-                now_state2 = enRocker.Left;
+                now_state = enRocker.Left;
             }
         }
         if (z == 0)
-            now_state2 = enRocker.Press;
-        if (now_state2 == value)
+            now_state = enRocker.Press;
+        if (now_state == value)
             return true;
         else
             return false;
@@ -1747,52 +1797,55 @@ namespace joystick {
     //% color="#C814B8"
     //% name.fieldEditor="gridpicker" name.fieldOptions.columns=5
     export function Button(num: enButton, value: enButtonState): boolean {
-        let temp2 = false;
+        let temp = false;
         switch (num) {
             case enButton.B1: {
                 pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
                 if (pins.digitalReadPin(DigitalPin.P13) == value) {
-                    temp2 = true;
+                    temp = true;
                 }
                 else {
-                    temp2 = false;
+                    temp = false;
                 }
                 break;
             }
             case enButton.B2: {
                 pins.setPull(DigitalPin.P14, PinPullMode.PullUp);
                 if (pins.digitalReadPin(DigitalPin.P14) == value) {
-                    temp2 = true;
+                    temp = true;
                 }
                 else {
-                    temp2 = false;
+                    temp = false;
                 }
                 break;
             }
             case enButton.B3: {
                 pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
                 if (pins.digitalReadPin(DigitalPin.P15) == value) {
-                    temp2 = true;
+                    temp = true;
                 }
                 else {
-                    temp2 = false;
+                    temp = false;
                 }
                 break;
             }
             case enButton.B4: {
                 pins.setPull(DigitalPin.P16, PinPullMode.PullUp);
                 if (pins.digitalReadPin(DigitalPin.P16) == value) {
-                    temp2 = true;
+                    temp = true;
                 }
                 else {
-                    temp2 = false;
+                    temp = false;
                 }
                 break;
             }
         }
-        return temp2;
+        return temp;
     }
 
 
 
 }
+
+
+//-----------------------------------
