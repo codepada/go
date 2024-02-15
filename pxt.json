@@ -1,6 +1,6 @@
 {
     "name": "Pada Education ",
-    "description": "",
+    "description": "Blocks provided by Pada Education",
     "dependencies": {
         "core": "*",
         "radio": "*",
