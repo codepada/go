@@ -1,24 +1,15 @@
+# Pada Education
 
-> Open this page at [https://codepada.github.io/go/](https://codepada.github.io/go/)
 
-## Use as Extension
+Blocks provided by Pada Education
 
-This repository can be added as an **extension** in MakeCode.
+## License
 
-* open [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* click on **New Project**
-* click on **Extensions** under the gearwheel menu
-* search for **https://github.com/codepada/go** and import
+* MIT
 
-## Edit this project
+## Supported targets
+For microbit
 
-To edit this repository in MakeCode.
-
-* open [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* click on **Import** then click on **Import URL**
-* paste **https://github.com/codepada/go** and click import
-
-#### Metadata (used for search, rendering)
-
-* for PXT/microbit
-<script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script>
+```package
+Pada Education=github.com/codepada/go
+```
