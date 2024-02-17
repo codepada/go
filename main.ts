@@ -501,7 +501,7 @@ namespace Gigotools {
     }
 
     //% group="motor for workshop"
-    //% block="Motor $channel direction $direction speed $speed"
+    //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
     //% direction.defl=ggMotorShaftDirection.HIGH
