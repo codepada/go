@@ -493,7 +493,7 @@ namespace Gigotools {
     
     
     //% direction.defl=ggMotorShaftDirection.HIGH
-    //% block="stop Motor $channel"
+    //% block="stop motor $channel"
     //% group="Motor for workshop"
     export function motorStop2(channel: ggMotorChannel): void {
         let dirPin = ggmotorChannels[channel];
@@ -1398,7 +1398,7 @@ namespace Sensor {
 namespace Motor {
     //% color=#E7734B
     //% direction.defl=motorShaftDirection.HIGH
-    //% block="stop Motor $channel"
+    //% block="stop motor $channel"
     //% group="Motor"
     export function motorStop1(channel: motorChannel): void {
         let dirPin = motorChannels[channel];
