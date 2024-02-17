@@ -432,6 +432,47 @@ namespace Gigotools {
     I2C(20,19)
     */
 
+    //-------------------------------------------------
+
+
+    //% direction.defl=ggMotorShaftDirection.HIGH
+    //% blockId=motorStop2 block="stop Motor $channel"
+    //% group="Motor for workshop"
+    export function motorStop2(channel: ggMotorChannel): void {
+        let dirPin = ggmotorChannels[channel];
+        let speedPin = ggmotorSpeedPins[channel];
+
+        pins.digitalWritePin(dirPin, 0);
+        pins.analogWritePin(speedPin, 0);
+    }
+
+
+    //% blockId=motorControl3 block="motor $channel direction $direction speed $speed"
+    //% speed.min=0 speed.max=255
+    //% speed.defl=100
+    //% direction.min=0 direction.max=1
+    //% group="Motor for workshop"
+    export function motorControl3(channel: ggMotorChannel, direction: number, speed: number): void {
+        let dirPin = ggmotorChannels[channel];
+        let speedPin = ggmotorSpeedPins[channel];
+
+        pins.digitalWritePin(dirPin, direction);
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
+    }
+    //% group="motor for workshop"
+    //% blockId=motorControl4 block="motor $channel direction $direction speed $speed"
+    //% speed.min=0 speed.max=255
+    //% speed.defl=100
+    //% direction.defl=ggMotorShaftDirection.HIGH
+
+    export function motorControl4(channel: ggMotorChannel, direction: ggMotorShaftDirection, speed: number): void {
+        let dirPin = ggmotorChannels[channel];
+        let speedPin = ggmotorSpeedPins[channel];
+
+        pins.digitalWritePin(dirPin, direction);
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
+    }
+
     //% blockId=DDMmotor2 block="motor channel %MotorPin|speed (0~100) %MSpeedValue|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
     //% McontrolValue.min=0 McontrolValue.max=1 
     //% MSpeedValue.min=0 MSpeedValue.max=100   
@@ -472,45 +513,7 @@ namespace Gigotools {
         pins.digitalWritePin(McontrolPin, pins.map(McontrolValue, 0, 1, 0, 1));
 
     }
-    //-------------------------------------------------
-    
 
-    //% direction.defl=ggMotorShaftDirection.HIGH
-    //% blockId=motorStop2 block="stop Motor $channel"
-    //% group="Motor for workshop"
-    export function motorStop2(channel: ggMotorChannel): void {
-        let dirPin = ggmotorChannels[channel];
-        let speedPin = ggmotorSpeedPins[channel];
-
-        pins.digitalWritePin(dirPin, 0);
-        pins.analogWritePin(speedPin, 0);
-    }
-    
-
-    //% blockId=motorControl3 block="motor $channel direction $direction speed $speed"
-    //% speed.min=0 speed.max=255
-    //% speed.defl=100
-    //% direction.min=0 direction.max=1
-    //% group="Motor for workshop"
-    export function motorControl3(channel: ggMotorChannel, direction: number, speed: number): void {
-        let dirPin = ggmotorChannels[channel];
-        let speedPin = ggmotorSpeedPins[channel];
-
-        pins.digitalWritePin(dirPin, direction);
-        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
-    }
-    //% blockId=motorControl4 block="motor $channel direction $direction speed $speed"
-    //% speed.min=0 speed.max=255
-    //% speed.defl=100
-    //% direction.defl=ggMotorShaftDirection.HIGH
-    //% group="motor for workshop"
-    export function motorControl4(channel: ggMotorChannel, direction: ggMotorShaftDirection, speed: number): void {
-        let dirPin = ggmotorChannels[channel];
-        let speedPin = ggmotorSpeedPins[channel];
-
-        pins.digitalWritePin(dirPin, direction);
-        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
-    }
     
 
 
