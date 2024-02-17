@@ -1495,7 +1495,7 @@ namespace GigoLED {
     }
     //% color=#FACB09
     //toggle led
-    //% blockId=led block="LED %pin $ledstate"
+    //% blockId=led block="lED %pin $ledstate"
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
     //% pin.defl=lEDChannel.D
@@ -1583,7 +1583,7 @@ namespace LCD1602 {
 
 
     //% color=#045F14
-    //% blockId="i2c_LCD1620_SET_ADDRESS" block="LCD (A) Address %addr"
+    //% blockId="i2c_LCD1620_SET_ADDRESS" block="lcd (A) Address %addr"
     //% weight=100 blockGap=8
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
@@ -1639,7 +1639,7 @@ namespace LCD1602 {
     }
 
     //% color=#045F14
-    //% blockId="i2c_LCD1620_ON" block="LCD on"
+    //% blockId="i2c_LCD1620_ON" block="lcd on"
     //% weight=81 blockGap=8
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
@@ -1648,7 +1648,7 @@ namespace LCD1602 {
     }
 
     //% color=#045F14
-    //% blockId="i2c_LCD1620_OFF" block="LCD off"
+    //% blockId="i2c_LCD1620_OFF" block="lcd off"
     //% weight=80 blockGap=8
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
@@ -1743,7 +1743,7 @@ namespace joystick {
 
     //---------------------------------------------------
     //% group="GHBit"
-    //% blockId=ghBit_Rocker block="Rocker|value %value"
+    //% blockId=ghBit_Rocker block="rocker|value %value"
     //% weight=96
     //% blockGap=10
     //% color="#C814B8"
@@ -1787,7 +1787,7 @@ namespace joystick {
 
     }
     //% group="GHBit"
-    //% blockId=ghBit_Button block="Button| %num|value %value"
+    //% blockId=ghBit_Button block="button| %num|value %value"
     //% weight=95
     //% blockGap=10
     //% color="#C814B8"
