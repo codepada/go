@@ -1195,7 +1195,6 @@ namespace Sensor {
         return (reading);
     }
     //% color=#000000    
-    //สำหรับ sensor
     //% block="analog Sensor $pin (0-1023) "
     //% group="Read Sensor"
     export function lightSensor(pin: sensorChannel): number {
@@ -1206,7 +1205,6 @@ namespace Sensor {
     }
 
     //% color=#000000    
-    //สำหรับ sensor
     //% block="digital Sensor $pin (0-1)"
     //% group="Read Sensor"
     export function Sensor(pin: sensorChannel): number {
@@ -1225,7 +1223,6 @@ namespace Sensor {
 
 
     //% color=#383838
-    //สำหรับ Track Line
     //% block="track Line $pin Black Color"
     //% group="Logic Sensor"
     export function isblack(pin: blackChannel): boolean {
@@ -1233,7 +1230,6 @@ namespace Sensor {
         return pins.digitalReadPin(read) == 1;
     }
     //% color=#636262
-    //สำหรับ Track Line
     //% block="track Line $pin Not Black"
     //% group="Logic Sensor"
     export function notblack(pin: blackChannel): boolean {
@@ -1243,7 +1239,6 @@ namespace Sensor {
 
 
     //% color=#3D3430    
-    //สำหรับ buttonpress
     //% block="on button $pin pressed"
     //% group="Logic Sensor"
     export function isButtonPressed(pin: buttonChannel): boolean {
@@ -1380,7 +1375,6 @@ namespace Sensor {
         }
     }
     //% group="ect"
-    //สำหรับ motion PIR3pin
     //% color=#76dbb1
     //% blockId=octopus_pir weight=80 blockGap=30
     //% block="motion detector at pin %p"    
@@ -1400,9 +1394,6 @@ namespace Sensor {
 //% color=#E7734B icon="\uf48b"
 //% groups="['Motor','Servo','Led', 'Read Sensor','MLX90614 IR thermometer','Logic Sensor','I2C LCD 1602']"
 namespace Motor {
-
-    //สำหรับ motor
-
     //% color=#E7734B
     //% direction.defl=motorShaftDirection.HIGH
     //% block="stop Motor $channel"
@@ -1445,7 +1436,6 @@ namespace Motor {
         pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
     //% color=#E84E19
-    //สำหรับ servo180
     //% block"servo180 $pinSmini degrees $degrees"
     //% degrees.min=20 degrees.max=160
     //% degrees.defl=90
@@ -1456,7 +1446,6 @@ namespace Motor {
 
     }
     //% color=#E84E19
-    //สำหรับ servocon
     //% block"continuous Servo $pinSV direction $direction"
     //% direction.defl=90
     //% group="Servo"
@@ -1469,7 +1458,6 @@ namespace Motor {
 //% weight=5 color=#E7734B icon="\uf110"
 namespace GigoLED {
     //% color=#FACB09
-    //สำหรับ Led
     //% block="led $leds Status $Status"
     //% Status.min=0 Status.max=1
     //% leds.defl=lEDChannel.D
@@ -1482,7 +1470,6 @@ namespace GigoLED {
     }
 
     //% color=#FACB09
-    //สำหรับ Led
     //% block="led $leds Status $Status"
     //% Status.defl=lEDShaftonoff.HIGH*
     //% leds.defl=lEDChannel.D
@@ -1495,7 +1482,7 @@ namespace GigoLED {
     }
     //% color=#FACB09
     //toggle led
-    //% blockId=led block="lED %pin $ledstate"
+    //% blockId=led block="led %pin $ledstate"
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
     //% pin.defl=lEDChannel.D
