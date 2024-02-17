@@ -431,6 +431,7 @@ namespace Gigotools {
     D(16,0)
     I2C(20,19)
     */
+
     //% blockId=DDMmotor2 block="motor channel %MotorPin|speed (0~100) %MSpeedValue|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
     //% McontrolValue.min=0 McontrolValue.max=1 
     //% MSpeedValue.min=0 MSpeedValue.max=100   
@@ -477,7 +478,7 @@ namespace Gigotools {
     //% direction.defl=ggMotorShaftDirection.HIGH
     //% block="stop Motor $channel"
     //% group="Motor for workshop"
-    export function motorStop(channel: ggMotorChannel): void {
+    export function motorStop2(channel: ggMotorChannel): void {
         let dirPin = ggmotorChannels[channel];
         let speedPin = ggmotorSpeedPins[channel];
 
@@ -491,7 +492,7 @@ namespace Gigotools {
     //% speed.defl=100
     //% direction.min=0 direction.max=1
     //% group="Motor for workshop"
-    export function motorControltest(channel: ggMotorChannel, direction: number, speed: number): void {
+    export function motorControl3(channel: ggMotorChannel, direction: number, speed: number): void {
         let dirPin = ggmotorChannels[channel];
         let speedPin = ggmotorSpeedPins[channel];
 
@@ -503,7 +504,7 @@ namespace Gigotools {
     //% speed.defl=100
     //% direction.defl=ggMotorShaftDirection.HIGH
     //% group="motor for workshop"
-    export function motorControl(channel: ggMotorChannel, direction: ggMotorShaftDirection, speed: number): void {
+    export function motorControl4(channel: ggMotorChannel, direction: ggMotorShaftDirection, speed: number): void {
         let dirPin = ggmotorChannels[channel];
         let speedPin = ggmotorSpeedPins[channel];
 
@@ -1398,7 +1399,7 @@ namespace Motor {
     //% direction.defl=motorShaftDirection.HIGH
     //% block="stop Motor $channel"
     //% group="Motor"
-    export function motorStop(channel: motorChannel): void {
+    export function motorStop1(channel: motorChannel): void {
         let dirPin = motorChannels[channel];
         let speedPin = motorSpeedPins[channel];
 
@@ -1413,7 +1414,7 @@ namespace Motor {
     //% direction.min=0 direction.max=1
     //% group="Motor"
     //% color=#E7734B
-    export function motorControltest(channel: motorChannel, direction: number, speed: number): void {
+    export function motorControl1(channel: motorChannel, direction: number, speed: number): void {
         let dirPin = motorChannels[channel];
         let speedPin = motorSpeedPins[channel];
 
@@ -1428,7 +1429,7 @@ namespace Motor {
     //% direction.defl=motorShaftDirection.HIGH
     //% group="Motor"
     //% color=#E7734B
-    export function motorControl(channel: motorChannel, direction: motorShaftDirection, speed: number): void {
+    export function motorControl2(channel: motorChannel, direction: motorShaftDirection, speed: number): void {
         let dirPin = motorChannels[channel];
         let speedPin = motorSpeedPins[channel];
 
