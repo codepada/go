@@ -432,9 +432,6 @@ namespace Gigotools {
     I2C(20,19)
     */
 
-    //-------------------------------------------------
-
-
     //% direction.defl=ggMotorShaftDirection.HIGH
     //% blockId=motorStop2 block="stop Motor $channel"
     //% group="Motor for workshop"
@@ -445,8 +442,6 @@ namespace Gigotools {
         pins.digitalWritePin(dirPin, 0);
         pins.analogWritePin(speedPin, 0);
     }
-
-
     //% blockId=motorControl3 block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
@@ -459,12 +454,12 @@ namespace Gigotools {
         pins.digitalWritePin(dirPin, direction);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
-    //% group="motor for workshop"
+    
     //% blockId=motorControl4 block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
     //% direction.defl=ggMotorShaftDirection.HIGH
-
+    //% group="motor for workshop"
     export function motorControl4(channel: ggMotorChannel, direction: ggMotorShaftDirection, speed: number): void {
         let dirPin = ggmotorChannels[channel];
         let speedPin = ggmotorSpeedPins[channel];
@@ -472,7 +467,6 @@ namespace Gigotools {
         pins.digitalWritePin(dirPin, direction);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
-
     //% blockId=DDMmotor2 block="motor channel %MotorPin|speed (0~100) %MSpeedValue|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
     //% McontrolValue.min=0 McontrolValue.max=1 
     //% MSpeedValue.min=0 MSpeedValue.max=100   
@@ -514,10 +508,6 @@ namespace Gigotools {
 
     }
 
-    
-
-
-    //-------------------------------------------------
 
     ////////////////////////////////
     //          Ultrasound            //
