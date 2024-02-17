@@ -1,8 +1,5 @@
 
-//Project Microbit Link plus LCD (show pin) แยกกลุ่ม
-
-//----------------------------------
-// joystick df
+// joystick control
 enum joymove {
     //% blockId="Nostate" block="stop"
     Stop,
@@ -34,7 +31,7 @@ let enButtonChannels: { [key: number]: DigitalPin } = {
     [dfButton.P14]: DigitalPin.P14,
 
 }
-// joystick ghbit
+
 enum enRocker {
     //% blockId="Nostate" block="Nostate"
     Nostate = 0,
@@ -66,7 +63,7 @@ enum enButton {
 }
 
 
-// บล็อกคำสั่งสำหรับควบคุมมอเตอร์
+// motor control
 enum motorChannel {
     //% block="E (P15,P16)"
     E,
@@ -135,7 +132,7 @@ enum lEDShaftonoff {
 
 }
 //----------------------------------
-//button
+//external button
 enum buttonChannel {
     //% block="A (P20)"
     A,
@@ -158,7 +155,7 @@ let buttonChannels: { [key: number]: DigitalPin } = {
 }
 //----------------------------------
 
-//อ่านค่าเซ็นเซอร์
+//external sensor
 enum sensorChannel {
     //% block="P1"
     P1,
@@ -189,7 +186,7 @@ let sensorChannels: { [key: number]: DigitalPin } = {
 }
 //----------------------------------
 
-//อ่านค่าเซ็นเซอร์
+
 enum blackChannel {
     //% block="P1"
     P1,
@@ -249,7 +246,7 @@ let servoChannels: { [key: number]: AnalogPin } = {
     [servoChannel.P16]: AnalogPin.P16,
 }
 //----------------------------------
-//servoCon
+
 enum servoconChannel {
     //% block="P1"
     P1,
@@ -333,7 +330,7 @@ enum mLX90614_TEMPERATURE_ORIGIN {
     //% block="ambient"
     AMBIENT = 0x06,
 }
-// บล็อกคำสั่งสำหรับควบคุมมอเตอร์ 2024/05/1
+// motor for gigotools kit 
 enum ggMotorChannel {
     //% block="A (P1,P2)"
     A,
@@ -427,7 +424,7 @@ namespace Gigotools {
     ////////////////////////////////
 
 
-    /**馬達通道定義註解
+    /**motor channel
     A(1,2)
     B(8,13)
     C(14,15)
@@ -460,8 +457,7 @@ namespace Gigotools {
 
         }
     }
-    /**馬達腳位自行宣告
-      */
+    
     //% blockId=DDMmotor block="speed pin %MSpeedPin|speed (0~255) %MSpeedValue|direction pin %McontrolPin|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
     //% McontrolValue.min=0 McontrolValue.max=1 
     //% MSpeedValue.min=0 MSpeedValue.max=255   
@@ -476,7 +472,7 @@ namespace Gigotools {
 
     }
     //-------------------------------------------------
-    // โอ edit
+    
 
     //% direction.defl=ggMotorShaftDirection.HIGH
     //% block="Stop Motor $channel"
@@ -520,9 +516,9 @@ namespace Gigotools {
     //-------------------------------------------------
 
     ////////////////////////////////
-    //          超音波            //
+    //          Ultrasound            //
     ////////////////////////////////
-    /**超音波註解
+    /**
      * Send a ping and get the echo time (in microseconds) as a result
      * @param trig tigger pin
      * @param echo echo pin
@@ -868,7 +864,7 @@ namespace Gigotools {
     }
 
     ////////////////////////////////
-    //          顏色感測器        //
+    //          Colour sensor       //
     ////////////////////////////////
     //% weight=12
     //% block="initialize color sensor"
@@ -1760,24 +1756,24 @@ namespace joystick {
         let z = pins.digitalReadPin(DigitalPin.P8);
         let now_state = enRocker.Nostate;
 
-        if (x < 200) // 上
+        if (x < 200) 
         {
 
             now_state = enRocker.Up;
 
         }
-        else if (x > 730) //下 900 -> 730
+        else if (x > 730) 
         {
 
             now_state = enRocker.Down;
         }
-        else  // 左右
+        else  
         {
-            if (y < 200) //右
+            if (y < 200) 
             {
                 now_state = enRocker.Right;
             }
-            else if (y > 730) //左 900 -> 730
+            else if (y > 730) 
             {
                 now_state = enRocker.Left;
             }

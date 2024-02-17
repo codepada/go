@@ -6,7 +6,8 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "microphone": "*"
+        "microphone": "*",
+        "linebeacon": "github:pizayanz/pxt-linebeacon#v0.0.14"
     },
     "files": [
         "main.ts",
