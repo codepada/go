@@ -57,6 +57,31 @@ basic.forever(function () {
     basic.showNumber(Sensor.temperature(mLX90614_TEMPERATURE_ORIGIN.OBJECT))
 })
 
+### motor
+input.onButtonPressed(Button.A, function () {
+    Motor.motorControl(motorChannel.E, motorShaftDirection.HIGH, 100)
+})
+input.onButtonPressed(Button.B, function () {
+    Motor.motorStop(motorChannel.E)
+})
+
+### continuesd sevor
+input.onButtonPressed(Button.A, function () {
+    Motor.ContinuousServo(servoChannel.P1, svconShaft.Left)
+})
+input.onButtonPressed(Button.AB, function () {
+    Motor.ContinuousServo(servoChannel.P1, svconShaft.Stop)
+})
+input.onButtonPressed(Button.B, function () {
+    Motor.ContinuousServo(servoChannel.P1, svconShaft.Right)
+})
+
+### LCD 16x02
+LCD1602.LcdInit(39)
+basic.forever(function () {
+    LCD1602.ShowString("hellow", 0, 0)
+})
+
 
 ## License
 
