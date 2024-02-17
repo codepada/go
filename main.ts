@@ -475,7 +475,7 @@ namespace Gigotools {
     
 
     //% direction.defl=ggMotorShaftDirection.HIGH
-    //% block="Stop Motor $channel"
+    //% block="stop Motor $channel"
     //% group="Motor for workshop"
     export function motorStop(channel: ggMotorChannel): void {
         let dirPin = ggmotorChannels[channel];
@@ -486,7 +486,7 @@ namespace Gigotools {
     }
 
 
-    //% block="Motor $channel direction $direction speed $speed"
+    //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
     //% direction.min=0 direction.max=1
@@ -500,7 +500,7 @@ namespace Gigotools {
         pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
 
-    //% group="Motor for workshop"
+    //% group="motor for workshop"
     //% block="Motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
@@ -1186,7 +1186,7 @@ namespace Command {
 namespace Sensor {
 
     //% color=#000000
-    //% block="Read button $pin (0-1)"
+    //% block="read button $pin (0-1)"
     //% group="Read Sensor"
     export function Readbutton(pin: buttonChannel): number {
         let read = buttonChannels[pin];
@@ -1196,7 +1196,7 @@ namespace Sensor {
     }
     //% color=#000000    
     //สำหรับ sensor
-    //% block="Analog Sensor $pin (0-1023) "
+    //% block="analog Sensor $pin (0-1023) "
     //% group="Read Sensor"
     export function lightSensor(pin: sensorChannel): number {
         let read = servoconChannels[pin];
@@ -1207,7 +1207,7 @@ namespace Sensor {
 
     //% color=#000000    
     //สำหรับ sensor
-    //% block="Digital Sensor $pin (0-1)"
+    //% block="digital Sensor $pin (0-1)"
     //% group="Read Sensor"
     export function Sensor(pin: sensorChannel): number {
         let read = sensorChannels[pin];
@@ -1226,7 +1226,7 @@ namespace Sensor {
 
     //% color=#383838
     //สำหรับ Track Line
-    //% block="Track Line $pin Black Color"
+    //% block="track Line $pin Black Color"
     //% group="Logic Sensor"
     export function isblack(pin: blackChannel): boolean {
         let read = blackChannels[pin];
@@ -1234,7 +1234,7 @@ namespace Sensor {
     }
     //% color=#636262
     //สำหรับ Track Line
-    //% block="Track Line $pin Not Black"
+    //% block="track Line $pin Not Black"
     //% group="Logic Sensor"
     export function notblack(pin: blackChannel): boolean {
         let read = blackChannels[pin];
@@ -1244,7 +1244,7 @@ namespace Sensor {
 
     //% color=#3D3430    
     //สำหรับ buttonpress
-    //% block="On button $pin pressed"
+    //% block="on button $pin pressed"
     //% group="Logic Sensor"
     export function isButtonPressed(pin: buttonChannel): boolean {
         pins.setPull(buttonChannels[pin], PinPullMode.PullUp);
@@ -1293,7 +1293,7 @@ namespace Sensor {
 
     //% group="thermometer"
     //% color=#76dbb1
-    //% blockId=get_DHT11_value block="DHT11 set pin %pin_arg|get %dhtResult" blockExternalInputs=true
+    //% blockId=get_DHT11_value block="dht11 set pin %pin_arg|get %dhtResult" blockExternalInputs=true
     //% pin_arg.fieldEditor="gridpicker" pin_arg.fieldOptions.columns=4
     //% pin_arg.fieldOptions.tooltips="false" pin_arg.fieldOptions.width="300"
     export function get_DHT11_value(pin_arg: DigitalPin, dhtResult: Dht11Result): number {
@@ -1319,7 +1319,7 @@ namespace Sensor {
      * temperature
      */
     //% color=#76dbb1
-    //% blockId="MLX90614_TEMPERATURE" block="%temperature_origin temperature (°C)"
+    //% blockId="mlx90614_TEMPERATURE" block="%temperature_origin temperature (°C)"
     //% weight=80 blockGap=8
     //% group="MLX90614 IR thermometer"
     export function temperature(temperature_origin: mLX90614_TEMPERATURE_ORIGIN): number {
@@ -1405,7 +1405,7 @@ namespace Motor {
 
     //% color=#E7734B
     //% direction.defl=motorShaftDirection.HIGH
-    //% block="Stop Motor $channel"
+    //% block="stop Motor $channel"
     //% group="Motor"
     export function motorStop(channel: motorChannel): void {
         let dirPin = motorChannels[channel];
@@ -1416,7 +1416,7 @@ namespace Motor {
     }
 
     //% color=#E7734B
-    //% block="Motor $channel direction $direction speed $speed"
+    //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
     //% direction.min=0 direction.max=1
@@ -1431,7 +1431,7 @@ namespace Motor {
     }
 
     //% color=#E7734B
-    //% block="Motor $channel direction $direction speed $speed"
+    //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
     //% direction.defl=motorShaftDirection.HIGH
@@ -1457,7 +1457,7 @@ namespace Motor {
     }
     //% color=#E84E19
     //สำหรับ servocon
-    //% block"ContinuousServo $pinSV direction $direction"
+    //% block"continuous Servo $pinSV direction $direction"
     //% direction.defl=90
     //% group="Servo"
     export function ContinuousServo(pinSV: servoChannel, direction: svconShaft): void {
@@ -1470,7 +1470,7 @@ namespace Motor {
 namespace GigoLED {
     //% color=#FACB09
     //สำหรับ Led
-    //% block="LED $leds Status $Status"
+    //% block="led $leds Status $Status"
     //% Status.min=0 Status.max=1
     //% leds.defl=lEDChannel.D
     //% group="Led"
@@ -1483,7 +1483,7 @@ namespace GigoLED {
 
     //% color=#FACB09
     //สำหรับ Led
-    //% block="LED $leds Status $Status"
+    //% block="led $leds Status $Status"
     //% Status.defl=lEDShaftonoff.HIGH*
     //% leds.defl=lEDChannel.D
     //% group="Led"
@@ -1495,7 +1495,7 @@ namespace GigoLED {
     }
     //% color=#FACB09
     //toggle led
-    //% blockId=LED block="LED %pin $ledstate"
+    //% blockId=led block="LED %pin $ledstate"
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
     //% pin.defl=lEDChannel.D
@@ -1583,7 +1583,7 @@ namespace LCD1602 {
 
 
     //% color=#045F14
-    //% blockId="I2C_LCD1620_SET_ADDRESS" block="LCD (A) Address %addr"
+    //% blockId="i2c_LCD1620_SET_ADDRESS" block="LCD (A) Address %addr"
     //% weight=100 blockGap=8
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
@@ -1605,7 +1605,7 @@ namespace LCD1602 {
     }
 
     //% color=#045F14
-    //% blockId="I2C_LCD1620_SHOW_NUMBER" block="show number %n|at x %x|y %y"
+    //% blockId="i2c_LCD1620_SHOW_NUMBER" block="show number %n|at x %x|y %y"
     //% weight=90 blockGap=8
     //% x.min=0 x.max=15
     //% y.min=0 y.max=1
@@ -1617,7 +1617,7 @@ namespace LCD1602 {
     }
 
     //% color=#045F14
-    //% blockId="I2C_LCD1620_SHOW_STRING" block="show string %s|at x %x|y %y"
+    //% blockId="i2c_LCD1620_SHOW_STRING" block="show string %s|at x %x|y %y"
     //% weight=90 blockGap=8
     //% x.min=0 x.max=15
     //% y.min=0 y.max=1
@@ -1639,7 +1639,7 @@ namespace LCD1602 {
     }
 
     //% color=#045F14
-    //% blockId="I2C_LCD1620_ON" block="LCD on"
+    //% blockId="i2c_LCD1620_ON" block="LCD on"
     //% weight=81 blockGap=8
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
@@ -1648,7 +1648,7 @@ namespace LCD1602 {
     }
 
     //% color=#045F14
-    //% blockId="I2C_LCD1620_OFF" block="LCD off"
+    //% blockId="i2c_LCD1620_OFF" block="LCD off"
     //% weight=80 blockGap=8
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
@@ -1657,7 +1657,7 @@ namespace LCD1602 {
     }
 
     //% color=#045F14
-    //% blockId="I2C_LCD1620_CLEAR" block="clear"
+    //% blockId="i2c_LCD1620_CLEAR" block="clear"
     //% weight=85 blockGap=8
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
@@ -1666,7 +1666,7 @@ namespace LCD1602 {
     }
 
     //% color=#045F14
-    //% blockId="I2C_LCD1620_BACKLIGHT_ON" block="light on"
+    //% blockId="i2c_LCD1620_BACKLIGHT_ON" block="light on"
     //% weight=71 blockGap=8
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
@@ -1676,7 +1676,7 @@ namespace LCD1602 {
     }
 
     //% color=#045F14
-    //% blockId="I2C_LCD1620_BACKLIGHT_OFF" block="light off "
+    //% blockId="i2c_LCD1620_BACKLIGHT_OFF" block="light off "
     //% weight=70 blockGap=8
     //% parts=LCD1602_I2C trackArgs=0
     //% group="LCD i2c"
@@ -1695,7 +1695,7 @@ namespace joystick {
 
     //% group="DFrobot"
     //% color=#383838
-    //% block="Button %pin is pressed"
+    //% block="button %pin is pressed"
     export function joystickbuttonpressed(pin: dfButton): boolean {
         pins.setPull(enButtonChannels[pin], PinPullMode.PullUp);
         let read = enButtonChannels[pin];
@@ -1743,7 +1743,7 @@ namespace joystick {
 
     //---------------------------------------------------
     //% group="GHBit"
-    //% blockId=GHBit_Rocker block="Rocker|value %value"
+    //% blockId=ghBit_Rocker block="Rocker|value %value"
     //% weight=96
     //% blockGap=10
     //% color="#C814B8"
@@ -1787,7 +1787,7 @@ namespace joystick {
 
     }
     //% group="GHBit"
-    //% blockId=GHBit_Button block="Button| %num|value %value"
+    //% blockId=ghBit_Button block="Button| %num|value %value"
     //% weight=95
     //% blockGap=10
     //% color="#C814B8"
