@@ -484,22 +484,6 @@ namespace Gigotools {
         pins.digitalWritePin(dirPin, 0);
         pins.analogWritePin(speedPin, 0);
     }
-    
-
-    //% block="motor $channel direction $direction speed $speed"
-    //% speed.min=0 speed.max=255
-    //% speed.defl=100
-    //% direction.min=0 direction.max=1
-    //% group="Motor for workshop"
-
-    export function motorControltest(channel: ggMotorChannel, direction: number, speed: number): void {
-        let dirPin = ggmotorChannels[channel];
-        let speedPin = ggmotorSpeedPins[channel];
-
-        pins.digitalWritePin(dirPin, direction);
-        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
-    }
-
     //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
@@ -512,6 +496,21 @@ namespace Gigotools {
         pins.digitalWritePin(dirPin, direction);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
+
+    //% block="motor $channel direction $direction speed $speed"
+    //% speed.min=0 speed.max=255
+    //% speed.defl=100
+    //% direction.min=0 direction.max=1
+    //% group="Motor for workshop"
+    export function motorControltest(channel: ggMotorChannel, direction: number, speed: number): void {
+        let dirPin = ggmotorChannels[channel];
+        let speedPin = ggmotorSpeedPins[channel];
+
+        pins.digitalWritePin(dirPin, direction);
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
+    }
+
+    
 
 
     //-------------------------------------------------
