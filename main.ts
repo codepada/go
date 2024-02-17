@@ -416,7 +416,7 @@ let ggechoChanel: { [key: number]: DigitalPin } = {
 }
 
 
-//% weight=0 color=#3CB371 icon="\uf135" block=Gigotools groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
+//% weight=0 color=#3CB371 icon="\uf135" block=Gigotools groups='["Motor for workshop basic","Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
 namespace Gigotools {
 
     ////////////////////////////////
@@ -434,7 +434,7 @@ namespace Gigotools {
 
     //% direction.defl=ggMotorShaftDirection.HIGH
     //% blockId=motorStop2 block="stop Motor $channel"
-    //% group="Motor for workshop"
+    //% group="Motor for workshop basic"
     export function motorStop2(channel: ggMotorChannel): void {
         let dirPin = ggmotorChannels[channel];
         let speedPin = ggmotorSpeedPins[channel];
@@ -446,7 +446,7 @@ namespace Gigotools {
     //% speed.min=0 speed.max=255
     //% speed.defl=100
     //% direction.min=0 direction.max=1
-    //% group="Motor for workshop"
+    //% group="Motor for workshop basic"
     export function motorControl3(channel: ggMotorChannel, direction: number, speed: number): void {
         let dirPin = ggmotorChannels[channel];
         let speedPin = ggmotorSpeedPins[channel];
@@ -459,7 +459,7 @@ namespace Gigotools {
     //% speed.min=0 speed.max=255
     //% speed.defl=100
     //% direction.defl=ggMotorShaftDirection.HIGH
-    //% group="motor for workshop"
+    //% group="motor for workshop basic"
     export function motorControl4(channel: ggMotorChannel, direction: ggMotorShaftDirection, speed: number): void {
         let dirPin = ggmotorChannels[channel];
         let speedPin = ggmotorSpeedPins[channel];
