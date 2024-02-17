@@ -5,11 +5,13 @@ Blocks that support [LEARNING LAB - MICROBIT COMPATIBLE ROBOT](https://padabook.
 
 ## Sample gigotools V2
 ### gigotool pinout
+```blocks
 A(P1,P2)
 B(8,P13)
 C(P14,P15)
 D(P16,P0)
 I2C(P20,P19)
+```
 ### motor for gigotools
 ```blocks
 input.onButtonPressed(Button.A, function on_button_pressed_a() {
@@ -41,6 +43,7 @@ basic.forever(function () {
 ```
 ## Sample gigo V1
 ### gigo pinout
+```blocks
 A(P20,P19)
 B(x,P14)
 C(x,P2)
@@ -49,6 +52,7 @@ E(P16,P15)
 F(P14,P13)
 G(P2,P12)
 H(P8,P1)
+```
 ### sensor button ex1
 ```blocks
 basic.forever(function () {
