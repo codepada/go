@@ -1,5 +1,4 @@
 basic.forever(function() {
     
-    basic.showNumber(0)
+    basic.showNumber(Sensor.Sensor(sensorChannel.P1))
 })
-// tests go here; this will not be compiled when this package is used as an extension.
