@@ -28,7 +28,9 @@ basic.forever(function () {
     RGBLED.RGBLED_set_color(Gigotools.colors(rGBLedColors.Red))
 })
 ### Color sensor
-
+basic.forever(function () {
+    basic.showNumber(Gigotools.ColorSensorRead(Gigotools.Channel.Red))
+})
 ## License
 
 * MIT
