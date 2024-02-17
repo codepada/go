@@ -416,7 +416,7 @@ let ggechoChanel: { [key: number]: DigitalPin } = {
 }
 
 
-//% weight=0 color=#3CB371 icon="\uf135" block=Gigotools groups='["Motor for workshop basic","Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
+//% weight=0 color=#3CB371 icon="\uf135" block=Gigotools groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
 namespace Gigotools {
 
     ////////////////////////////////
@@ -432,16 +432,7 @@ namespace Gigotools {
     I2C(20,19)
     */
 
-    //% direction.defl=ggMotorShaftDirection.HIGH
-    //% block="stop Motor $channel"
-    //% group="Motor for workshop"
-    export function motorStop2(channel: ggMotorChannel): void {
-        let dirPin = ggmotorChannels[channel];
-        let speedPin = ggmotorSpeedPins[channel];
-
-        pins.digitalWritePin(dirPin, 0);
-        pins.analogWritePin(speedPin, 0);
-    }
+    
 
     
 
@@ -487,6 +478,41 @@ namespace Gigotools {
 
     }
 
+    //% block="motor $channel direction $direction speed $speed"
+    //% speed.min=0 speed.max=255
+    //% speed.defl=100
+    //% direction.min=0 direction.max=1
+    //% group="Motor for workshop basic"
+    export function motorControl3(channel: ggMotorChannel, direction: number, speed: number): void {
+        let dirPin = ggmotorChannels[channel];
+        let speedPin = ggmotorSpeedPins[channel];
+
+        pins.digitalWritePin(dirPin, direction);
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
+    }
+    //% block="motor $channel direction $direction speed $speed"
+    //% speed.min=0 speed.max=255
+    //% speed.defl=100
+    //% direction.defl=ggMotorShaftDirection.HIGH
+    //% group="motor for workshop basic"
+    export function motorControl4(channel: ggMotorChannel, direction: ggMotorShaftDirection, speed: number): void {
+        let dirPin = ggmotorChannels[channel];
+        let speedPin = ggmotorSpeedPins[channel];
+
+        pins.digitalWritePin(dirPin, direction);
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
+    }
+    
+    //% direction.defl=ggMotorShaftDirection.HIGH
+    //% block="stop Motor $channel"
+    //% group="Motor for workshop"
+    export function motorStop2(channel: ggMotorChannel): void {
+        let dirPin = ggmotorChannels[channel];
+        let speedPin = ggmotorSpeedPins[channel];
+
+        pins.digitalWritePin(dirPin, 0);
+        pins.analogWritePin(speedPin, 0);
+    }
 
     ////////////////////////////////
     //          Ultrasound            //
