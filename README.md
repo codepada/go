@@ -3,7 +3,7 @@
 
 Blocks that support [LEARNING LAB - MICROBIT COMPATIBLE ROBOT](https://padabook.com/th/products/545481-ชุดการเรียนรู้การเขียนโปรแกรม+Micro%3Abit+COMPATIBLE+ROBOTS)
 
-## Sample gigotools
+## Sample gigotools V2
 ### gigotool pinout
 A(P1,P2)
 B(8,P13)
@@ -32,8 +32,8 @@ basic.forever(function () {
     basic.showNumber(Gigotools.ColorSensorRead(Gigotools.Channel.Red))
 })
 
-## Sample gigo
-### gigotool pinout
+## Sample gigo V1
+### gigo pinout
 A(P20,P19)
 B(x,P14)
 C(x,P2)
@@ -80,6 +80,39 @@ input.onButtonPressed(Button.B, function () {
 LCD1602.LcdInit(39)
 basic.forever(function () {
     LCD1602.ShowString("hellow", 0, 0)
+})
+
+### joystick
+basic.forever(function () {
+    if (joystick.joystickmove(joymove.Up)) {
+        basic.showArrow(ArrowNames.North)
+    } else if (joystick.joystickmove(joymove.Down)) {
+        basic.showArrow(ArrowNames.South)
+    } else if (joystick.joystickmove(joymove.Left)) {
+        basic.showArrow(ArrowNames.West)
+    } else if (joystick.joystickmove(joymove.Right)) {
+        basic.showArrow(ArrowNames.East)
+    } else if (joystick.joypressed()) {
+        basic.showIcon(IconNames.SmallDiamond)
+    } else if (joystick.joystickbuttonpressed(dfButton.P15)) {
+        basic.showString("r")
+    } else if (joystick.joystickbuttonpressed(dfButton.P16)) {
+        basic.showString("b")
+    } else if (joystick.joystickbuttonpressed(dfButton.P13)) {
+        basic.showString("g")
+    } else if (joystick.joystickbuttonpressed(dfButton.P14)) {
+        basic.showString("y")
+    } else {
+        basic.clearScreen()
+    }
+})
+
+### LED gigo
+input.onButtonPressed(Button.A, function () {
+    GigoLED.ledBrightness(lEDChannel.D, true)
+})
+input.onButtonPressed(Button.B, function () {
+    GigoLED.ledBrightness(lEDChannel.D, false)
 })
 
 
