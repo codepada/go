@@ -42,8 +42,8 @@ basic.forever(function () {
 })
 ```
 ## Sample gigo V1
-![Box](https://github.com/codepada/go/blob/master/micorbitbox.png)
-![pinout](https://github.com/codepada/go/blob/master/pinout.png)
+![Box](https://github.com/codepada/go/blob/master/picture4github/micorbitbox.png)
+![pinout](https://github.com/codepada/go/blob/master/picture4github/pinout.png)
 ### gigo pinout
 ```blocks
 A(P20,P19)
@@ -56,6 +56,7 @@ G(P2,P12)
 H(P8,P1)
 ```
 ### sensor button ex1
+![forcesensor](https://github.com/codepada/go/blob/master/picture4github/forcesensor.png)
 ```blocks
 basic.forever(function () {
     basic.showNumber(Sensor.Readbutton(buttonChannel.A))
@@ -76,6 +77,7 @@ basic.forever(function () {
 })
 ```
 ### motor
+![motor](https://github.com/codepada/go/blob/master/picture4github/motor.png)
 ```blocks
 input.onButtonPressed(Button.A, function () {
     Motor.motorControl(motorChannel.E, motorShaftDirection.HIGH, 100)
@@ -84,7 +86,8 @@ input.onButtonPressed(Button.B, function () {
     Motor.motorStop(motorChannel.E)
 })
 ```
-### continuesd sevor
+### continuesd servo
+![continuesd servor](https://github.com/codepada/go/blob/master/picture4github/servocon.png)
 ```blocks
 input.onButtonPressed(Button.A, function () {
     Motor.ContinuousServo(servoChannel.P1, svconShaft.Left)
@@ -104,6 +107,7 @@ basic.forever(function () {
 })
 ```
 ### joystick
+![ joystick](https://github.com/codepada/go/blob/master/picture4github/joydf.png)
 ```blocks
 basic.forever(function () {
     if (joystick.joystickmove(joymove.Up)) {
@@ -130,6 +134,7 @@ basic.forever(function () {
 })
 ```
 ### LED gigo
+![ led](https://github.com/codepada/go/blob/master/picture4github/led.png)
 ```blocks
 input.onButtonPressed(Button.A, function () {
     GigoLED.ledBrightness(lEDChannel.D, true)
