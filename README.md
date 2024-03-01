@@ -42,6 +42,8 @@ basic.forever(function () {
 })
 ```
 ## Sample gigo V1
+![Box](https://github.com/codepada/go/blob/master/micorbitbox.png)
+![pinout](https://github.com/codepada/go/blob/master/pinout.png)
 ### gigo pinout
 ```blocks
 A(P20,P19)
