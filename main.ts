@@ -81,8 +81,8 @@ enum motorShaftDirection {
     HIGH,
 }
 let MotorSDD:{ [key: number]: number }={
-    [MotorShaftDirection.LOW]: 0,
-    [MotorShaftDirection.HIGH]: 1,
+    [motorShaftDirection.LOW]: 0,
+    [motorShaftDirection.HIGH]: 1,
 }
 let motorSpeedPins: { [key: number]: AnalogPin } = {
     [motorChannel.E]: AnalogPin.P16,
