@@ -80,7 +80,7 @@ enum motorShaftDirection {
     //% block="Right"
     HIGH,
 }
-let MotorSDD:{ [key: number]: number }={
+let motorSDD:{ [key: number]: number }={
     [motorShaftDirection.LOW]: 0,
     [motorShaftDirection.HIGH]: 1,
 }
@@ -1430,13 +1430,13 @@ namespace Motor {
     //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
-    //% direction.defl=motor.motorShaftDirection.HIGH
+    //% direction.defl=Motor.motorShaftDirection.HIGH
     //% group="Motor"
     //% color=#E7734B
     export function motorControl2(channel: motorChannel, direction: motorShaftDirection, speed: number): void {
         let dirPin = motorChannels[channel];
         let speedPin = motorSpeedPins[channel];
-        let direct = MotorSDD[direction];
+        let direct = motorSDD[direction];
         pins.digitalWritePin(dirPin, direct);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
