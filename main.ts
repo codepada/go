@@ -1478,26 +1478,26 @@ namespace gigoLED {
     }
 //----------------------------------
     //% color=#FACB09
-    //% block="led $leds Status $Status"
-    //% Status.min=0 Status.max=1
+    //% block="led $leds status $status"
+    //% status.min=0 status.max=1
     //% leds.defl=lEDChannel.D
     //% group="Led"
-    export function ledtest(leds: LEDChannel, Status: number): void {
+    export function ledtest(leds: LEDChannel, status: number): void {
         let ledg = LEDChannels[leds];
 
-        pins.digitalWritePin(ledg, Status);
+        pins.digitalWritePin(ledg, status);
 
     }
 
     //% color=#FACB09
-    //% block="led $leds Status $Status"
-    //% Status.defl=lEDShaftonoff.HIGH*
+    //% block="led $leds status $status"
+    //% status.defl=lEDShaftonoff.HIGH*
     //% leds.defl=lEDChannel.D
     //% group="Led"
-    export function led(leds: LEDChannel, Status: LEDShaftonoff): void {
+    export function led(leds: LEDChannel, status: LEDShaftonoff): void {
         let ledg = LEDChannels[leds];
 
-        pins.digitalWritePin(ledg, Status);
+        pins.digitalWritePin(ledg, status);
 
     }
     //% color=#FACB09
