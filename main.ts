@@ -63,39 +63,6 @@ enum enButton {
 }
 
 
-// motor control
-enum motorChannel {
-    //% block="E (P15,P16)"
-    E,
-    //% block="F (P13,P14)""
-    F,
-    //% block="G (P12,P2)""
-    G,
-    //% block="H (P1,P8)""
-    H,
-}
-enum motorShaftDirection {
-    //% block="Left"
-    LOW,
-    //% block="Right"
-    HIGH,
-}
-let motorSDD:{ [key: number]: number }={
-    [motorShaftDirection.LOW]: 0,
-    [motorShaftDirection.HIGH]: 1,
-}
-let motorSpeedPins: { [key: number]: AnalogPin } = {
-    [motorChannel.E]: AnalogPin.P16,
-    [motorChannel.F]: AnalogPin.P14,
-    [motorChannel.G]: AnalogPin.P2,
-    [motorChannel.H]: AnalogPin.P8,
-}
-let motorChannels: { [key: number]: DigitalPin } = {
-    [motorChannel.E]: DigitalPin.P15,
-    [motorChannel.F]: DigitalPin.P13,
-    [motorChannel.G]: DigitalPin.P12,
-    [motorChannel.H]: DigitalPin.P1,
-}
 
 //----------------------------------
 //led
@@ -1398,14 +1365,48 @@ namespace Sensor {
 
 //% color=#E7734B icon="\uf48b"
 //% groups="['Motor','Servo','Led', 'Read Sensor','MLX90614 IR thermometer','Logic Sensor','I2C LCD 1602']"
-namespace Motor {
+namespace motor {
+    // motor control
+    export enum MotorChannel {
+        //% block="E (P15,P16)"
+        E,
+        //% block="F (P13,P14)""
+        F,
+        //% block="G (P12,P2)""
+        G,
+        //% block="H (P1,P8)""
+        H,
+    }
+    export enum MotorShaftDirection {
+        //% block="Left"
+        LOW,
+        //% block="Right"
+        HIGH,
+    }
+    export let MotorSDD: { [key: number]: number } = {
+        [MotorShaftDirection.LOW]: 0,
+        [MotorShaftDirection.HIGH]: 1,
+    }
+    export let MotorSpeedPins: { [key: number]: AnalogPin } = {
+        [MotorChannel.E]: AnalogPin.P16,
+        [MotorChannel.F]: AnalogPin.P14,
+        [MotorChannel.G]: AnalogPin.P2,
+        [MotorChannel.H]: AnalogPin.P8,
+    }
+    export let MotorChannels: { [key: number]: DigitalPin } = {
+        [MotorChannel.E]: DigitalPin.P15,
+        [MotorChannel.F]: DigitalPin.P13,
+        [MotorChannel.G]: DigitalPin.P12,
+        [MotorChannel.H]: DigitalPin.P1,
+    }
+
     //% color=#E7734B
-    //% direction.defl=motorShaftDirection.HIGH
+    //% direction.defl=MotorShaftDirection.HIGH
     //% block="stop motor $channel"
     //% group="Motor"
-    export function motorStop1(channel: motorChannel): void {
-        let dirPin = motorChannels[channel];
-        let speedPin = motorSpeedPins[channel];
+    export function motorStop1(channel: MotorChannel): void {
+        let dirPin = MotorChannels[channel];
+        let speedPin = MotorSpeedPins[channel];
 
         pins.digitalWritePin(dirPin, 0);
         pins.analogWritePin(speedPin, 0);
@@ -1418,9 +1419,9 @@ namespace Motor {
     //% direction.min=0 direction.max=1
     //% group="Motor"
     //% color=#E7734B
-    export function motorControl1(channel: motorChannel, direction: number, speed: number): void {
-        let dirPin = motorChannels[channel];
-        let speedPin = motorSpeedPins[channel];
+    export function motorControl1(channel: MotorChannel, direction: number, speed: number): void {
+        let dirPin = MotorChannels[channel];
+        let speedPin = MotorSpeedPins[channel];
 
         pins.digitalWritePin(dirPin, direction);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
@@ -1430,13 +1431,13 @@ namespace Motor {
     //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
-    //% direction.defl=Motor.motorShaftDirection.HIGH
+    //% direction.defl=motor.MotorShaftDirection.HIGH
     //% group="Motor"
     //% color=#E7734B
-    export function motorControl2(channel: motorChannel, direction: motorShaftDirection, speed: number): void {
-        let dirPin = motorChannels[channel];
-        let speedPin = motorSpeedPins[channel];
-        let direct = motorSDD[direction];
+    export function motorControl2(channel: MotorChannel, direction: MotorShaftDirection, speed: number): void {
+        let dirPin = MotorChannels[channel];
+        let speedPin = MotorSpeedPins[channel];
+        let direct = MotorSDD[direction];
         pins.digitalWritePin(dirPin, direct);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
     }
