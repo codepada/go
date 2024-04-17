@@ -1166,12 +1166,12 @@ namespace sensor {
 
     //% color=#76dbb1
     //% group="ect"
-    //% blockId=sensor_ping block="ultrasonic trig %trig|echo %echo|get distance %unit"
+    //% block="ultrasonic trig %trig|echo %echo|get distance %unit"
     //% trig.fieldEditor="gridpicker" trig.fieldOptions.columns=4
     //% trig.fieldOptions.tooltips="false" trig.fieldOptions.width="300"
     //% echo.fieldEditor="gridpicker" echo.fieldOptions.columns=4
     //% echo.fieldOptions.tooltips="false" echo.fieldOptions.width="300"
-    export function sensor_ping(trig: DigitalPin, echo: DigitalPin, unit: PingUnitold, maxCmDistance = 500): number {
+    export function sensorping(trig: DigitalPin, echo: DigitalPin, unit: PingUnitold, maxCmDistance = 500): number {
         // send pulse
         pins.setPull(trig, PinPullMode.PullNone);
         pins.digitalWritePin(trig, 0);
