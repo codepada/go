@@ -1664,20 +1664,28 @@ namespace joystick {
         //% block="green"
         Green,
         //% block="yellow"
-        Yellow
+        Yellow,
+        //% block="A"
+        A,
+        //% block="B"
+        B,
     }
     export let EnButtonChannels: { [key: number]: DigitalPin } = {
             [DfButton.Red]: DigitalPin.P15,
             [DfButton.Blue]: DigitalPin.P16,
             [DfButton.Green]: DigitalPin.P13,
-            [DfButton.Yellow]: DigitalPin.P14
+            [DfButton.Yellow]: DigitalPin.P14,
+            [DfButton.A]: DigitalPin.P5,
+             [DfButton.B]: DigitalPin.P11
     }
     // Store the previous state of the buttons
     let buttonStates: { [key: number]: boolean } = {
         [DfButton.Red]: false,
         [DfButton.Blue]: false,
         [DfButton.Green]: false,
-        [DfButton.Yellow]: false
+        [DfButton.Yellow]: false,
+        [DfButton.A]: false,
+        [DfButton.B]: false
     }
 
     export enum EnRocker {
