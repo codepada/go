@@ -21,13 +21,13 @@ namespace Gigotools {
     */
     // motor for gigotools kit 
     export enum GgMotorChannel {
-        //% block="A (P1,P2)"
+        //% block="A (P2,P1)"
         A,
-        //% block="B (P8,P13)""
+        //% block="B (P13,P8)""
         B,
-        //% block="C (P14,P15)""
+        //% block="C (P15,P14)""
         C,
-        //% block="D (P16,P0)""
+        //% block="D (P0,P16)""
         D,
     }
     export enum GgMotorShaftDirection {
