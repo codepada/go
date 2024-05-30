@@ -1658,21 +1658,26 @@ namespace joystick {
 
     export enum DfButton {
         //% block="red"
-        P15,
+        Red,
         //% block="blue"
-        P16,
+        Blue,
         //% block="green"
-        P13,
+        Green,
         //% block="yellow"
-        P14,
-
+        Yellow
     }
     export let EnButtonChannels: { [key: number]: DigitalPin } = {
-        [DfButton.P15]: DigitalPin.P15,
-        [DfButton.P16]: DigitalPin.P16,
-        [DfButton.P13]: DigitalPin.P13,
-        [DfButton.P14]: DigitalPin.P14,
-
+            [DfButton.Red]: DigitalPin.P15,
+            [DfButton.Blue]: DigitalPin.P16,
+            [DfButton.Green]: DigitalPin.P13,
+            [DfButton.Yellow]: DigitalPin.P14
+    }
+    // Store the previous state of the buttons
+    let buttonStates: { [key: number]: boolean } = {
+        [DfButton.Red]: false,
+        [DfButton.Blue]: false,
+        [DfButton.Green]: false,
+        [DfButton.Yellow]: false
     }
 
     export enum EnRocker {
@@ -1696,7 +1701,10 @@ namespace joystick {
         //% blockId="Realse" block="Realse"
         Realse = 1
     }
-
+    export enum EnButtonStateDF {
+        Press = 0,
+        Release = 1
+    }
     export enum EnButton {
 
         B1 = 0,
@@ -1706,12 +1714,23 @@ namespace joystick {
     }
     //% group="DFrobot"
     //% color=#383838
-    //% block="button %pin is pressed"
-    export function joystickbuttonpressed(pin: DfButton): boolean {
-        pins.setPull(EnButtonChannels[pin], PinPullMode.PullUp);
-        let read = EnButtonChannels[pin];
-        return pins.digitalReadPin(read) == 0;
+    //% block="button %num| is %value"
+    export function ButtonDF(num: DfButton, value: EnButtonStateDF): boolean {
+        let pin = EnButtonChannels[num];
+        pins.setPull(pin, PinPullMode.PullUp);
+        let currentState = pins.digitalReadPin(pin) == 0;
+
+        // Check for button press or release
+        if (value == EnButtonStateDF.Press && currentState && !buttonStates[num]) {
+            buttonStates[num] = true;
+            return true;
+        } else if (value == EnButtonStateDF.Release && !currentState && buttonStates[num]) {
+            buttonStates[num] = false;
+            return true;
+        }
+        return false;
     }
+
     //% color=#383838
     //% block="joystick is pressed"
     //% group="DFrobot"
