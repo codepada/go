@@ -38,16 +38,16 @@ namespace Gigotools {
 
     }
     export let GgmotorSpeedPins: { [key: number]: AnalogPin } = {
-        [GgMotorChannel.A]: AnalogPin.P2,
-        [GgMotorChannel.B]: AnalogPin.P13,
-        [GgMotorChannel.C]: AnalogPin.P15,
-        [GgMotorChannel.D]: AnalogPin.P0,
+        [GgMotorChannel.A]: AnalogPin.P1,
+        [GgMotorChannel.B]: AnalogPin.P8,
+        [GgMotorChannel.C]: AnalogPin.P14,
+        [GgMotorChannel.D]: AnalogPin.P16,
     }
     export let GgmotorChannels: { [key: number]: DigitalPin } = {
-        [GgMotorChannel.A]: DigitalPin.P1,
-        [GgMotorChannel.B]: DigitalPin.P8,
-        [GgMotorChannel.C]: DigitalPin.P14,
-        [GgMotorChannel.D]: DigitalPin.P16,
+        [GgMotorChannel.A]: DigitalPin.P2,
+        [GgMotorChannel.B]: DigitalPin.P13,
+        [GgMotorChannel.C]: DigitalPin.P15,
+        [GgMotorChannel.D]: DigitalPin.P0,
     }
 
     export enum GigoMotorChannel {
@@ -73,20 +73,20 @@ namespace Gigotools {
 
         switch (MotorPin) {
             case 1:
-                pins.analogWritePin(AnalogPin.P1, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P2, pins.map(McontrolValue, 0, 1, 0, 1));
+                pins.analogWritePin(AnalogPin.P2, pins.map(MSpeedValue, 0, 100, 0, 1000));
+                pins.digitalWritePin(DigitalPin.P1, pins.map(McontrolValue, 0, 1, 0, 1));
                 break;
             case 2:
-                pins.analogWritePin(AnalogPin.P8, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P13, pins.map(McontrolValue, 0, 1, 0, 1));
+                pins.analogWritePin(AnalogPin.P13, pins.map(MSpeedValue, 0, 100, 0, 1000));
+                pins.digitalWritePin(DigitalPin.P8, pins.map(McontrolValue, 0, 1, 0, 1));
                 break;
             case 3:
-                pins.analogWritePin(AnalogPin.P14, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P15, pins.map(McontrolValue, 0, 1, 0, 1));
+                pins.analogWritePin(AnalogPin.P15, pins.map(MSpeedValue, 0, 100, 0, 1000));
+                pins.digitalWritePin(DigitalPin.P14, pins.map(McontrolValue, 0, 1, 0, 1));
                 break;
             case 4:
-                pins.analogWritePin(AnalogPin.P16, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P0, pins.map(McontrolValue, 0, 1, 0, 1));
+                pins.analogWritePin(AnalogPin.P0, pins.map(MSpeedValue, 0, 100, 0, 1000));
+                pins.digitalWritePin(DigitalPin.P16, pins.map(McontrolValue, 0, 1, 0, 1));
                 break;
 
         }
