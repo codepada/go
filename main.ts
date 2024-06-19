@@ -821,49 +821,6 @@ namespace Gigotools {
 }
 
 
-
-//----------------------------------
-//% color=#E7734B icon="\uf021" 
-namespace Command {
-
-    //% block color=#007ACC
-    export function True(): boolean {
-        return true;
-    }
-
-    //% block color=#007ACC
-    export function False(): boolean {
-        return false;
-    }
-
-    //% block="reset Microbit" color=#007ACC
-    export function reset(): void {
-        control.reset();
-    }
-
-
-    export let NEW_LINE = "\r\n";
-    export let NEW_LINE_DELIMITER: Delimiters = Delimiters.NewLine;
-    let writeLinePadding = 32;
-
-
-    //% weight=90
-    //% help=serial/write-line blockGap=8
-    //% blockId=serial_writeline block="send %text to computer" color=#007ACC
-    //% text.shadowOptions.toString=true
-    export function writeLine(text: string): void {
-        if (!text) text = "";
-        serial.writeString(text);
-        // pad data to the 32 byte boundary
-        // to ensure apps receive the packet
-        if (writeLinePadding > 0) {
-            let r = (writeLinePadding - (text.length + NEW_LINE.length) % writeLinePadding) % writeLinePadding;
-            for (let i = 0; i < r; ++i)
-                serial.writeString(" ");
-        }
-        serial.writeString(NEW_LINE);
-    }
-}
 //% color=#E7734B icon="\uf2db"
 namespace sensor {
     //external button
