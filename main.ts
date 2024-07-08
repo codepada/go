@@ -919,26 +919,26 @@ namespace GigoWorkshop {
      * @param maxCmDistance maximum distance in centimeters (default is 500)
      */
     export enum GgsonarPort {
-        //% block="A [ trig(P2) echo(P1) ]"
+        //% block="A [ trig(P1) echo(P2) ]"
         A,
-        //% block="B [ trig(P13) echo(P8) ]"
+        //% block="B [ trig(P8) echo(P13) ]"
         B,
-        //% block="C [ trig(P15) echo(P14) ]"
+        //% block="C [ trig(P14) echo(P15) ]"
         C,
-        //% block="D [ trig(P0) echo(P16) ]"
+        //% block="D [ trig(P16) echo(P0) ]"
         D,
     }
     export let GgtrigChanel: { [key: number]: DigitalPin } = {
-        [GgsonarPort.A]: DigitalPin.P2,
-        [GgsonarPort.B]: DigitalPin.P13,
-        [GgsonarPort.C]: DigitalPin.P15,
-        [GgsonarPort.D]: DigitalPin.P0,
-    }
-    export let GgechoChanel: { [key: number]: DigitalPin } = {
         [GgsonarPort.A]: DigitalPin.P1,
         [GgsonarPort.B]: DigitalPin.P8,
         [GgsonarPort.C]: DigitalPin.P14,
         [GgsonarPort.D]: DigitalPin.P16,
+    }
+    export let GgechoChanel: { [key: number]: DigitalPin } = {
+        [GgsonarPort.A]: DigitalPin.P2,
+        [GgsonarPort.B]: DigitalPin.P13,
+        [GgsonarPort.C]: DigitalPin.P15,
+        [GgsonarPort.D]: DigitalPin.P0,
     }
     //sonar
     export enum PingUnitgigo {
