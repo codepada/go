@@ -812,7 +812,104 @@ namespace PlanetX_AILens {
 
 //% weight=0 color=#3CB371 icon="\uf135"  groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
 namespace GigoWorkshop {
+    
+        //external button for roboticworkshop
+        export enum ButtonChannelWS {
+            //% block="A (P1)"
+            A,
+            //% block="B (P8)"
+            B,
+            //% block="C (P14)"
+            C,
+            //% block="D (P16)"
+            D,
+            //% block="I2C"
+            E,
+        }
+        export let ButtonChannelsWS: { [key: number]: DigitalPin } = {
+            [ButtonChannelWS.A]: DigitalPin.P1,
+            [ButtonChannelWS.B]: DigitalPin.P8,
+            [ButtonChannelWS.C]: DigitalPin.P14,
+            [ButtonChannelWS.D]: DigitalPin.P16,
+            [ButtonChannelWS.E]: DigitalPin.P20,
 
+        }
+        //----------------------------------
+
+
+
+        //external sensor
+        export enum SensorChannelWS {
+            //% block="P1"
+            P1,
+            //% block="P2"
+            P2,
+            //% block="P8"
+            P8,
+            //% block="P13"
+            P13,
+            //% block="P14"
+            P14,
+            //% block="P15"
+            P15,
+            //% block="P16"
+            P16,
+            //% block="P0"
+            P0,
+        }
+        export let SensorChannelsWS: { [key: number]: DigitalPin } = {
+            [SensorChannelWS.P1]: DigitalPin.P1,
+            [SensorChannelWS.P8]: DigitalPin.P8,
+            [SensorChannelWS.P0]: DigitalPin.P0,
+            [SensorChannelWS.P2]: DigitalPin.P2,
+            [SensorChannelWS.P13]: DigitalPin.P13,
+            [SensorChannelWS.P14]: DigitalPin.P14,
+            [SensorChannelWS.P15]: DigitalPin.P15,
+            [SensorChannelWS.P16]: DigitalPin.P16,
+        }
+        export let SensorChannelAWS: { [key: number]: AnalogPin } = {
+            [SensorChannelWS.P1]: AnalogPin.P1,
+            [SensorChannelWS.P8]: AnalogPin.P8,
+            [SensorChannelWS.P0]: AnalogPin.P0,
+            [SensorChannelWS.P2]: AnalogPin.P2,
+            [SensorChannelWS.P13]: AnalogPin.P13,
+            [SensorChannelWS.P14]: AnalogPin.P14,
+            [SensorChannelWS.P15]: AnalogPin.P15,
+            [SensorChannelWS.P16]: AnalogPin.P16,
+        }
+        //----------------------------------
+
+        //% color=#000000
+        //% block="read button $pin (0-1)"
+        //% group="Read Sensor"
+        export function readbuttonWS(pin: ButtonChannelWS): number {
+            let read = ButtonChannelsWS[pin];
+            pins.setPull(ButtonChannelsWS[pin], PinPullMode.PullUp);
+            let reading = pins.digitalReadPin(read);
+            return (reading);
+        }
+        //% color=#000000    
+        //% block="analog Sensor $pin (0-1023) "
+        //% group="Read Sensor"
+        export function lightSensorWS(pin: SensorChannelWS): number {
+            let read = SensorChannelAWS[pin];
+            let reading = pins.analogReadPin(read);
+            //let mappin = pins.map(reading, 0, 1023, 0, 10); // แปลงค่าจาก 0-1023 เป็น 0-10
+            return Math.round(reading);
+        }
+
+        //% color=#000000    
+        //% block="digital Sensor $pin (0-1)"
+        //% group="Read Sensor"
+        export function SensorWS(pin: SensorChannelWS): number {
+            let read = SensorChannelsWS[pin];
+            let reading = pins.digitalReadPin(read);
+            return (reading);
+        }
+
+
+
+    
     ////////////////////////////////
     //          DDM Motor         //
     ////////////////////////////////
