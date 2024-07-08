@@ -869,47 +869,6 @@ namespace GigoWorkshop {
 
 
 
-    //% blockId=DDMmotor2 block="motor channel %MotorPin|speed (0~100) %MSpeedValue|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
-    //% McontrolValue.min=0 McontrolValue.max=1 
-    //% MSpeedValue.min=0 MSpeedValue.max=100   
-    //% group="Motor for workshop"
-    export function ddmmotor2(MotorPin: GigoMotorChannel, MSpeedValue: number, McontrolValue: number): void {
-
-        switch (MotorPin) {
-            case 1:
-                pins.analogWritePin(AnalogPin.P2, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P1, pins.map(McontrolValue, 0, 1, 0, 1));
-                break;
-            case 2:
-                pins.analogWritePin(AnalogPin.P13, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P8, pins.map(McontrolValue, 0, 1, 0, 1));
-                break;
-            case 3:
-                pins.analogWritePin(AnalogPin.P15, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P14, pins.map(McontrolValue, 0, 1, 0, 1));
-                break;
-            case 4:
-                pins.analogWritePin(AnalogPin.P0, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P16, pins.map(McontrolValue, 0, 1, 0, 1));
-                break;
-
-        }
-    }
-
-    //% blockId=DDMmotor block="speed pin %MSpeedPin|speed (0~255) %MSpeedValue|direction pin %McontrolPin|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
-    //% McontrolValue.min=0 McontrolValue.max=1 
-    //% MSpeedValue.min=0 MSpeedValue.max=255   
-    //% MSpeedPin.fieldEditor="gridpicker" MSpeedPin.fieldOptions.columns=4
-    //% MSpeedPin.fieldOptions.tooltips="false" MSpeedPin.fieldOptions.width="300"
-    //% McontrolPin.fieldEditor="gridpicker" McontrolPin.fieldOptions.columns=4
-    //% McontrolPin.fieldOptions.tooltips="false" McontrolPin.fieldOptions.width="300"
-    //% group="Motor for workshop"
-    export function ddmmotor(MSpeedPin: AnalogPin, MSpeedValue: number, McontrolPin: DigitalPin, McontrolValue: number): void {
-        pins.analogWritePin(MSpeedPin, pins.map(MSpeedValue, 0, 255, 0, 1020));
-        pins.digitalWritePin(McontrolPin, pins.map(McontrolValue, 0, 1, 0, 1));
-
-    }
-
     //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=255
     //% speed.defl=100
@@ -920,7 +879,7 @@ namespace GigoWorkshop {
         let speedPin = GgmotorSpeedPins[channel];
 
         pins.digitalWritePin(dirPin, direction);
-        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 100, 0, 1023));
     }
 
 
@@ -945,7 +904,7 @@ namespace GigoWorkshop {
         let speedPin = GgmotorSpeedPins[channel];
 
         pins.digitalWritePin(dirPin, direction);
-        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 100, 0, 1023));
     }
 
 
