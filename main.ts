@@ -878,7 +878,15 @@ namespace GigoWorkshop {
             [SensorChannelWS.P16]: AnalogPin.P16,
         }
         //----------------------------------
-
+        //% color=#000000
+        //% block="read Toggle $pin (0-1)"
+        //% group="Read Sensor"
+        export function readToggle(pin: SensorChannelWS): number {
+            let read = SensorChannelsWS[pin];
+            pins.setPull(SensorChannelsWS[pin], PinPullMode.PullUp);
+            let reading = pins.digitalReadPin(read);
+            return (reading);
+        }
         //% color=#000000
         //% block="read button $pin (0-1)"
         //% group="Read Sensor"
