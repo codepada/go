@@ -1038,6 +1038,79 @@ namespace GigoWorkshop {
             default: return d;
         }
     }
+    //////////////////////
+    //       OLD LED.   //
+    //////////////////////
+    //----------------------------------
+
+
+    export enum LEDChannelWS {
+        //% block="A (P2)"
+        A,
+        //% block="B (P13)"
+        B,
+        //% block="C (P15)"
+        C,
+        //% block="D (P0)"
+        D,
+    }
+    export let LEDChannelsWS: { [key: number]: DigitalPin } = {
+        [LEDChannelWS.A]: DigitalPin.P2,
+        [LEDChannelWS.B]: DigitalPin.P13,
+        [LEDChannelWS.C]: DigitalPin.P15,
+        [LEDChannelWS.D]: DigitalPin.P0,
+
+    }
+    export enum LEDShaftonoffWS {
+        //% block="off"
+        LOW,
+        //% block="on"
+        HIGH,
+
+    }
+    //----------------------------------
+    //% color=#FACB09
+    //% block="led $leds status $status"
+    //% status.min=0 status.max=1
+    //% leds.defl=lEDChannelWS.D
+    //% group="Led"
+    export function ledtest(leds: LEDChannelWS, status: number): void {
+        let ledg = LEDChannelsWS[leds];
+        pins.digitalWritePin(ledg, status);
+
+    }
+
+    //% color=#FACB09
+    //% block="led $leds status $status"
+    //% status.defl=lEDShaftonoff.HIGH*
+    //% leds.defl=lEDChannelWS.D
+    //% group="Led"
+    export function led(leds: LEDChannelWS, status: LEDShaftonoffWS): void {
+        let ledg = LEDChannelsWS[leds];
+        pins.digitalWritePin(ledg, status);
+
+    }
+    //% color=#FACB09
+    //toggle led
+    //% blockId=led block="led %pin $ledstate"
+    //% ledstate.shadow="toggleOnOff"
+    //% expandableArgumentMode="toggle"
+    //% pin.defl=lEDChannelWS.D
+    //% group="Led"
+    export function ledBrightness(pin: LEDChannelWS, ledstate: boolean): void {
+        if (ledstate) {
+            let pinled = LEDChannelsWS[pin];
+            pins.digitalWritePin(pinled, 1);
+
+        }
+        else {
+            let pinled = LEDChannelsWS[pin];
+            pins.digitalWritePin(pinled, 0);
+
+        }
+    }
+
+    //-------------------//
     ////////////////////////////////
     //          RGB LEDS          //
     ////////////////////////////////
@@ -1627,7 +1700,8 @@ namespace GigoWorkshop {
 //% color=#E7734B icon="\uf110"
 namespace GigoLED {
     //----------------------------------
-    //led
+    
+    //led old
     export enum LEDChannel {
         //% block="A (P19)"
         A,
