@@ -1489,277 +1489,87 @@ namespace GigoWorkshop {
     ////////////////////////////////
     //          Colour sensor       //
     ////////////////////////////////
-    //% weight=12
-    //% block="initialize color sensor"
+    //% weight=0 color=#3CB371 icon="\uf135" groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
+    namespace GigoWorkshop {
 
-    //% group="Color Sensor"
-    export function colorSensorinit(): void {
-        pins.i2cWriteNumber(41, 33276, NumberFormat.UInt16BE, false)
-        pins.i2cWriteNumber(41, 32771, NumberFormat.UInt16BE, false)
-    }
-    /**
-    */
-    let nowReadColor = [0, 0, 0]
-    //% weight=12
-    //% block="color sensor read color"
+        ////////////////////////////////
+        //        Color Sensor        //
+        ////////////////////////////////
 
-    //% group="Color Sensor"
-    export function colorSensorReadColor(): void {
-        pins.i2cWriteNumber(41, 178, NumberFormat.Int8LE, false)
-
-        pins.i2cWriteNumber(41, 179, NumberFormat.Int8LE, false)
-
-        pins.i2cWriteNumber(41, 182, NumberFormat.Int8LE, true)
-        let TCS_RED = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
-        pins.i2cWriteNumber(41, 184, NumberFormat.Int8LE, true)
-        let TCS_GREEN = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
-        pins.i2cWriteNumber(41, 186, NumberFormat.Int8LE, true)
-        let TCS_BLUE = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
-        TCS_RED = Math.round(Math.map(TCS_RED, 0, 65535, 0, 255))
-        TCS_GREEN = Math.round(Math.map(TCS_GREEN, 0, 65535, 0, 255))
-        TCS_BLUE = Math.round(Math.map(TCS_BLUE, 0, 65535, 0, 255))
-        nowReadColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
-    }
-    /**
-   */
-    export enum Channel {
-        //% block="R"
-        Red = 1,
-        //% block="G"
-        Green = 2,
-        //% block="B"
-        Blue = 3
-    }
-    //% weight=12
-    //% block="color sensor read RGB %channel |channel"
-
-    //% group="Color Sensor"
-    export function colorSensorRead(channel: Channel = 1): number {
-        pins.i2cWriteNumber(41, 178, NumberFormat.Int8LE, false)
-
-        pins.i2cWriteNumber(41, 179, NumberFormat.Int8LE, false)
-
-        pins.i2cWriteNumber(41, 182, NumberFormat.Int8LE, true)
-        let TCS_RED = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
-        pins.i2cWriteNumber(41, 184, NumberFormat.Int8LE, true)
-        let TCS_GREEN = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
-        pins.i2cWriteNumber(41, 186, NumberFormat.Int8LE, true)
-        let TCS_BLUE = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
-
-        let RdCl = 0
-        switch (channel) {
-            case 1:
-                RdCl = Math.round(Math.map(TCS_RED, 0, 65535, 0, 255))
-                break;
-            case 2:
-                RdCl = Math.round(Math.map(TCS_GREEN, 0, 65535, 0, 255))
-                break;
-            case 3:
-                RdCl = Math.round(Math.map(TCS_BLUE, 0, 65535, 0, 255))
-                break;
+        // Initialize the color sensor
+        export function colorSensorInit(): void {
+            pins.i2cWriteNumber(41, 33276, NumberFormat.UInt16BE, false);
+            pins.i2cWriteNumber(41, 32771, NumberFormat.UInt16BE, false);
         }
 
-        return RdCl
-    }
-    export enum ColorPart {
-        //% block="Red"
-        Red = 1,
-        //% block="Green"
-        Green = 2,
-        //% block="Blue"
-        Blue = 3,
-        //% block="Yellow"
-        Yellow = 4,
-        //% block="Purple"
-        Purple = 5,
-        //% block="Custom1"
-        Custom1 = 6,
-        //% block="Custom2"
-        Custom2 = 7,
-        //% block="Custom3"
-        Custom3 = 8
-    }
+        let nowReadColor = [0, 0, 0];
 
-    let ReadRedColor = [0, 0, 0]
-    let ReadGreenColor = [0, 0, 0]
-    let ReadBlueColor = [0, 0, 0]
-    let ReadYellowColor = [0, 0, 0]
-    let ReadPurpleColor = [0, 0, 0]
-    let ReadCustom1Color = [0, 0, 0]
-    let ReadCustom2Color = [0, 0, 0]
-    let ReadCustom3Color = [0, 0, 0]
+        // Function to read the current color values
+        export function colorSensorReadNow(): number[] {
+            pins.i2cWriteNumber(41, 178, NumberFormat.Int8LE, false);
+            pins.i2cWriteNumber(41, 179, NumberFormat.Int8LE, false);
+            pins.i2cWriteNumber(41, 182, NumberFormat.Int8LE, true);
+            let TCS_RED = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false);
+            pins.i2cWriteNumber(41, 184, NumberFormat.Int8LE, true);
+            let TCS_GREEN = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false);
+            pins.i2cWriteNumber(41, 186, NumberFormat.Int8LE, true);
+            let TCS_BLUE = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false);
 
-    //% weight=12
-    //% block="color sensor record %colorpart |"
+            TCS_RED = Math.round(Math.map(TCS_RED, 0, 65535, 0, 255));
+            TCS_GREEN = Math.round(Math.map(TCS_GREEN, 0, 65535, 0, 255));
+            TCS_BLUE = Math.round(Math.map(TCS_BLUE, 0, 65535, 0, 255));
 
-    //% group="Color Sensor"
-    export function colorSensorRecord(colorpart: ColorPart = 1): void {
-        pins.i2cWriteNumber(41, 178, NumberFormat.Int8LE, false)
-
-        pins.i2cWriteNumber(41, 179, NumberFormat.Int8LE, false)
-
-        pins.i2cWriteNumber(41, 182, NumberFormat.Int8LE, true)
-        let TCS_RED = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
-        pins.i2cWriteNumber(41, 184, NumberFormat.Int8LE, true)
-        let TCS_GREEN = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
-        pins.i2cWriteNumber(41, 186, NumberFormat.Int8LE, true)
-        let TCS_BLUE = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false)
-        TCS_RED = Math.round(Math.map(TCS_RED, 0, 65535, 0, 255))
-        TCS_GREEN = Math.round(Math.map(TCS_GREEN, 0, 65535, 0, 255))
-        TCS_BLUE = Math.round(Math.map(TCS_BLUE, 0, 65535, 0, 255))
-        switch (colorpart) {
-            case 1:
-                ReadRedColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
-                break;
-            case 2:
-                ReadGreenColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
-                break;
-            case 3:
-                ReadBlueColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
-                break;
-            case 4:
-                ReadYellowColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
-                break;
-            case 5:
-                ReadPurpleColor = [TCS_RED, TCS_GREEN, TCS_BLUE]
-                break;
-            case 6:
-                ReadCustom1Color = [TCS_RED, TCS_GREEN, TCS_BLUE]
-                break;
-            case 7:
-                ReadCustom2Color = [TCS_RED, TCS_GREEN, TCS_BLUE]
-                break;
-            case 8:
-                ReadCustom3Color = [TCS_RED, TCS_GREEN, TCS_BLUE]
-                break;
+            nowReadColor = [TCS_RED, TCS_GREEN, TCS_BLUE];
+            return nowReadColor;
         }
-    }
-    let WriteRedColor = [0, 0, 0]
-    let WriteGreenColor = [0, 0, 0]
-    let WriteBlueColor = [0, 0, 0]
-    let WriteYellowColor = [0, 0, 0]
-    let WritePurpleColor = [0, 0, 0]
-    let WriteCustom1Color = [0, 0, 0]
-    let WriteCustom2Color = [0, 0, 0]
-    let WriteCustom3Color = [0, 0, 0]
-    let colorright = false
-    let forkrange = 5
-    //% weight=99 blockGap=8
-    //% block="read R %WriteRed|and G %WriteGreen|and B %WriteBlue equal to %colorpart|"
-    //% WriteRed.min=0 WriteRed.max=255
-    //% WriteGreen.min=0 WriteGreen.max=255
-    //% WriteBlue.min=0 WriteBlue.max=255
 
-    //% group="Color Sensor"
-    export function readColorEqual(WriteRed: number, WriteGreen: number, WriteBlue: number, colorpart: ColorPart = 1): boolean {
-        switch (colorpart) {
-            case 1:
-                WriteRedColor = [WriteRed, WriteGreen, WriteBlue];
-                if ((Math.abs(ReadRedColor[0] - nowReadColor[0]) < forkrange) && (Math.abs(ReadRedColor[1] - nowReadColor[1]) < forkrange) && (Math.abs(ReadRedColor[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else if ((Math.abs(WriteRedColor[0] - nowReadColor[0]) < forkrange) && (Math.abs(WriteRedColor[1] - nowReadColor[1]) < forkrange) && (Math.abs(WriteRedColor[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else {
-                    colorright = false
-                }
-                break;
-            case 2:
-                WriteGreenColor = [WriteRed, WriteGreen, WriteBlue];
-                if ((Math.abs(ReadGreenColor[0] - nowReadColor[0]) < forkrange) && (Math.abs(ReadGreenColor[1] - nowReadColor[1]) < forkrange) && (Math.abs(ReadGreenColor[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else if ((Math.abs(WriteGreenColor[0] - nowReadColor[0]) < forkrange) && (Math.abs(WriteGreenColor[1] - nowReadColor[1]) < forkrange) && (Math.abs(WriteGreenColor[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else {
-                    colorright = false
-                }
-                break;
-            case 3:
-                WriteBlueColor = [WriteRed, WriteGreen, WriteBlue];
-                if ((Math.abs(ReadBlueColor[0] - nowReadColor[0]) < forkrange) && (Math.abs(ReadBlueColor[1] - nowReadColor[1]) < forkrange) && (Math.abs(ReadBlueColor[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else if ((Math.abs(WriteBlueColor[0] - nowReadColor[0]) < forkrange) && (Math.abs(WriteBlueColor[1] - nowReadColor[1]) < forkrange) && (Math.abs(WriteBlueColor[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else {
-                    colorright = false
-                }
-                break;
-            case 4:
-                WriteYellowColor = [WriteRed, WriteGreen, WriteBlue];
-                if ((Math.abs(ReadYellowColor[0] - nowReadColor[0]) < forkrange) && (Math.abs(ReadYellowColor[1] - nowReadColor[1]) < forkrange) && (Math.abs(ReadYellowColor[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else if ((Math.abs(WriteYellowColor[0] - nowReadColor[0]) < forkrange) && (Math.abs(WriteYellowColor[1] - nowReadColor[1]) < forkrange) && (Math.abs(WriteYellowColor[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else {
-                    colorright = false
-                }
-                break;
+        //% weight=12
+        //% block="Read RGB"
+        //% group="Color Sensor"
+        export function scanColorBlock(): string {
+            colorSensorInit();
+            let colors = colorSensorReadNow();
+            let red = colors[0];
+            let green = colors[1];
+            let blue = colors[2];
+            return `R:${red}, G:${green}, B:${blue}`;
+        }
 
-            case 5:
-                WritePurpleColor = [WriteRed, WriteGreen, WriteBlue];
-                if ((Math.abs(ReadPurpleColor[0] - nowReadColor[0]) < forkrange) && (Math.abs(ReadPurpleColor[1] - nowReadColor[1]) < forkrange) && (Math.abs(ReadPurpleColor[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else if ((Math.abs(WritePurpleColor[0] - nowReadColor[0]) < forkrange) && (Math.abs(WritePurpleColor[1] - nowReadColor[1]) < forkrange) && (Math.abs(WritePurpleColor[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else {
-                    colorright = false
-                }
-                break;
-            case 6:
-                WriteCustom1Color = [WriteRed, WriteGreen, WriteBlue];
-                if ((Math.abs(ReadCustom1Color[0] - nowReadColor[0]) < forkrange) && (Math.abs(ReadCustom1Color[1] - nowReadColor[1]) < forkrange) && (Math.abs(ReadCustom1Color[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else if ((Math.abs(WriteCustom1Color[0] - nowReadColor[0]) < forkrange) && (Math.abs(WriteCustom1Color[1] - nowReadColor[1]) < forkrange) && (Math.abs(WriteCustom1Color[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else {
-                    colorright = false
-                }
-                break;
-            case 7:
-                WriteCustom2Color = [WriteRed, WriteGreen, WriteBlue];
-                if ((Math.abs(ReadCustom2Color[0] - nowReadColor[0]) < forkrange) && (Math.abs(ReadCustom2Color[1] - nowReadColor[1]) < forkrange) && (Math.abs(ReadCustom2Color[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else if ((Math.abs(WriteCustom2Color[0] - nowReadColor[0]) < forkrange) && (Math.abs(WriteCustom2Color[1] - nowReadColor[1]) < forkrange) && (Math.abs(WriteCustom2Color[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else {
-                    colorright = false
-                }
-                break;
-            case 8:
-                WriteCustom3Color = [WriteRed, WriteGreen, WriteBlue];
-                if ((Math.abs(ReadCustom3Color[0] - nowReadColor[0]) < forkrange) && (Math.abs(ReadCustom3Color[1] - nowReadColor[1]) < forkrange) && (Math.abs(ReadCustom3Color[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else if ((Math.abs(WriteCustom3Color[0] - nowReadColor[0]) < forkrange) && (Math.abs(WriteCustom3Color[1] - nowReadColor[1]) < forkrange) && (Math.abs(WriteCustom3Color[2] - nowReadColor[2]) < forkrange)) {
-                    colorright = true
-                }
-                else {
-                    colorright = false
-                }
-                break;
+        //% weight=12
+        //% block="Read RGB"
+        //% group="Color Sensor"
+        export function scanColor(): void {
+            colorSensorInit();
+            let colors = colorSensorReadNow();
+            let red = colors[0];
+            let green = colors[1];
+            let blue = colors[2];
+            serial.writeLine(`R:${red}, G:${green}, B:${blue}`);
         }
-        if (colorright == true) {
-            return true
+
+        //% block="R %WriteRed G %WriteGreen B %WriteBlue to %Name"
+        //% WriteRed.min=0 WriteRed.max=255
+        //% WriteGreen.min=0 WriteGreen.max=255
+        //% WriteBlue.min=0 WriteBlue.max=255
+        //% default.Name="name"
+        //% group="Color Sensor"
+        export function readColorEqual(WriteRed: number, WriteGreen: number, WriteBlue: number, Name: string): boolean {
+            colorSensorInit();
+            let colors = colorSensorReadNow();
+            let red = colors[0];
+            let green = colors[1];
+            let blue = colors[2];
+
+            return (red == WriteRed && green == WriteGreen && blue == WriteBlue);
         }
-        else {
-            return false
+        //% color=#00008B
+        //% block="Serial write line %text"
+        //% group="Serial"
+        export function serialWriteLine(text: string): void {
+            serial.writeLine(text);
         }
     }
 
-}
 
 //% color=#E7734B icon="\uf110"
 namespace GigoLED {
@@ -2777,4 +2587,4 @@ namespace Joystick {
 }
 
 
-//-----------------------------------
+}
