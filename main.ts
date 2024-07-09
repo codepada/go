@@ -1175,28 +1175,60 @@ namespace GigoWorkshop {
     }
 
     //-------------------//
+    //-------------------//
     ////////////////////////////////
     //          RGB LEDS          //
     ////////////////////////////////
+
     /**
-         * Create a  RGB LED Pin.
+    * Create a RGB LED Pin and show color directly.
+    */
+    //% color=#EE82EE
+    //% block="pin %pin|show color %color=RGBLED_colors|brightness %brightness"
+    //% weight=100 blockGap=8
+    //% brightness.min=0 brightness.max=255
+    //% group="RGB LED"
+    export function RGBLED_showColor(pin: DigitalPin, color: number, brightness: number): void {
+        let buf = pins.createBuffer(1 * 3);
+
+        // Set brightness
+        brightness = brightness & 0xff;
+        basic.pause(1); // add a pause to stop weirdnesses
+
+        // Set color
+        let red = unpackR(color);
+        let green = unpackG(color);
+        let blue = unpackB(color);
+
+        buf[0] = green;
+        buf[1] = red;
+        buf[2] = blue;
+
+        // Show color
+        light.sendWS2812BufferWithBrightness(buf, pin, brightness);
+    }
+
+
+
+    /**
+         * Create a RGB LED Pin.
          */
-    //% blockId="RGBLED_create" block="pin %pin|"
+    //% blockId="RGBLED_createPin" block="pin %pin|"
     //% weight=100 blockGap=8
     //% trackArgs=0,2
     //% blockSetVariable=RGBLED
-
     //% group="RGB LED"
-    export function RGBLED_create(pin: DigitalPin): HaloHd {
+    export function RGBLED_createPin(pin: DigitalPin): HaloHd {
         let RGBLED = new HaloHd();
         RGBLED.buf = pins.createBuffer(1 * 3);
         RGBLED.start = 0;
-        RGBLED._length = 1;/*LED數量*/
-        RGBLED.RGBLED_set_brightness(128)
+        RGBLED._length = 1; /*LED數量*/
+        RGBLED.RGBLED_setBrightness(128);
         RGBLED.pin = pin;
         pins.digitalWritePin(RGBLED.pin, pin);
         return RGBLED;
     }
+
     export class HaloHd {
         buf: Buffer;
         pin: DigitalPin;
@@ -1204,36 +1236,24 @@ namespace GigoWorkshop {
         start: number;
         _length: number;
 
-
-
-
-
         /**
          * Shows whole ZIP Halo display as a given color (range 0-255 for r, g, b). 
          * @param rgb RGB color of the LED
          */
-
         //% group="RGB LED"
         //% block="%RGBLED|show color %rgb=RGBLED_colors" 
         //% weight=99 blockGap=8
-        RGBLED_set_color(rgb: number) {
+        RGBLED_setColor(rgb: number) {
             rgb = rgb >> 0;
             this.setAllRGB(rgb);
             this.show();
         }
 
-
-
         /**
          * Send all the changes to the ZIP Halo display.
          */
 
-        //% group="RGB LED"
-        /* blockId="kitronik_halo_hd_display_show" block="%RGBLED|show" blockGap=8 */
-        //% weight=96
         show() {
-            //use the Kitronik version which respects brightness for all 
-            //ws2812b.sendBuffer(this.buf, this.pin, this.brightness);
             // Use the pxt-microbit core version which now respects brightness (10/2020)
             light.sendWS2812BufferWithBrightness(this.buf, this.pin, this.brightness);
         }
@@ -1243,9 +1263,6 @@ namespace GigoWorkshop {
          * You need to call ``show`` to make the changes visible.
          */
 
-        //% group="RGB LED"
-        /* blockId="kitronik_halo_hd_display_clear" block="%RGBLED|clear" */
-        //% weight=95 blockGap=8
         clear(): void {
             this.buf.fill(0, this.start * 3, this._length * 3);
         }
@@ -1254,31 +1271,29 @@ namespace GigoWorkshop {
          * Set the brightness of the ZIP Halo display. This flag only applies to future show operation.
          * @param brightness a measure of LED brightness in 0-255. eg: 255
          */
-
         //% group="RGB LED"
         //% block="%RGBLED|set brightness %brightness" blockGap=8
         //% weight=92
         //% brightness.min=0 brightness.max=255
-        RGBLED_set_brightness(brightness: number): void {
-            //Clamp incoming variable at 0-255 as values out of this range cause unexpected brightnesses as the lower level code only expects a byte.
+        RGBLED_setBrightness(brightness: number): void {
+            // Clamp incoming variable at 0-255 as values out of this range cause unexpected brightnesses as the lower level code only expects a byte.
             if (brightness < 0) {
-                brightness = 0
-            }
-            else if (brightness > 255) {
-                brightness = 255
+                brightness = 0;
+            } else if (brightness > 255) {
+                brightness = 255;
             }
             this.brightness = brightness & 0xff;
-            basic.pause(1) //add a pause to stop wierdnesses
+            basic.pause(1); // add a pause to stop weirdnesses
         }
 
-        //Sets up the buffer for pushing LED control data out to LEDs
+        // Sets up the buffer for pushing LED control data out to LEDs
         private setBufferRGB(offset: number, red: number, green: number, blue: number): void {
             this.buf[offset + 0] = green;
             this.buf[offset + 1] = red;
             this.buf[offset + 2] = blue;
         }
 
-        //Separates out Red, Green and Blue data and fills the LED control data buffer for all LEDs
+        // Separates out Red, Green and Blue data and fills the LED control data buffer for all LEDs
         private setAllRGB(rgb: number) {
             let red = unpackR(rgb);
             let green = unpackG(rgb);
@@ -1286,15 +1301,13 @@ namespace GigoWorkshop {
 
             const end = this.start + this._length;
             for (let i = this.start; i < end; ++i) {
-                this.setBufferRGB(i * 3, red, green, blue)
+                this.setBufferRGB(i * 3, red, green, blue);
             }
         }
 
-        //Separates out Red, Green and Blue data and fills the LED control data buffer for a single LED
+        // Separates out Red, Green and Blue data and fills the LED control data buffer for a single LED
         private setPixelRGB(pixeloffset: number, rgb: number): void {
-            if (pixeloffset < 0
-                || pixeloffset >= this._length)
-                return;
+            if (pixeloffset < 0 || pixeloffset >= this._length) return;
 
             pixeloffset = (pixeloffset + this.start) * 3;
 
@@ -1302,35 +1315,28 @@ namespace GigoWorkshop {
             let green = unpackG(rgb);
             let blue = unpackB(rgb);
 
-            this.setBufferRGB(pixeloffset, red, green, blue)
+            this.setBufferRGB(pixeloffset, red, green, blue);
         }
     }
-
-
 
     /**
      * Converts wavelength value to red, green, blue channels
      * @param wavelength value between 470 and 625. eg: 500
      */
-    //% group="RGB LED"
 
-    //% weight=1 blockGap=8
-    /* blockId="kitronik_halo_hd_wavelength" block="wavelength %wavelength|nm" */
-    //% wavelength.min=470 wavelength.max=625
     export function wavelength(wavelength: number): number {
-        /*  The LEDs we are using have centre wavelengths of 470nm (Blue) 525nm(Green) and 625nm (Red) 
-        * 	 We blend these linearly to give the impression of the other wavelengths. 
-        *   as we cant wavelength shift an actual LED... (Ye canna change the laws of physics Capt)*/
+        /* The LEDs we are using have centre wavelengths of 470nm (Blue) 525nm(Green) and 625nm (Red) 
+        *  We blend these linearly to give the impression of the other wavelengths. 
+        *  as we can't wavelength shift an actual LED... (Ye canna change the laws of physics Capt)*/
         let r = 0;
         let g = 0;
         let b = 0;
-        if ((wavelength >= 470) && (wavelength < 525)) {
-            //We are between Blue and Green so mix those
+        if (wavelength >= 470 && wavelength < 525) {
+            // We are between Blue and Green so mix those
             g = pins.map(wavelength, 470, 525, 0, 255);
             b = pins.map(wavelength, 470, 525, 255, 0);
-        }
-        else if ((wavelength >= 525) && (wavelength <= 625)) {
-            //we are between Green and Red, so mix those
+        } else if (wavelength >= 525 && wavelength <= 625) {
+            // we are between Green and Red, so mix those
             r = pins.map(wavelength, 525, 625, 0, 255);
             g = pins.map(wavelength, 525, 625, 255, 0);
         }
@@ -1344,41 +1350,29 @@ namespace GigoWorkshop {
      * @param hue value between 0 and 360
      */
 
-    //% group="RGB LED"
-    //% weight=1 blockGap=8
-    /* blockId="kitronik_halo_hd_hue" block="hue %hue" */
-    //% hue.min=0 hue.max=360
     export function hueToRGB(hue: number): number {
-        let redVal = 0
-        let greenVal = 0
-        let blueVal = 0
-        let hueStep = 2.125
-        if ((hue >= 0) && (hue < 120)) { //RedGreen section
-            greenVal = Math.floor((hue) * hueStep)
-            redVal = 255 - greenVal
-        }
-        else if ((hue >= 120) && (hue < 240)) { //GreenBlueSection
-            blueVal = Math.floor((hue - 120) * hueStep)
-            greenVal = 255 - blueVal
-        }
-        else if ((hue >= 240) && (hue < 360)) { //BlueRedSection
-            redVal = Math.floor((hue - 240) * hueStep)
-            blueVal = 255 - redVal
+        let redVal = 0;
+        let greenVal = 0;
+        let blueVal = 0;
+        let hueStep = 2.125;
+        if (hue >= 0 && hue < 120) { // RedGreen section
+            greenVal = Math.floor(hue * hueStep);
+            redVal = 255 - greenVal;
+        } else if (hue >= 120 && hue < 240) { // GreenBlueSection
+            blueVal = Math.floor((hue - 120) * hueStep);
+            greenVal = 255 - blueVal;
+        } else if (hue >= 240 && hue < 360) { // BlueRedSection
+            redVal = Math.floor((hue - 240) * hueStep);
+            blueVal = 255 - redVal;
         }
         return ((redVal & 0xFF) << 16) | ((greenVal & 0xFF) << 8) | (blueVal & 0xFF);
     }
-
-    /*  The LEDs we are using have centre wavelengths of 470nm (Blue) 525nm(Green) and 625nm (Red) 
-    * 	 We blend these linearly to give the impression of the other wavelengths. 
-    *   as we cant wavelength shift an actual LED... (Ye canna change the laws of physics Capt)*/
-
     /**
-     * Converts value to red, green, blue channels
-     * @param red value of the red channel between 0 and 255. eg: 255
-     * @param green value of the green channel between 0 and 255. eg: 255
-     * @param blue value of the blue channel between 0 and 255. eg: 255
-     */
-
+ * Converts value to red, green, blue channels
+ * @param red value of the red channel between 0 and 255. eg: 255
+ * @param green value of the green channel between 0 and 255. eg: 255
+ * @param blue value of the blue channel between 0 and 255. eg: 255
+ */
     //% group="RGB LED"
     //% weight=1 blockGap=8
     //% blockId="rgb" block="red %red|green %green|blue %blue"
@@ -1388,7 +1382,7 @@ namespace GigoWorkshop {
 
     /**
      * Gets the RGB value of a known color
-    */
+     */
     export enum RGBLedColors {
         //% block=off
         Off = 0x000000,
@@ -1402,39 +1396,40 @@ namespace GigoWorkshop {
         Green = 0x00FF00,
         //% block=blue
         Blue = 0x0000FF,
-        //% block=indigo
-        Indigo = 0x4b0082,
+
         //% block=purple
         Purple = 0xFF00FF,
         //% block=white
         White = 0xFFFFFF
-
     }
 
     //% group="RGB LED"
     //% weight=2 blockGap=8
-    //% blockId="RGBLED_colors" block="%color" 
+    //% blockId="RGBLED_colors" block="%color"
     export function colors(color: RGBLedColors): number {
         return color;
     }
 
-    //Combines individual RGB settings to be a single number
+    // Combines individual RGB settings to be a single number
     function packRGB(a: number, b: number, c: number): number {
         return ((a & 0xFF) << 16) | ((b & 0xFF) << 8) | (c & 0xFF);
     }
-    //Separates red value from combined number
+
+    // Separates red value from combined number
     function unpackR(rgb: number): number {
         let r = (rgb >> 16) & 0xFF;
         return r;
     }
-    //Separates green value from combined number
+
+    // Separates green value from combined number
     function unpackG(rgb: number): number {
         let g = (rgb >> 8) & 0xFF;
         return g;
     }
-    //Separates blue value from combined number
+
+    // Separates blue value from combined number
     function unpackB(rgb: number): number {
-        let b = (rgb) & 0xFF;
+        let b = rgb & 0xFF;
         return b;
     }
 
@@ -1449,28 +1444,40 @@ namespace GigoWorkshop {
         h = h % 360;
         s = Math.clamp(0, 99, s);
         l = Math.clamp(0, 99, l);
-        let c = Math.idiv((((100 - Math.abs(2 * l - 100)) * s) << 8), 10000); //chroma, [0,255]
-        let h1 = Math.idiv(h, 60);//[0,6]
-        let h2 = Math.idiv((h - h1 * 60) * 256, 60);//[0,255]
-        let temp = Math.abs((((h1 % 2) << 8) + h2) - 256);
-        let x = (c * (256 - (temp))) >> 8;//[0,255], second largest component of this color
+        let c = Math.idiv(((100 - Math.abs(2 * l - 100)) * s << 8), 10000); // chroma, [0,255]
+        let h1 = Math.idiv(h, 60); // [0,6]
+        let h2 = Math.idiv((h - h1 * 60) * 256, 60); // [0,255]
+        let temp = Math.abs(((h1 % 2) << 8 + h2) - 256);
+        let x = (c * (256 - temp)) >> 8; // [0,255], second largest component of this color
         let r$: number;
         let g$: number;
         let b$: number;
         if (h1 == 0) {
-            r$ = c; g$ = x; b$ = 0;
+            r$ = c;
+            g$ = x;
+            b$ = 0;
         } else if (h1 == 1) {
-            r$ = x; g$ = c; b$ = 0;
+            r$ = x;
+            g$ = c;
+            b$ = 0;
         } else if (h1 == 2) {
-            r$ = 0; g$ = c; b$ = x;
+            r$ = 0;
+            g$ = c;
+            b$ = x;
         } else if (h1 == 3) {
-            r$ = 0; g$ = x; b$ = c;
+            r$ = 0;
+            g$ = x;
+            b$ = c;
         } else if (h1 == 4) {
-            r$ = x; g$ = 0; b$ = c;
+            r$ = x;
+            g$ = 0;
+            b$ = c;
         } else if (h1 == 5) {
-            r$ = c; g$ = 0; b$ = x;
+            r$ = c;
+            g$ = 0;
+            b$ = x;
         }
-        let m = Math.idiv((Math.idiv((l * 2 << 8), 100) - c), 2);
+        let m = Math.idiv((Math.idiv(l * 2 << 8, 100) - c), 2);
         let r = r$ + m;
         let g = g$ + m;
         let b = b$ + m;
@@ -1485,6 +1492,11 @@ namespace GigoWorkshop {
         CounterClockwise,
         Shortest
     }
+
+
+
+
+
 
     ////////////////////////////////
     //          Colour sensor       //
