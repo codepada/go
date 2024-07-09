@@ -1569,7 +1569,7 @@ namespace GigoWorkshop {
             serial.writeLine(text);
         }
     }
-
+}
 
 //% color=#E7734B icon="\uf110"
 namespace GigoLED {
@@ -2587,4 +2587,3 @@ namespace Joystick {
 }
 
 
-}
