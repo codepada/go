@@ -1492,9 +1492,7 @@ namespace GigoWorkshop {
     //% weight=0 color=#3CB371 icon="\uf135" groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
     
 
-        ////////////////////////////////
-        //        Color Sensor        //
-        ////////////////////////////////
+        
 
         // Initialize the color sensor
         export function colorSensorInit(): void {
@@ -1562,9 +1560,9 @@ namespace GigoWorkshop {
 
             return (red == WriteRed && green == WriteGreen && blue == WriteBlue);
         }
-        //% color=#00008B
+        //% color=#000066
         //% block="Serial write line %text"
-        //% group="Serial"
+        //% group="Color Sensor"
         export function serialWriteLine(text: string): void {
             serial.writeLine(text);
         }
