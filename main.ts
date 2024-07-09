@@ -1186,6 +1186,7 @@ namespace GigoWorkshop {
     //% color=#EE82EE
     //% block="pin %pin|show color %color=RGBLED_colors|brightness %brightness"
     //% weight=100 blockGap=8
+    //% brightness.defl=255
     //% brightness.min=0 brightness.max=255
     //% group="RGB LED"
     export function RGBLED_showColor(pin: DigitalPin, color: number, brightness: number): void {
