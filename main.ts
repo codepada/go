@@ -1520,7 +1520,7 @@ namespace GigoWorkshop {
             nowReadColor = [TCS_RED, TCS_GREEN, TCS_BLUE];
             return nowReadColor;
         }
-
+        
         //% weight=12
         //% block="Read RGB"
         //% group="Color Sensor"
@@ -1532,10 +1532,8 @@ namespace GigoWorkshop {
             let blue = colors[2];
             return `R:${red}, G:${green}, B:${blue}`;
         }
-
-        //% weight=12
-        //% block="Read RGB"
-        //% group="Color Sensor"
+        //code สำหรับ แสดงใน serial.writeLine
+        //ปิดไว้
         export function scanColor(): void {
             colorSensorInit();
             let colors = colorSensorReadNow();
