@@ -1571,7 +1571,7 @@ namespace GigoWorkshop {
 
             return (red == WriteRed && green == WriteGreen && blue == WriteBlue);
         }
-        //% color=##8470FF
+        //% color=#8470FF
         //% block="Serial write line %text"
         //% group="Color Sensor"
         export function serialWriteLine(text: any): void {
