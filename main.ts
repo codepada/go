@@ -1787,7 +1787,12 @@ namespace GigoSensor {
         let reading = pins.digitalReadPin(read);
         return (reading);
     }
-
+    //% color=#000066
+    //% block="Serial write line %text"
+    //% group="Read Sensor"
+    export function serialWriteLine(text: string): void {
+        serial.writeLine(text);
+    }
 
     function signal_dht11(pin: DigitalPin): void {
         pins.digitalWritePin(pin, 0);
