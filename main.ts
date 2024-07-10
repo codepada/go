@@ -1136,7 +1136,7 @@ namespace GigoWorkshop {
     //% color=#FACB09
     //% block="led $leds status $status"
     //% status.min=0 status.max=1
-    //% leds.defl=lEDChannelWS.D
+    //% leds.defl=LEDChannelWS.D
     //% group="Led"
     export function ledtest(leds: LEDChannelWS, status: number): void {
         let ledg = LEDChannelsWS[leds];
@@ -1147,7 +1147,7 @@ namespace GigoWorkshop {
     //% color=#FACB09
     //% block="led $leds status $status"
     //% status.defl=lEDShaftonoff.HIGH*
-    //% leds.defl=lEDChannelWS.D
+    //% leds.defl=LEDChannelWS.D
     //% group="Led"
     export function led(leds: LEDChannelWS, status: LEDShaftonoffWS): void {
         let ledg = LEDChannelsWS[leds];
@@ -1159,7 +1159,7 @@ namespace GigoWorkshop {
     //% block="led %pin $ledstate"
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
-    //% pin.defl=lEDChannelWS.D
+    //% pin.defl=LEDChannelWS.D
     //% group="Led"
     export function ledBrightness(pin: LEDChannelWS, ledstate: boolean): void {
         if (ledstate) {
@@ -1198,7 +1198,7 @@ namespace GigoWorkshop {
         //% block="P16"
         P16,
         //% block="P0"
-        P0,
+        P0
     }
     export let PinNewBoxs: { [key: number]: DigitalPin } = {
         [PinNewBox.P1]: DigitalPin.P1,
@@ -1208,7 +1208,7 @@ namespace GigoWorkshop {
         [PinNewBox.P14]: DigitalPin.P14,
         [PinNewBox.P15]: DigitalPin.P15,
         [PinNewBox.P16]: DigitalPin.P16,
-        [PinNewBox.P0]: DigitalPin.P0,
+        [PinNewBox.P0]: DigitalPin.P0
     }
     //% color=#EE82EE
     //% block="pin %pin|show color %color=RGBLED_colors|brightness %brightness"
