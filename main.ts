@@ -934,11 +934,11 @@ namespace GigoWorkshop {
     export enum GgMotorChannel {
         //% block="A (P2,P1)"
         A,
-        //% block="B (P13,P8)""
+        //% block="B (P13,P8)"
         B,
-        //% block="C (P15,P14)""
+        //% block="C (P15,P14)"
         C,
-        //% block="D (P0,P16)""
+        //% block="D (P0,P16)"
         D,
     }
     export enum GgMotorShaftDirection {
@@ -1002,7 +1002,7 @@ namespace GigoWorkshop {
     //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=100
     //% speed.defl=100
-    //% direction.defl=ggMotorShaftDirection.HIGH
+    //% direction.defl=GgMotorShaftDirection.HIGH
     //% group="Motor for workshop"
     export function motorControl4(channel: GgMotorChannel, direction: GgMotorShaftDirection, speed: number): void {
         let dirPin = GgmotorChannels[channel];
@@ -1183,7 +1183,7 @@ namespace GigoWorkshop {
     /**
     * Create a RGB LED Pin and show color directly.
     */
-    // Enum for specific pins
+    //Enum for specific pins
    
     export enum PinNewBox {
         //% block="P1"
