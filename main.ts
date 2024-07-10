@@ -1575,7 +1575,7 @@ namespace GigoWorkshop {
         //% block="Serial write line %text"
         //% group="Color Sensor"
         export function serialWriteLine(text: any): void {
-            serial.writeLine(text.toString());
+            serial.writeLine(text);
         }
     
 }
@@ -1791,7 +1791,7 @@ namespace GigoSensor {
     //% block="Serial write line %text"
     //% group="Read Sensor"
     export function serialWriteLine(text: any): void {
-        serial.writeLine(text.toString());
+        serial.writeLine(text);
     }
 
     function signal_dht11(pin: DigitalPin): void {
