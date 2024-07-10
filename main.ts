@@ -1156,7 +1156,7 @@ namespace GigoWorkshop {
     }
     //% color=#FACB09
     //toggle led
-    //% blockId=led block="led %pin $ledstate"
+    //% block="led %pin $ledstate"
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
     //% pin.defl=lEDChannelWS.D
