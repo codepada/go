@@ -1571,7 +1571,7 @@ namespace GigoWorkshop {
 
             return (red == WriteRed && green == WriteGreen && blue == WriteBlue);
         }
-        //% color=#000066
+        //% color=##8470FF
         //% block="Serial write line %text"
         //% group="Color Sensor"
         export function serialWriteLine(text: any): void {
@@ -1787,7 +1787,7 @@ namespace GigoSensor {
         let reading = pins.digitalReadPin(read);
         return (reading);
     }
-    //% color=#000066
+    //% color=#8470FF
     //% block="Serial write line %text"
     //% group="Read Sensor"
     export function serialWriteLine(text: any): void {
