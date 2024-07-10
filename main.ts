@@ -810,7 +810,7 @@ namespace PlanetX_AILens {
 
 //--------------------
 
-//% weight=0 color=#3CB371 icon="\uf135"  groups="["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]"
+//% weight=0 color=#3CB371 icon="\uf135"  groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
 namespace GigoWorkshop {
     
         //external button for roboticworkshop
@@ -1183,25 +1183,13 @@ namespace GigoWorkshop {
     /**
     * Create a RGB LED Pin and show color directly.
     */
-    // Enum for specific pins
-    export enum SpecificPin {
-        P0 = DigitalPin.P0,
-        P1 = DigitalPin.P1,
-        P2 = DigitalPin.P2,
-        P8 = DigitalPin.P8,
-        P13 = DigitalPin.P13,
-        P14 = DigitalPin.P14,
-        P15 = DigitalPin.P15,
-        P16 = DigitalPin.P16
-    }
-
     //% color=#EE82EE
     //% block="pin %pin|show color %color=RGBLED_colors|brightness %brightness"
     //% weight=100 blockGap=8
     //% brightness.defl=255
     //% brightness.min=0 brightness.max=255
     //% group="RGB LED"
-    export function RGBLED_showColor(pin: SpecificPin, color: number, brightness: number): void {
+    export function RGBLED_showColor(pin: DigitalPin, color: number, brightness: number): void {
         let buf = pins.createBuffer(1 * 3);
 
         // Set brightness
@@ -1418,7 +1406,7 @@ namespace GigoWorkshop {
 
     //% group="RGB LED"
     //% weight=2 blockGap=8
-    
+    //% blockId="RGBLED_colors" block="%color"
     export function colors(color: RGBLedColors): number {
         return color;
     }
@@ -1512,7 +1500,7 @@ namespace GigoWorkshop {
 
 
     ////////////////////////////////
-    //          Color sensor       //
+    //          Colour sensor       //
     ////////////////////////////////
     //% weight=0 color=#3CB371 icon="\uf135" groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
     
