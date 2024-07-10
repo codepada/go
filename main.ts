@@ -1236,7 +1236,7 @@ namespace GigoWorkshop {
         buf[2] = blue;
 
         // Show color
-        light.sendWS2812BufferWithBrightness(buf, pin, brightness);
+        light.sendWS2812BufferWithBrightness(buf, PinNewBoxs[pin], brightness);
     }
 
 
