@@ -810,7 +810,7 @@ namespace PlanetX_AILens {
 
 //--------------------
 
-//% weight=0 color=#3CB371 icon="\uf135"  groups=["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]
+//% weight=0 color=#3CB371 icon="\uf135"  groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
 namespace GigoWorkshop {
     
         //external button for roboticworkshop
@@ -934,11 +934,11 @@ namespace GigoWorkshop {
     export enum GgMotorChannel {
         //% block="A (P2,P1)"
         A,
-        //% block="B (P13,P8)"
+        //% block="B (P13,P8)""
         B,
-        //% block="C (P15,P14)"
+        //% block="C (P15,P14)""
         C,
-        //% block="D (P0,P16)"
+        //% block="D (P0,P16)""
         D,
     }
     export enum GgMotorShaftDirection {
@@ -1002,7 +1002,7 @@ namespace GigoWorkshop {
     //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=100
     //% speed.defl=100
-    //% direction.defl=GgMotorShaftDirection.HIGH
+    //% direction.defl=ggMotorShaftDirection.HIGH
     //% group="Motor for workshop"
     export function motorControl4(channel: GgMotorChannel, direction: GgMotorShaftDirection, speed: number): void {
         let dirPin = GgmotorChannels[channel];
@@ -1136,7 +1136,7 @@ namespace GigoWorkshop {
     //% color=#FACB09
     //% block="led $leds status $status"
     //% status.min=0 status.max=1
-    //% leds.defl=LEDChannelWS.D
+    //% leds.defl=lEDChannelWS.D
     //% group="Led"
     export function ledtest(leds: LEDChannelWS, status: number): void {
         let ledg = LEDChannelsWS[leds];
@@ -1147,7 +1147,7 @@ namespace GigoWorkshop {
     //% color=#FACB09
     //% block="led $leds status $status"
     //% status.defl=lEDShaftonoff.HIGH*
-    //% leds.defl=LEDChannelWS.D
+    //% leds.defl=lEDChannelWS.D
     //% group="Led"
     export function led(leds: LEDChannelWS, status: LEDShaftonoffWS): void {
         let ledg = LEDChannelsWS[leds];
@@ -1159,7 +1159,7 @@ namespace GigoWorkshop {
     //% block="led %pin $ledstate"
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
-    //% pin.defl=LEDChannelWS.D
+    //% pin.defl=lEDChannelWS.D
     //% group="Led"
     export function ledBrightness(pin: LEDChannelWS, ledstate: boolean): void {
         if (ledstate) {
@@ -1175,48 +1175,33 @@ namespace GigoWorkshop {
     }
 
     //-------------------//
-    
+    //-------------------//
     ////////////////////////////////
     //          RGB LEDS          //
     ////////////////////////////////
 
-   
-   
-    export enum PinNewBox {
-        //% block="P1"
-        P1,
-        //% block="P2"
-        P2,
-        //% block="P8"
-        P8,
-        //% block="P13"
-        P13,
-        //% block="P14"
-        P14,
-        //% block="P15"
-        P15,
-        //% block="P16"
-        P16,
-        //% block="P0"
-        P0
+    /**
+    * Create a RGB LED Pin and show color directly.
+    */
+    // Enum for specific pins
+    export enum SpecificPin {
+        P0 = DigitalPin.P0,
+        P1 = DigitalPin.P1,
+        P2 = DigitalPin.P2,
+        P8 = DigitalPin.P8,
+        P13 = DigitalPin.P13,
+        P14 = DigitalPin.P14,
+        P15 = DigitalPin.P15,
+        P16 = DigitalPin.P16
     }
-    export let PinNewBoxs: { [key: number]: DigitalPin } = {
-        [PinNewBox.P1]: DigitalPin.P1,
-        [PinNewBox.P2]: DigitalPin.P2,
-        [PinNewBox.P8]: DigitalPin.P8,
-        [PinNewBox.P13]: DigitalPin.P13,
-        [PinNewBox.P14]: DigitalPin.P14,
-        [PinNewBox.P15]: DigitalPin.P15,
-        [PinNewBox.P16]: DigitalPin.P16,
-        [PinNewBox.P0]: DigitalPin.P0
-    }
+
     //% color=#EE82EE
     //% block="pin %pin|show color %color=RGBLED_colors|brightness %brightness"
     //% weight=100 blockGap=8
     //% brightness.defl=255
     //% brightness.min=0 brightness.max=255
     //% group="RGB LED"
-    export function RGBLED_showColor(pin: PinNewBox, color: number, brightness: number): void {
+    export function RGBLED_showColor(pin: SpecificPin, color: number, brightness: number): void {
         let buf = pins.createBuffer(1 * 3);
 
         // Set brightness
@@ -1233,7 +1218,7 @@ namespace GigoWorkshop {
         buf[2] = blue;
 
         // Show color
-        light.sendWS2812BufferWithBrightness(buf, PinNewBoxs[pin], brightness);
+        light.sendWS2812BufferWithBrightness(buf, pin, brightness);
     }
 
 
