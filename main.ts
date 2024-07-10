@@ -975,7 +975,7 @@ namespace GigoWorkshop {
 
 
     //% block="motor $channel direction $direction speed $speed"
-    //% speed.min=0 speed.max=255
+    //% speed.min=0 speed.max=100
     //% speed.defl=100
     //% direction.min=0 direction.max=1
     //% group="Motor for workshop"
@@ -1000,7 +1000,7 @@ namespace GigoWorkshop {
     }
 
     //% block="motor $channel direction $direction speed $speed"
-    //% speed.min=0 speed.max=255
+    //% speed.min=0 speed.max=100
     //% speed.defl=100
     //% direction.defl=ggMotorShaftDirection.HIGH
     //% group="Motor for workshop"
@@ -2063,7 +2063,7 @@ namespace GigoMotor {
 
     //% color=#E7734B
     //% block="motor $channel direction $direction speed $speed"
-    //% speed.min=0 speed.max=255
+    //% speed.min=0 speed.max=100
     //% speed.defl=100
     //% direction.min=0 direction.max=1
     //% group="Motor"
@@ -2073,12 +2073,12 @@ namespace GigoMotor {
         let speedPin = MotorSpeedPins[channel];
 
         pins.digitalWritePin(dirPin, direction);
-        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 100, 0, 1023));
     }
 
     //% color=#E7734B
     //% block="motor $channel direction $direction speed $speed"
-    //% speed.min=0 speed.max=255
+    //% speed.min=0 speed.max=100
     //% speed.defl=100
     //% direction.defl=motor.MotorShaftDirection.HIGH
     //% group="Motor"
@@ -2088,7 +2088,7 @@ namespace GigoMotor {
         let speedPin = MotorSpeedPins[channel];
         let direct = MotorSDD[direction];
         pins.digitalWritePin(dirPin, direct);
-        pins.analogWritePin(speedPin, pins.map(speed, 0, 255, 0, 1023));
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 100, 0, 1023));
     }
 
     //servo180
