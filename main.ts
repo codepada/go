@@ -1184,7 +1184,7 @@ namespace GigoWorkshop {
     * Create a RGB LED Pin and show color directly.
     */
     // Enum for specific pins
-    enum SpecificPin {
+    export enum SpecificPin {
         P0 = DigitalPin.P0,
         P1 = DigitalPin.P1,
         P2 = DigitalPin.P2,
