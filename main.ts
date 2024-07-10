@@ -1174,8 +1174,6 @@ namespace GigoWorkshop {
         }
     }
 
-    //-------------------//
-    //-------------------//
     ////////////////////////////////
     //          RGB LEDS          //
     ////////////////////////////////
@@ -1183,13 +1181,71 @@ namespace GigoWorkshop {
     /**
     * Create a RGB LED Pin and show color directly.
     */
+
+    export enum fixRGBpin {
+        //% block="P1"
+        P1,
+        //% block="P2"
+        P2,
+        //% block="P8"
+        P8,
+        //% block="P13"
+        P13,
+        //% block="P14"
+        P14,
+        //% block="P15"
+        P15,
+        //% block="P16"
+        P16,
+        //% block="P0"
+        P0,
+    }
+
+    export let fixRGBpinChanel: { [key: number]: DigitalPin } = {
+        [fixRGBpin.P1]: DigitalPin.P1,
+        [fixRGBpin.P2]: DigitalPin.P2,
+        [fixRGBpin.P8]: DigitalPin.P8,
+        [fixRGBpin.P13]: DigitalPin.P13,
+        [fixRGBpin.P14]: DigitalPin.P14,
+        [fixRGBpin.P15]: DigitalPin.P15,
+        [fixRGBpin.P16]: DigitalPin.P16,
+        [fixRGBpin.P0]: DigitalPin.P0,
+    }
+
+
+
+
+    //% color=#EE82EE
+    //% block="RGB Color pin %pin red %red green %green blue %blue brightness %brightness"
+    //% weight=500 blockGap=8
+    //% brightness.defl=255
+    //% brightness.min=0 brightness.max=255
+    //% group="RGB LED"
+    export function RGBLED_showColorA(pin: fixRGBpin, red: number, green: number, blue: number, brightness: number): void {
+        let buf = pins.createBuffer(1 * 3);
+
+        // Set brightness
+        brightness = brightness & 0xff;
+        basic.pause(1); // add a pause to stop weirdnesses
+
+        // Set color
+        let color = packRGB(red, green, blue);
+
+        // Show color
+        buf[0] = unpackG(color);
+        buf[1] = unpackR(color);
+        buf[2] = unpackB(color);
+
+        light.sendWS2812BufferWithBrightness(buf, fixRGBpinChanel[pin], brightness);
+    }
+
     //% color=#EE82EE
     //% block="pin %pin|show color %color=RGBLED_colors|brightness %brightness"
     //% weight=100 blockGap=8
     //% brightness.defl=255
     //% brightness.min=0 brightness.max=255
     //% group="RGB LED"
-    export function RGBLED_showColor(pin: DigitalPin, color: number, brightness: number): void {
+    export function RGBLED_showColor(pin: fixRGBpin, color: number, brightness: number): void {
         let buf = pins.createBuffer(1 * 3);
 
         // Set brightness
@@ -1206,19 +1262,9 @@ namespace GigoWorkshop {
         buf[2] = blue;
 
         // Show color
-        light.sendWS2812BufferWithBrightness(buf, pin, brightness);
+        light.sendWS2812BufferWithBrightness(buf, fixRGBpinChanel[pin], brightness);
     }
 
-
-
-    /**
-         * Create a RGB LED Pin.
-         */
-    //% blockId="RGBLED_createPin" block="pin %pin|"
-    //% weight=100 blockGap=8
-    //% trackArgs=0,2
-    //% blockSetVariable=RGBLED
-    //% group="RGB LED"
     export function RGBLED_createPin(pin: DigitalPin): HaloHd {
         let RGBLED = new HaloHd();
         RGBLED.buf = pins.createBuffer(1 * 3);
@@ -1241,9 +1287,7 @@ namespace GigoWorkshop {
          * Shows whole ZIP Halo display as a given color (range 0-255 for r, g, b). 
          * @param rgb RGB color of the LED
          */
-        //% group="RGB LED"
-        //% block="%RGBLED|show color %rgb=RGBLED_colors" 
-        //% weight=99 blockGap=8
+
         RGBLED_setColor(rgb: number) {
             rgb = rgb >> 0;
             this.setAllRGB(rgb);
@@ -1272,10 +1316,7 @@ namespace GigoWorkshop {
          * Set the brightness of the ZIP Halo display. This flag only applies to future show operation.
          * @param brightness a measure of LED brightness in 0-255. eg: 255
          */
-        //% group="RGB LED"
-        //% block="%RGBLED|set brightness %brightness" blockGap=8
-        //% weight=92
-        //% brightness.min=0 brightness.max=255
+
         RGBLED_setBrightness(brightness: number): void {
             // Clamp incoming variable at 0-255 as values out of this range cause unexpected brightnesses as the lower level code only expects a byte.
             if (brightness < 0) {
@@ -1374,9 +1415,7 @@ namespace GigoWorkshop {
  * @param green value of the green channel between 0 and 255. eg: 255
  * @param blue value of the blue channel between 0 and 255. eg: 255
  */
-    //% group="RGB LED"
-    //% weight=1 blockGap=8
-    //% blockId="rgb" block="red %red|green %green|blue %blue"
+
     export function rgb(red: number, green: number, blue: number): number {
         return packRGB(red, green, blue);
     }
@@ -1404,8 +1443,8 @@ namespace GigoWorkshop {
         White = 0xFFFFFF
     }
 
-    //% group="RGB LED"
-    //% weight=2 blockGap=8
+
+
     //% blockId="RGBLED_colors" block="%color"
     export function colors(color: RGBLedColors): number {
         return color;
@@ -1493,6 +1532,7 @@ namespace GigoWorkshop {
         CounterClockwise,
         Shortest
     }
+    //---------------------------------------------//
 
 
 
