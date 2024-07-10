@@ -1175,15 +1175,12 @@ namespace GigoWorkshop {
     }
 
     //-------------------//
-    //-------------------//
+    
     ////////////////////////////////
     //          RGB LEDS          //
     ////////////////////////////////
 
-    /**
-    * Create a RGB LED Pin and show color directly.
-    */
-    //Enum for specific pins
+   
    
     export enum PinNewBox {
         //% block="P1"
