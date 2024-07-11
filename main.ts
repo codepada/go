@@ -1129,6 +1129,12 @@ namespace GigoWorkshop {
             default: return d;
         }
     }
+    //% color=#8470FF
+    //% block="Serial write line %text"
+    //% group="Ultrasonic Sensor"
+    export function serialWriteLine(text: any): void {
+        serial.writeLine(text);
+    }
     //////////////////////
     //       OLD LED.   //
     //////////////////////
@@ -1638,12 +1644,7 @@ namespace GigoWorkshop {
 
         return (red == WriteRed && green == WriteGreen && blue == WriteBlue);
     }
-    //% color=#8470FF
-    //% block="Serial write line %text"
-    //% group="Color Sensor"
-    export function serialWriteLine(text: any): void {
-        serial.writeLine(text);
-    }
+    
 
 }
 
