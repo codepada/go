@@ -775,10 +775,7 @@ namespace PlanetX_AILens {
     }
     let asrEventId = 3500
     let lastvoc = 0
-    //% block="ASR sensor hear %vocabulary"
-    //% subcategory=ASR group="IIC Port"
-    //% vocabulary.fieldEditor="gridpicker" vocabulary.fieldOptions.columns=3
-    //% color=#00B1ED
+    
     export function onASR(vocabulary: vocabularyList, handler: () => void) {
         control.onEvent(asrEventId, vocabulary, handler);
         control.inBackground(() => {
@@ -792,15 +789,11 @@ namespace PlanetX_AILens {
             }
         })
     }
-    //% block="ASR sensor enter learning-model"
-    //% subcategory=ASR group="IIC Port"
-    //% color=#00B1ED
+    
     export function setASRLearn(): void {
         pins.i2cWriteNumber(0x0B, 0x50, NumberFormat.Int8LE)
     }
-    //% block="ASR sensor clear learned entrys"
-    //% subcategory=ASR group="IIC Port"
-    //% color=#00B1ED
+    
     export function delASRLearn(): void {
         pins.i2cWriteNumber(0x0B, 0x60, NumberFormat.Int8LE)
     }
