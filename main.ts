@@ -982,21 +982,21 @@ namespace GigoWorkshop {
     }
     export let servoNewchanel: { [key: number]: AnalogPin } = {
         [ServoNew.P1]: AnalogPin.P1,
-        [ServoNew.P8]: AnalogPin.P8,
-        [ServoNew.P0]: AnalogPin.P0,
         [ServoNew.P2]: AnalogPin.P2,
+        [ServoNew.P8]: AnalogPin.P8,
         [ServoNew.P13]: AnalogPin.P13,
         [ServoNew.P14]: AnalogPin.P14,
         [ServoNew.P15]: AnalogPin.P15,
         [ServoNew.P16]: AnalogPin.P16,
+        [ServoNew.P0]: AnalogPin.P0,
     }
     
-    //% block"servo180 $pinSmini degrees $degrees"
-    //% degrees.min=20 degrees.max=160
+    //% block"servo180 $pin degrees $degrees"
+    //% degrees.min=0 degrees.max=180
     //% degrees.defl=90
     //% group="Motor for workshop"
-    export function miniServo(pinSmini: ServoNew, degrees: number): void {
-        let pinsmini = servoNewchanel[pinSmini];
+    export function miniServo(pin: ServoNew, degrees: number): void {
+        let pinsmini = servoNewchanel[pin];
         pins.servoWritePin(pinsmini, degrees);
 
     }
