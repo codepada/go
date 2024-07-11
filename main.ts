@@ -1,5 +1,10 @@
+//AI lens
+
+/**
+ * This extension is designed to programme and drive the Smart AI Lens(二郎神)
+ */
 //% color=#0031AF icon="\uf06e" 
-//% groups='["On Start", "Ball", "Face", "Card", "Color", "Tracking", "Learn"]'
+//% groups='["Basic", "Ball", "Face", "Card", "Color", "Tracking", "Learn"]'
 //% block="AI-Lens"
 namespace PlanetX_AILens {
     const CameraAdd = 0X14;
@@ -290,7 +295,9 @@ namespace PlanetX_AILens {
     /**
     * TODO: Waiting for module initialize.
     */
-
+    //% block="Initialize AI-Lens"
+    //% group="Basic" weight=100
+    //% color=#00B1ED
     export function initModule(): void {
         let timeout = input.runningTime()
         while (!(pins.i2cReadNumber(CameraAdd, NumberFormat.Int8LE))) {
@@ -305,13 +312,12 @@ namespace PlanetX_AILens {
     * TODO: Switch recognition objects.
     * @param fun Function list eg: FuncList.Face
     */
-    //% block="Mode %fun"
+    //% block="Switch function as %fun"
     //% fun.fieldEditor="gridpicker"
     //% fun.fieldOptions.columns=3
-    //% group="On Start" weight=95 
+    //% group="Basic" weight=95 
     //% color=#00B1ED
     export function switchfunc(fun: FuncList): void {
-        initModule()
         let funcBuff = pins.i2cReadBuffer(CameraAdd, 9)
         funcBuff[0] = 0x20
         funcBuff[1] = fun
@@ -321,7 +327,9 @@ namespace PlanetX_AILens {
     /**
     * TODO: Get the image in a frame
     */
-
+    //% block="Get one image from AI-Lens"
+    //% group="Basic" weight=90 
+    //% color=#00B1ED
     export function cameraImage(): void {
         DataBuff = pins.i2cReadBuffer(CameraAdd, 9)
         basic.pause(30)
@@ -334,7 +342,6 @@ namespace PlanetX_AILens {
     //% group="Ball" weight=85 
     //% color=#00B1ED
     export function checkBall(): boolean {
-        cameraImage()
         return DataBuff[0] == 7
     }
     //% block="Image contains %ballcolor ball"
@@ -343,7 +350,6 @@ namespace PlanetX_AILens {
     //% ballcolor.fieldOptions.columns=2 
     //% color=#00B1ED
     export function ballColor(ballcolor: ballColorList): boolean {
-        cameraImage()
         if (DataBuff[0] == 7) {
             return ballcolor == DataBuff[1]
         }
@@ -355,7 +361,6 @@ namespace PlanetX_AILens {
     //% group="Ball" weight=83 
     //% color=#00B1ED
     export function BallTotalNum(): number {
-        cameraImage()
         if (DataBuff[0] == 7) {
             return DataBuff[7]
         }
@@ -366,16 +371,12 @@ namespace PlanetX_AILens {
     /**
     * TODO: In the image get ball(s)' info
     */
-    //ปืดโค้ด info ทังหมด
-    /**
-    *  block="In the image get ball(s)' info: %status"
-    *  status.fieldEditor="gridpicker"
-    *  status.fieldOptions.columns=3
-    *  group="Ball" weight=80 
-    *  color=#00B1ED
-    */
+    //% block="In the image get ball(s)' info: %status"
+    //% status.fieldEditor="gridpicker"
+    //% status.fieldOptions.columns=3
+    //% group="Ball" weight=80 
+    //% color=#00B1ED
     export function ballData(status: Ballstatus): number {
-        cameraImage()
         if (DataBuff[0] == 7) {
             switch (status) {
                 case Ballstatus.X:
@@ -388,7 +389,7 @@ namespace PlanetX_AILens {
                     return DataBuff[4]
                     break
                 case Ballstatus.Confidence:
-                    return DataBuff[6]
+                    return 100 - DataBuff[6]
                     break
                 case Ballstatus.ID:
                     return DataBuff[8]
@@ -410,14 +411,12 @@ namespace PlanetX_AILens {
     //% group="Face" weight=75 
     //% color=#00B1ED
     export function checkFace(): boolean {
-        cameraImage()
         return DataBuff[0] == 6
     }
     //% block="In the image get face(s)' total"
     //% group="Face" weight=74 
     //% color=#00B1ED
     export function faceTotalNum(): number {
-        cameraImage()
         if (DataBuff[0] == 6) {
             return DataBuff[7]
         }
@@ -429,16 +428,12 @@ namespace PlanetX_AILens {
     * TODO: Judge whether there is a face in the picture
     * @param status Facestatus, eg: Facestatus.X
     */
-    //ปิด info
-    /** 
-     block="In the image get face(s)' info: %status"
-     status.fieldEditor="gridpicker"
-     status.fieldOptions.columns=3
-     group="Face" weight=70 
-     color=#00B1ED
-    */
+    //% block="In the image get face(s)' info: %status"
+    //% status.fieldEditor="gridpicker"
+    //% status.fieldOptions.columns=3
+    //% group="Face" weight=70 
+    //% color=#00B1ED
     export function faceData(status: Facestatus): number {
-        cameraImage()
         if (DataBuff[0] == 6) {
             switch (status) {
                 case Facestatus.X:
@@ -454,7 +449,7 @@ namespace PlanetX_AILens {
                     return DataBuff[5]
                     break
                 case Facestatus.Confidence:
-                    return DataBuff[6]
+                    return 100 - DataBuff[6]
                     break
                 case Facestatus.ID:
                     return DataBuff[8]
@@ -477,7 +472,6 @@ namespace PlanetX_AILens {
     //% group="Card" weight=65 
     //% color=#00B1ED
     export function numberCard(status: numberCards): boolean {
-        cameraImage()
         if (DataBuff[0] == 2) {
             return status == DataBuff[1]
         }
@@ -494,7 +488,6 @@ namespace PlanetX_AILens {
     //% group="Card" weight=60 
     //% color=#00B1ED
     export function letterCard(status: letterCards): boolean {
-        cameraImage()
         if (DataBuff[0] == 4) {
             return status == DataBuff[1]
         }
@@ -511,7 +504,6 @@ namespace PlanetX_AILens {
     //% group="Card" weight=55 
     //% color=#00B1ED
     export function trafficCard(status: trafficCards): boolean {
-        cameraImage()
         if (DataBuff[0] == 3) {
             return status == DataBuff[1]
         }
@@ -528,7 +520,6 @@ namespace PlanetX_AILens {
     //% group="Card" 
     //% color=#00B1ED
     export function otherCard(status: otherCards): boolean {
-        cameraImage()
         if (DataBuff[0] == 3) {
             return status == DataBuff[1]
         }
@@ -539,7 +530,6 @@ namespace PlanetX_AILens {
     //% group="Card" weight=49 
     //% color=#00B1ED
     export function cardTotalNum(): number {
-        cameraImage()
         if (DataBuff[0] == 2 || DataBuff[0] == 3 || DataBuff[0] == 4) {
             return DataBuff[7]
         }
@@ -551,16 +541,12 @@ namespace PlanetX_AILens {
     * TODO: Card parameters in the screen
     * @param status otherCards, eg: Cardstatus.X
     */
-    //ปิด
-    /**
-     block="In the image get Card(s)' info: %status"
-     status.fieldEditor="gridpicker"
-     status.fieldOptions.columns=3
-     group="Card" weight=45 
-     color=#00B1ED
-     */
+    //% block="In the image get Card(s)' info: %status"
+    //% status.fieldEditor="gridpicker"
+    //% status.fieldOptions.columns=3
+    //% group="Card" weight=45 
+    //% color=#00B1ED
     export function CardData(status: Cardstatus): number {
-        cameraImage()
         if (DataBuff[0] == 2 || DataBuff[0] == 3 || DataBuff[0] == 4) {
             switch (status) {
                 case Cardstatus.X:
@@ -573,7 +559,7 @@ namespace PlanetX_AILens {
                     return DataBuff[4]
                     break
                 case Cardstatus.Confidence:
-                    return DataBuff[6]
+                    return 100 - DataBuff[6]
                     break
                 case Cardstatus.ID:
                     return DataBuff[8]
@@ -585,10 +571,6 @@ namespace PlanetX_AILens {
         else
             return 0
     }
-
-
-
-
     /**
     * TODO: Judge whether there is a color in the screen
     * @param status ColorLs, eg: ColorLs.red
@@ -599,7 +581,6 @@ namespace PlanetX_AILens {
     //% group="Color" weight=30 
     //% color=#00B1ED
     export function colorCheck(status: ColorLs): boolean {
-        cameraImage()
         if (DataBuff[0] == 9) {
             return status == DataBuff[1]
         }
@@ -610,7 +591,6 @@ namespace PlanetX_AILens {
     //% group="Color" weight=29 
     //% color=#00B1ED
     export function colorTotalNum(): number {
-        cameraImage()
         if (DataBuff[0] == 9) {
             return DataBuff[7]
         }
@@ -622,15 +602,12 @@ namespace PlanetX_AILens {
     * TODO: color parameters in the screen
     * @param status Colorstatus, eg: Colorstatus.X
     */
-    /**
-     block="In the image get color card(s)' info: %status"
-     status.fieldEditor="gridpicker"
-     status.fieldOptions.columns=3
-     group="Color" weight=25 
-     color=#00B1ED
-     */
+    //% block="In the image get color card(s)' info: %status"
+    //% status.fieldEditor="gridpicker"
+    //% status.fieldOptions.columns=3
+    //% group="Color" weight=25 
+    //% color=#00B1ED
     export function colorData(status: Colorstatus): number {
-        cameraImage()
         if (DataBuff[0] == 9) {
             switch (status) {
                 case Colorstatus.X:
@@ -643,7 +620,7 @@ namespace PlanetX_AILens {
                     return DataBuff[4]
                     break
                 case Colorstatus.Confidence:
-                    return DataBuff[6]
+                    return 100 - DataBuff[6]
                     break
                 case Colorstatus.ID:
                     return DataBuff[8]
@@ -660,16 +637,13 @@ namespace PlanetX_AILens {
     * TODO: line parameters in the screen
     * @param status Linestatus, eg: Linestatus.angle
     */
-    /**
-     block="In the image get line(s)' info: %status"
-     status.fieldEditor="gridpicker"
-     status.fieldOptions.columns=3
-     group="Tracking"
-     weight=35 
-     color=#00B1ED
-     */
+    //% block="In the image get line(s)' info: %status"
+    //% status.fieldEditor="gridpicker"
+    //% status.fieldOptions.columns=3
+    //% group="Tracking"
+    //% weight=35 
+    //% color=#00B1ED
     export function lineData(status: Linestatus): number {
-        cameraImage()
         if (DataBuff[0] == 8) {
             switch (status) {
                 case Linestatus.angle:
@@ -699,7 +673,6 @@ namespace PlanetX_AILens {
     //% weight=34 
     //% color=#00B1ED
     export function lineDirection(status: LineTrend): boolean {
-        cameraImage()
         if (DataBuff[0] == 8) {
             switch (status) {
                 case LineTrend.none:
@@ -748,7 +721,6 @@ namespace PlanetX_AILens {
     //% group="Learn" weight=20 
     //% color=#00B1ED
     export function learnObject(thingsID: learnID): void {
-        cameraImage()
         let thingsBuf = pins.createBuffer(9)
         thingsBuf[0] = 10
         thingsBuf[1] = thingsID
@@ -761,7 +733,6 @@ namespace PlanetX_AILens {
     //% group="Learn" weight=15 
     //% color=#00B1ED
     export function ClearlearnObject(): void {
-        cameraImage()
         let thingsBuf = pins.createBuffer(9)
         thingsBuf[0] = 10
         thingsBuf[1] = 10
@@ -776,7 +747,6 @@ namespace PlanetX_AILens {
     //% group="Learn" weight=14 
     //% color=#00B1ED
     export function objectCheck(status: learnID): boolean {
-        cameraImage()
         if (DataBuff[0] == 10 && status == DataBuff[1]) {
             if (objectConfidence(status) >= 83) {
                 return true
@@ -795,10 +765,9 @@ namespace PlanetX_AILens {
     //% group="Learn" weight=10 
     //% color=#00B1ED
     export function objectConfidence(thingsID: learnID): number {
-        cameraImage()
         if (DataBuff[0] == 10 && DataBuff[2] < 30) {
             if (DataBuff[1] == thingsID) {
-                return DataBuff[2]
+                return 100 - DataBuff[2]
             }
             else {
                 return 0
@@ -808,9 +777,11 @@ namespace PlanetX_AILens {
     }
     let asrEventId = 3500
     let lastvoc = 0
-
+    //% block="ASR sensor hear %vocabulary"
+    //% subcategory=ASR group="IIC Port"
+    //% vocabulary.fieldEditor="gridpicker" vocabulary.fieldOptions.columns=3
+    //% color=#00B1ED
     export function onASR(vocabulary: vocabularyList, handler: () => void) {
-        cameraImage()
         control.onEvent(asrEventId, vocabulary, handler);
         control.inBackground(() => {
             while (true) {
@@ -823,14 +794,16 @@ namespace PlanetX_AILens {
             }
         })
     }
-
+    //% block="ASR sensor enter learning-model"
+    //% subcategory=ASR group="IIC Port"
+    //% color=#00B1ED
     export function setASRLearn(): void {
-        cameraImage()
         pins.i2cWriteNumber(0x0B, 0x50, NumberFormat.Int8LE)
     }
-
+    //% block="ASR sensor clear learned entrys"
+    //% subcategory=ASR group="IIC Port"
+    //% color=#00B1ED
     export function delASRLearn(): void {
-        cameraImage()
         pins.i2cWriteNumber(0x0B, 0x60, NumberFormat.Int8LE)
     }
 }
@@ -839,112 +812,112 @@ namespace PlanetX_AILens {
 
 //% weight=0 color=#3CB371 icon="\uf135"  groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
 namespace GigoWorkshop {
+    
+        //external button for roboticworkshop
+        export enum ButtonChannelWS {
+            //% block="A (P1)"
+            A,
+            //% block="B (P8)"
+            B,
+            //% block="C (P14)"
+            C,
+            //% block="D (P16)"
+            D,
+            //% block="I2C"
+            E,
+        }
+        export let ButtonChannelsWS: { [key: number]: DigitalPin } = {
+            [ButtonChannelWS.A]: DigitalPin.P1,
+            [ButtonChannelWS.B]: DigitalPin.P8,
+            [ButtonChannelWS.C]: DigitalPin.P14,
+            [ButtonChannelWS.D]: DigitalPin.P16,
+            [ButtonChannelWS.E]: DigitalPin.P20,
 
-    //external button for roboticworkshop
-    export enum ButtonChannelWS {
-        //% block="A (P1)"
-        A,
-        //% block="B (P8)"
-        B,
-        //% block="C (P14)"
-        C,
-        //% block="D (P16)"
-        D,
-        //% block="I2C"
-        E,
-    }
-    export let ButtonChannelsWS: { [key: number]: DigitalPin } = {
-        [ButtonChannelWS.A]: DigitalPin.P1,
-        [ButtonChannelWS.B]: DigitalPin.P8,
-        [ButtonChannelWS.C]: DigitalPin.P14,
-        [ButtonChannelWS.D]: DigitalPin.P16,
-        [ButtonChannelWS.E]: DigitalPin.P20,
-
-    }
-    //----------------------------------
-
-
-
-    //external sensor
-    export enum SensorChannelWS {
-        //% block="P1"
-        P1,
-        //% block="P2"
-        P2,
-        //% block="P8"
-        P8,
-        //% block="P13"
-        P13,
-        //% block="P14"
-        P14,
-        //% block="P15"
-        P15,
-        //% block="P16"
-        P16,
-        //% block="P0"
-        P0,
-    }
-    export let SensorChannelsWS: { [key: number]: DigitalPin } = {
-        [SensorChannelWS.P1]: DigitalPin.P1,
-        [SensorChannelWS.P8]: DigitalPin.P8,
-        [SensorChannelWS.P0]: DigitalPin.P0,
-        [SensorChannelWS.P2]: DigitalPin.P2,
-        [SensorChannelWS.P13]: DigitalPin.P13,
-        [SensorChannelWS.P14]: DigitalPin.P14,
-        [SensorChannelWS.P15]: DigitalPin.P15,
-        [SensorChannelWS.P16]: DigitalPin.P16,
-    }
-    export let SensorChannelAWS: { [key: number]: AnalogPin } = {
-        [SensorChannelWS.P1]: AnalogPin.P1,
-        [SensorChannelWS.P8]: AnalogPin.P8,
-        [SensorChannelWS.P0]: AnalogPin.P0,
-        [SensorChannelWS.P2]: AnalogPin.P2,
-        [SensorChannelWS.P13]: AnalogPin.P13,
-        [SensorChannelWS.P14]: AnalogPin.P14,
-        [SensorChannelWS.P15]: AnalogPin.P15,
-        [SensorChannelWS.P16]: AnalogPin.P16,
-    }
-    //----------------------------------
-    //% color=#000000
-    //% block="read Toggle $pin (0-1)"
-    //% group="Read Sensor"
-    export function readToggle(pin: SensorChannelWS): number {
-        let read = SensorChannelsWS[pin];
-        pins.setPull(SensorChannelsWS[pin], PinPullMode.PullUp);
-        let reading = pins.digitalReadPin(read);
-        return (reading);
-    }
-    //% color=#000000
-    //% block="read button $pin (0-1)"
-    //% group="Read Sensor"
-    export function readbuttonWS(pin: ButtonChannelWS): number {
-        let read = ButtonChannelsWS[pin];
-        pins.setPull(ButtonChannelsWS[pin], PinPullMode.PullUp);
-        let reading = pins.digitalReadPin(read);
-        return (reading);
-    }
-    //% color=#000000    
-    //% block="analog Sensor $pin (0-1023) "
-    //% group="Read Sensor"
-    export function lightSensorWS(pin: SensorChannelWS): number {
-        let read = SensorChannelAWS[pin];
-        let reading = pins.analogReadPin(read);
-        //let mappin = pins.map(reading, 0, 1023, 0, 10); // แปลงค่าจาก 0-1023 เป็น 0-10
-        return Math.round(reading);
-    }
-
-    //% color=#000000    
-    //% block="digital Sensor $pin (0-1)"
-    //% group="Read Sensor"
-    export function SensorWS(pin: SensorChannelWS): number {
-        let read = SensorChannelsWS[pin];
-        let reading = pins.digitalReadPin(read);
-        return (reading);
-    }
+        }
+        //----------------------------------
 
 
 
+        //external sensor
+        export enum SensorChannelWS {
+            //% block="P1"
+            P1,
+            //% block="P2"
+            P2,
+            //% block="P8"
+            P8,
+            //% block="P13"
+            P13,
+            //% block="P14"
+            P14,
+            //% block="P15"
+            P15,
+            //% block="P16"
+            P16,
+            //% block="P0"
+            P0,
+        }
+        export let SensorChannelsWS: { [key: number]: DigitalPin } = {
+            [SensorChannelWS.P1]: DigitalPin.P1,
+            [SensorChannelWS.P8]: DigitalPin.P8,
+            [SensorChannelWS.P0]: DigitalPin.P0,
+            [SensorChannelWS.P2]: DigitalPin.P2,
+            [SensorChannelWS.P13]: DigitalPin.P13,
+            [SensorChannelWS.P14]: DigitalPin.P14,
+            [SensorChannelWS.P15]: DigitalPin.P15,
+            [SensorChannelWS.P16]: DigitalPin.P16,
+        }
+        export let SensorChannelAWS: { [key: number]: AnalogPin } = {
+            [SensorChannelWS.P1]: AnalogPin.P1,
+            [SensorChannelWS.P8]: AnalogPin.P8,
+            [SensorChannelWS.P0]: AnalogPin.P0,
+            [SensorChannelWS.P2]: AnalogPin.P2,
+            [SensorChannelWS.P13]: AnalogPin.P13,
+            [SensorChannelWS.P14]: AnalogPin.P14,
+            [SensorChannelWS.P15]: AnalogPin.P15,
+            [SensorChannelWS.P16]: AnalogPin.P16,
+        }
+        //----------------------------------
+        //% color=#000000
+        //% block="read Toggle $pin (0-1)"
+        //% group="Read Sensor"
+        export function readToggle(pin: SensorChannelWS): number {
+            let read = SensorChannelsWS[pin];
+            pins.setPull(SensorChannelsWS[pin], PinPullMode.PullUp);
+            let reading = pins.digitalReadPin(read);
+            return (reading);
+        }
+        //% color=#000000
+        //% block="read button $pin (0-1)"
+        //% group="Read Sensor"
+        export function readbuttonWS(pin: ButtonChannelWS): number {
+            let read = ButtonChannelsWS[pin];
+            pins.setPull(ButtonChannelsWS[pin], PinPullMode.PullUp);
+            let reading = pins.digitalReadPin(read);
+            return (reading);
+        }
+        //% color=#000000    
+        //% block="analog Sensor $pin (0-1023) "
+        //% group="Read Sensor"
+        export function lightSensorWS(pin: SensorChannelWS): number {
+            let read = SensorChannelAWS[pin];
+            let reading = pins.analogReadPin(read);
+            //let mappin = pins.map(reading, 0, 1023, 0, 10); // แปลงค่าจาก 0-1023 เป็น 0-10
+            return Math.round(reading);
+        }
 
+        //% color=#000000    
+        //% block="digital Sensor $pin (0-1)"
+        //% group="Read Sensor"
+        export function SensorWS(pin: SensorChannelWS): number {
+            let read = SensorChannelsWS[pin];
+            let reading = pins.digitalReadPin(read);
+            return (reading);
+        }
+
+
+
+    
     ////////////////////////////////
     //          DDM Motor         //
     ////////////////////////////////
@@ -1570,87 +1543,87 @@ namespace GigoWorkshop {
     //          Colour sensor       //
     ////////////////////////////////
     //% weight=0 color=#3CB371 icon="\uf135" groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
+    
 
+        
 
+        // Initialize the color sensor
+        export function colorSensorInit(): void {
+            pins.i2cWriteNumber(41, 33276, NumberFormat.UInt16BE, false);
+            pins.i2cWriteNumber(41, 32771, NumberFormat.UInt16BE, false);
+        }
 
+        let nowReadColor = [0, 0, 0];
 
-    // Initialize the color sensor
-    export function colorSensorInit(): void {
-        pins.i2cWriteNumber(41, 33276, NumberFormat.UInt16BE, false);
-        pins.i2cWriteNumber(41, 32771, NumberFormat.UInt16BE, false);
-    }
+        // Function to read the current color values
+        export function colorSensorReadNow(): number[] {
+            pins.i2cWriteNumber(41, 178, NumberFormat.Int8LE, false);
+            pins.i2cWriteNumber(41, 179, NumberFormat.Int8LE, false);
+            pins.i2cWriteNumber(41, 182, NumberFormat.Int8LE, true);
+            let TCS_RED = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false);
+            pins.i2cWriteNumber(41, 184, NumberFormat.Int8LE, true);
+            let TCS_GREEN = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false);
+            pins.i2cWriteNumber(41, 186, NumberFormat.Int8LE, true);
+            let TCS_BLUE = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false);
 
-    let nowReadColor = [0, 0, 0];
+            TCS_RED = Math.round(Math.map(TCS_RED, 0, 65535, 0, 255));
+            TCS_GREEN = Math.round(Math.map(TCS_GREEN, 0, 65535, 0, 255));
+            TCS_BLUE = Math.round(Math.map(TCS_BLUE, 0, 65535, 0, 255));
 
-    // Function to read the current color values
-    export function colorSensorReadNow(): number[] {
-        pins.i2cWriteNumber(41, 178, NumberFormat.Int8LE, false);
-        pins.i2cWriteNumber(41, 179, NumberFormat.Int8LE, false);
-        pins.i2cWriteNumber(41, 182, NumberFormat.Int8LE, true);
-        let TCS_RED = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false);
-        pins.i2cWriteNumber(41, 184, NumberFormat.Int8LE, true);
-        let TCS_GREEN = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false);
-        pins.i2cWriteNumber(41, 186, NumberFormat.Int8LE, true);
-        let TCS_BLUE = pins.i2cReadNumber(41, NumberFormat.UInt16BE, false);
+            nowReadColor = [TCS_RED, TCS_GREEN, TCS_BLUE];
+            return nowReadColor;
+        }
+        
+        //% weight=12
+        //% block="Read RGB"
+        //% group="Color Sensor"
+        export function scanColorBlock(): string {
+            colorSensorInit();
+            let colors = colorSensorReadNow();
+            let red = colors[0];
+            let green = colors[1];
+            let blue = colors[2];
+            return `R:${red}, G:${green}, B:${blue}`;
+        }
+        //code สำหรับ แสดงใน serial.writeLine
+        //ปิดไว้
+        export function scanColor(): void {
+            colorSensorInit();
+            let colors = colorSensorReadNow();
+            let red = colors[0];
+            let green = colors[1];
+            let blue = colors[2];
+            serial.writeLine(`R:${red}, G:${green}, B:${blue}`);
+        }
 
-        TCS_RED = Math.round(Math.map(TCS_RED, 0, 65535, 0, 255));
-        TCS_GREEN = Math.round(Math.map(TCS_GREEN, 0, 65535, 0, 255));
-        TCS_BLUE = Math.round(Math.map(TCS_BLUE, 0, 65535, 0, 255));
+        //% block="R %WriteRed G %WriteGreen B %WriteBlue to %Name"
+        //% WriteRed.min=0 WriteRed.max=255
+        //% WriteGreen.min=0 WriteGreen.max=255
+        //% WriteBlue.min=0 WriteBlue.max=255
+        //% default.Name="name"
+        //% group="Color Sensor"
+        export function readColorEqual(WriteRed: number, WriteGreen: number, WriteBlue: number, Name: string): boolean {
+            colorSensorInit();
+            let colors = colorSensorReadNow();
+            let red = colors[0];
+            let green = colors[1];
+            let blue = colors[2];
 
-        nowReadColor = [TCS_RED, TCS_GREEN, TCS_BLUE];
-        return nowReadColor;
-    }
-
-    //% weight=12
-    //% block="Read RGB"
-    //% group="Color Sensor"
-    export function scanColorBlock(): string {
-        colorSensorInit();
-        let colors = colorSensorReadNow();
-        let red = colors[0];
-        let green = colors[1];
-        let blue = colors[2];
-        return `R:${red}, G:${green}, B:${blue}`;
-    }
-    //code สำหรับ แสดงใน serial.writeLine
-    //ปิดไว้
-    export function scanColor(): void {
-        colorSensorInit();
-        let colors = colorSensorReadNow();
-        let red = colors[0];
-        let green = colors[1];
-        let blue = colors[2];
-        serial.writeLine(`R:${red}, G:${green}, B:${blue}`);
-    }
-
-    //% block="R %WriteRed G %WriteGreen B %WriteBlue to %Name"
-    //% WriteRed.min=0 WriteRed.max=255
-    //% WriteGreen.min=0 WriteGreen.max=255
-    //% WriteBlue.min=0 WriteBlue.max=255
-    //% default.Name="name"
-    //% group="Color Sensor"
-    export function readColorEqual(WriteRed: number, WriteGreen: number, WriteBlue: number, Name: string): boolean {
-        colorSensorInit();
-        let colors = colorSensorReadNow();
-        let red = colors[0];
-        let green = colors[1];
-        let blue = colors[2];
-
-        return (red == WriteRed && green == WriteGreen && blue == WriteBlue);
-    }
-    //% color=#8470FF
-    //% block="Serial write line %text"
-    //% group="Color Sensor"
-    export function serialWriteLine(text: any): void {
-        serial.writeLine(text);
-    }
-
+            return (red == WriteRed && green == WriteGreen && blue == WriteBlue);
+        }
+        //% color=#8470FF
+        //% block="Serial write line %text"
+        //% group="Color Sensor"
+        export function serialWriteLine(text: any): void {
+            serial.writeLine(text);
+        }
+    
 }
 
 //% color=#E7734B icon="\uf110"
 namespace GigoLED {
     //----------------------------------
-
+    
     //led old
     export enum LEDChannel {
         //% block="A (P19)"
