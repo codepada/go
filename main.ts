@@ -1082,7 +1082,6 @@ namespace GigoWorkshop {
         Inches
     }
 
-
     //% block="sonar %channel unit %unit"
     //% group="Ultrasonic Sensor"
     //% unit.defl=PingUnitgigo.Centimeters
@@ -1169,7 +1168,7 @@ namespace GigoWorkshop {
     //% color=#FACB09
     //% block="led $leds status $status"
     //% status.min=0 status.max=1
-    //% leds.defl=lEDChannelWS.D
+    //% leds.defl=LEDChannelWS.D
     //% group="Led"
     export function ledtest(leds: LEDChannelWS, status: number): void {
         let ledg = LEDChannelsWS[leds];
@@ -1180,7 +1179,7 @@ namespace GigoWorkshop {
     //% color=#FACB09
     //% block="led $leds status $status"
     //% status.defl=lEDShaftonoff.HIGH*
-    //% leds.defl=lEDChannelWS.D
+    //% leds.defl=LEDChannelWS.D
     //% group="Led"
     export function led(leds: LEDChannelWS, status: LEDShaftonoffWS): void {
         let ledg = LEDChannelsWS[leds];
@@ -1192,7 +1191,7 @@ namespace GigoWorkshop {
     //% block="led %pin $ledstate"
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
-    //% pin.defl=lEDChannelWS.D
+    //% pin.defl=LEDChannelWS.D
     //% group="Led"
     export function ledBrightness(pin: LEDChannelWS, ledstate: boolean): void {
         if (ledstate) {
