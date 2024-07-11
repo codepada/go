@@ -1691,7 +1691,7 @@ namespace GigoLED {
     //% color=#FACB09
     //% block="led $leds status $status"
     //% status.min=0 status.max=1
-    //% leds.defl=lEDChannel.D
+    //% leds.defl=LEDChannel.D
     //% group="Led"
     export function ledtest(leds: LEDChannel, status: number): void {
         let ledg = LEDChannels[leds];
@@ -1699,11 +1699,7 @@ namespace GigoLED {
 
     }
 
-    //% color=#FACB09
-    //% block="led $leds status $status"
-    //% status.defl=lEDShaftonoff.HIGH*
-    //% leds.defl=lEDChannel.D
-    //% group="Led"
+    
     export function led(leds: LEDChannel, status: LEDShaftonoff): void {
         let ledg = LEDChannels[leds];
         pins.digitalWritePin(ledg, status);
@@ -1714,7 +1710,7 @@ namespace GigoLED {
     //% blockId=led block="led %pin $ledstate"
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
-    //% pin.defl=lEDChannel.D
+    //% pin.defl=LEDChannel.D
     //% group="Led"
     export function ledBrightness(pin: LEDChannel, ledstate: boolean): void {
         if (ledstate) {
