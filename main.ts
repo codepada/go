@@ -995,9 +995,9 @@ namespace GigoWorkshop {
     //% degrees.min=0 degrees.max=180
     //% degrees.defl=90
     //% group="Motor for workshop"
-    export function Servo180 (pin: ServoNew, degrees: number): void {
+    export function servo (pin: ServoNew, degrees: number): void {
         let pinsmini = servoNewchanel[pin];
-        pins.servoWritePin(pinsmini, degrees);
+        return pins.servoWritePin(pinsmini, degrees);
 
     }
 
