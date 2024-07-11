@@ -991,7 +991,7 @@ namespace GigoWorkshop {
         [ServoNew.P0]: AnalogPin.P0,
     }
     
-    //% block"servo180 $pin degrees $degrees"
+    //% block"servo $pin degrees $degrees"
     //% degrees.min=0 degrees.max=180
     //% degrees.defl=90
     //% group="Motor for workshop"
