@@ -1026,7 +1026,7 @@ namespace GigoWorkshop {
         pins.analogWritePin(speedPin, 0);
     }
 
-    //% block="motor $channel direction $direction speed $speed"
+    //% block="motor $channel direction $direction speed $speed" 
     //% speed.min=0 speed.max=100
     //% speed.defl=100
     //% direction.defl=ggMotorShaftDirection.HIGH
@@ -1037,6 +1037,47 @@ namespace GigoWorkshop {
 
         pins.digitalWritePin(dirPin, direction);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 100, 0, 1023));
+    }
+    //% color =#3CB371
+    //% blockId=DDMmotor2 block="motor channel %MotorPin|speed (0~100) %MSpeedValue|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
+    //% McontrolValue.min=0 McontrolValue.max=1 
+    //% MSpeedValue.min=0 MSpeedValue.max=100   
+    //% group="Motor"
+    export function DDMmotor2(MotorPin: GigoMotorChannel, MSpeedValue: number, McontrolValue: number): void {
+
+        switch (MotorPin) {
+            case 1:
+                pins.analogWritePin(AnalogPin.P1, pins.map(MSpeedValue, 0, 100, 0, 1000));
+                pins.digitalWritePin(DigitalPin.P2, pins.map(McontrolValue, 0, 1, 0, 1));
+                break;
+            case 2:
+                pins.analogWritePin(AnalogPin.P8, pins.map(MSpeedValue, 0, 100, 0, 1000));
+                pins.digitalWritePin(DigitalPin.P13, pins.map(McontrolValue, 0, 1, 0, 1));
+                break;
+            case 3:
+                pins.analogWritePin(AnalogPin.P14, pins.map(MSpeedValue, 0, 100, 0, 1000));
+                pins.digitalWritePin(DigitalPin.P15, pins.map(McontrolValue, 0, 1, 0, 1));
+                break;
+            case 4:
+                pins.analogWritePin(AnalogPin.P16, pins.map(MSpeedValue, 0, 100, 0, 1000));
+                pins.digitalWritePin(DigitalPin.P0, pins.map(McontrolValue, 0, 1, 0, 1));
+                break;
+
+        }
+    }
+    //% color =#3CB371
+    //% blockId=DDMmotor block="speed pin %MSpeedPin|speed (0~255) %MSpeedValue|direction pin %McontrolPin|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
+    //% McontrolValue.min=0 McontrolValue.max=1 
+    //% MSpeedValue.min=0 MSpeedValue.max=255   
+    //% MSpeedPin.fieldEditor="gridpicker" MSpeedPin.fieldOptions.columns=4
+    //% MSpeedPin.fieldOptions.tooltips="false" MSpeedPin.fieldOptions.width="300"
+    //% McontrolPin.fieldEditor="gridpicker" McontrolPin.fieldOptions.columns=4
+    //% McontrolPin.fieldOptions.tooltips="false" McontrolPin.fieldOptions.width="300"
+    //% group="Motor"
+    export function DDMmotor(MSpeedPin: AnalogPin, MSpeedValue: number, McontrolPin: DigitalPin, McontrolValue: number): void {
+        pins.analogWritePin(MSpeedPin, pins.map(MSpeedValue, 0, 255, 0, 1020));
+        pins.digitalWritePin(McontrolPin, pins.map(McontrolValue, 0, 1, 0, 1));
+
     }
 
 
