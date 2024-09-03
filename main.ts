@@ -1143,7 +1143,7 @@ namespace GigoWorkshop {
     }
 
 
-    //% color =#6356b3
+    //% color=#6356b3
     //% blockId=sonar_ping block="trig pin %trig|echo pin %echo|unit %unit"
     //% group="Ultrasonic Sensor"
     export function ping(trig: DigitalPin, echo: DigitalPin, unit: PingUnitgigo, maxCmDistance = 500): number {
