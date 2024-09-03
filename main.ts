@@ -1193,13 +1193,7 @@ namespace GigoWorkshop {
         [LEDChannelWS.D]: DigitalPin.P0,
 
     }
-    export enum LEDShaftonoffWS {
-        //% block="off"
-        LOW,
-        //% block="on"
-        HIGH,
-
-    }
+    
     //----------------------------------
     //% color=#FACB09
     //% block="led $leds status $status"
@@ -1209,6 +1203,14 @@ namespace GigoWorkshop {
     export function ledtest(leds: LEDChannelWS, status: number): void {
         let ledg = LEDChannelsWS[leds];
         pins.digitalWritePin(ledg, status);
+
+    }
+    /** 
+    export enum LEDShaftonoffWS {
+        //% block="off"
+        LOW,
+        //% block="on"
+        HIGH,
 
     }
 
@@ -1222,6 +1224,8 @@ namespace GigoWorkshop {
         pins.digitalWritePin(ledg, status);
 
     }
+    */
+    
     //% color=#FACB09
     //toggle led
     //% block="led %pin $ledstate"
