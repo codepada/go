@@ -775,7 +775,7 @@ namespace AILens {
     }
     let asrEventId = 3500
     let lastvoc = 0
-    
+
     export function onASR(vocabulary: vocabularyList, handler: () => void) {
         control.onEvent(asrEventId, vocabulary, handler);
         control.inBackground(() => {
@@ -789,11 +789,11 @@ namespace AILens {
             }
         })
     }
-    
+
     export function setASRLearn(): void {
         pins.i2cWriteNumber(0x0B, 0x50, NumberFormat.Int8LE)
     }
-    
+
     export function delASRLearn(): void {
         pins.i2cWriteNumber(0x0B, 0x60, NumberFormat.Int8LE)
     }
@@ -801,7 +801,7 @@ namespace AILens {
 
 //--------------------
 
-//% weight=0 color=#3CB371 icon="\uf135"  groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
+//% weight=0 color=#3CB371 icon="\uf135"  groups='["Gigo Motor","Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
 namespace GigoWorkshop {
 
     //external button for roboticworkshop
@@ -925,11 +925,11 @@ namespace GigoWorkshop {
     export enum GgMotorChannel {
         //% block="A (P2,P1)"
         A,
-        //% block="B (P13,P8)""
+        //% block="B (P13,P8)"
         B,
-        //% block="C (P15,P14)""
+        //% block="C (P15,P14)"
         C,
-        //% block="D (P0,P16)""
+        //% block="D (P0,P16)"
         D,
     }
     export enum GgMotorShaftDirection {
@@ -952,16 +952,7 @@ namespace GigoWorkshop {
         [GgMotorChannel.D]: DigitalPin.P0,
     }
 
-    export enum GigoMotorChannel {
-        //% block="A"
-        MotorA = 1,
-        //% block="B"
-        MotorB = 2,
-        //% block="C"
-        MotorC = 3,
-        //% block="D"
-        MotorD = 4
-    }
+
     export enum ServoNew {
         //% block="P1"
         P1,
@@ -990,12 +981,15 @@ namespace GigoWorkshop {
         [ServoNew.P16]: AnalogPin.P16,
         [ServoNew.P0]: AnalogPin.P0,
     }
-    
-    //% block"servo $pin degrees $degrees"
+
+
+
+
+    //% block="servo $pin degrees $degrees"
     //% degrees.min=0 degrees.max=180
     //% degrees.defl=90
     //% group="Motor for workshop"
-    export function servo (pin: ServoNew, degrees: number): void {
+    export function servo(pin: ServoNew, degrees: number): void {
         let pinsmini = servoNewchanel[pin];
         return pins.servoWritePin(pinsmini, degrees);
 
@@ -1015,7 +1009,7 @@ namespace GigoWorkshop {
     }
 
 
-    //% direction.defl=ggMotorShaftDirection.HIGH
+    //% direction.defl=GgMotorShaftDirection.HIGH
     //% block="stop motor $channel"
     //% group="Motor for workshop"
     export function motorStop2(channel: GgMotorChannel): void {
@@ -1029,7 +1023,7 @@ namespace GigoWorkshop {
     //% block="motor $channel direction $direction speed $speed" 
     //% speed.min=0 speed.max=100
     //% speed.defl=100
-    //% direction.defl=ggMotorShaftDirection.HIGH
+    //% direction.defl=GgMotorShaftDirection.HIGH
     //% group="Motor for workshop"
     export function motorControl4(channel: GgMotorChannel, direction: GgMotorShaftDirection, speed: number): void {
         let dirPin = GgmotorChannels[channel];
@@ -1038,47 +1032,48 @@ namespace GigoWorkshop {
         pins.digitalWritePin(dirPin, direction);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 100, 0, 1023));
     }
-    //% color =#3CB371
-    //% blockId=DDMmotor2 block="motor channel %MotorPin|speed (0~100) %MSpeedValue|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
-    //% McontrolValue.min=0 McontrolValue.max=1 
-    //% MSpeedValue.min=0 MSpeedValue.max=100   
-    //% group="Motor"
-    export function DDMmotor2(MotorPin: GigoMotorChannel, MSpeedValue: number, McontrolValue: number): void {
 
-        switch (MotorPin) {
-            case 1:
-                pins.analogWritePin(AnalogPin.P1, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P2, pins.map(McontrolValue, 0, 1, 0, 1));
-                break;
-            case 2:
-                pins.analogWritePin(AnalogPin.P8, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P13, pins.map(McontrolValue, 0, 1, 0, 1));
-                break;
-            case 3:
-                pins.analogWritePin(AnalogPin.P14, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P15, pins.map(McontrolValue, 0, 1, 0, 1));
-                break;
-            case 4:
-                pins.analogWritePin(AnalogPin.P16, pins.map(MSpeedValue, 0, 100, 0, 1000));
-                pins.digitalWritePin(DigitalPin.P0, pins.map(McontrolValue, 0, 1, 0, 1));
-                break;
-
-        }
+    export enum GgMotorChannelwork {
+        //% block="A"
+        A,
+        //% block="B"
+        B,
+        //% block="C"
+        C,
+        //% block="D"
+        D,
     }
-    //% color =#3CB371
-    //% blockId=DDMmotor block="speed pin %MSpeedPin|speed (0~255) %MSpeedValue|direction pin %McontrolPin|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
+
+    //% color=#6356b3
+    //% block="motor channel $channel|speed (0~100) $speed|rotation direction(0~1) $direction" blockExternalInputs=false
+    //% speed.min=0 speed.max=100
+    //% speed.defl=100
+    //% group="Motor for workshop"
+    export function motorControl5(channel: GgMotorChannelwork, direction: number, speed: number): void {
+        let dirPin = GgmotorChannels[channel];
+        let speedPin = GgmotorSpeedPins[channel];
+
+        pins.digitalWritePin(dirPin, direction);
+        pins.analogWritePin(speedPin, pins.map(speed, 0, 100, 0, 1023));
+    }
+    //% color=#6356b3
+    //% block="speed pin %MSpeedPin|speed (0~255) %MSpeedValue|direction pin %McontrolPin|rotation direction(0~1) %McontrolValue" blockExternalInputs=false
     //% McontrolValue.min=0 McontrolValue.max=1 
     //% MSpeedValue.min=0 MSpeedValue.max=255   
     //% MSpeedPin.fieldEditor="gridpicker" MSpeedPin.fieldOptions.columns=4
     //% MSpeedPin.fieldOptions.tooltips="false" MSpeedPin.fieldOptions.width="300"
     //% McontrolPin.fieldEditor="gridpicker" McontrolPin.fieldOptions.columns=4
     //% McontrolPin.fieldOptions.tooltips="false" McontrolPin.fieldOptions.width="300"
-    //% group="Motor"
+    //% group="Motor for workshop"
     export function DDMmotor(MSpeedPin: AnalogPin, MSpeedValue: number, McontrolPin: DigitalPin, McontrolValue: number): void {
-        pins.analogWritePin(MSpeedPin, pins.map(MSpeedValue, 0, 255, 0, 1020));
-        pins.digitalWritePin(McontrolPin, pins.map(McontrolValue, 0, 1, 0, 1));
 
+        pins.digitalWritePin(McontrolPin, McontrolValue);
+        pins.analogWritePin(MSpeedPin, pins.map(MSpeedValue, 0, 255, 0, 1023));
     }
+
+
+
+
 
 
     ////////////////////////////////
@@ -1219,7 +1214,7 @@ namespace GigoWorkshop {
 
     //% color=#FACB09
     //% block="led $leds status $status"
-    //% status.defl=lEDShaftonoff.HIGH*
+    //% status.defl=LEDShaftonoffWS.HIGH
     //% leds.defl=LEDChannelWS.D
     //% group="Led"
     export function led(leds: LEDChannelWS, status: LEDShaftonoffWS): void {
@@ -1615,7 +1610,6 @@ namespace GigoWorkshop {
     ////////////////////////////////
     //          Colour sensor       //
     ////////////////////////////////
-    //% weight=0 color=#3CB371 icon="\uf135" groups='["Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
 
 
 
@@ -1673,9 +1667,9 @@ namespace GigoWorkshop {
     //% WriteRed.min=0 WriteRed.max=255
     //% WriteGreen.min=0 WriteGreen.max=255
     //% WriteBlue.min=0 WriteBlue.max=255
-    //% default.Name="name"
+    //% Name.defl="name"
     //% group="Color Sensor"
-    export function readColorEqual(WriteRed: number, WriteGreen: number, WriteBlue: number, Name: string): boolean {
+    export function readColorEqual(WriteRed: number, WriteGreen: number, WriteBlue: number): boolean { // ลบ Name
         colorSensorInit();
         let colors = colorSensorReadNow();
         let red = colors[0];
@@ -1684,7 +1678,7 @@ namespace GigoWorkshop {
 
         return (red == WriteRed && green == WriteGreen && blue == WriteBlue);
     }
-    
+
 
 }
 
@@ -1740,7 +1734,7 @@ namespace GigoLED {
 
     }
 
-    
+
     export function led(leds: LEDChannel, status: LEDShaftonoff): void {
         let ledg = LEDChannels[leds];
         pins.digitalWritePin(ledg, status);
@@ -2116,7 +2110,7 @@ namespace GigoSensor {
 
 
 
-//% color=#E7734B icon="\uf48b"
+//% color=#E7734B  icon="\uf48b"
 //% groups="['Motor','Servo','Led', 'Read Sensor','MLX90614 IR thermometer','Logic Sensor','I2C LCD 1602']"
 namespace GigoMotor {
     // motor control
@@ -2165,7 +2159,7 @@ namespace GigoMotor {
         pins.analogWritePin(speedPin, 0);
     }
 
-    //% color=#E7734B
+
     //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=100
     //% speed.defl=100
@@ -2186,7 +2180,7 @@ namespace GigoMotor {
     //% speed.defl=100
     //% direction.defl=motor.MotorShaftDirection.HIGH
     //% group="Motor"
-    //% color=#E7734B
+
     export function motorControl2(channel: MotorChannel, direction: MotorShaftDirection, speed: number): void {
         let dirPin = MotorChannels[channel];
         let speedPin = MotorSpeedPins[channel];
