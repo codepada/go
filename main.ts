@@ -206,12 +206,42 @@ namespace GigoSensor {
         let reading = pins.digitalReadPin(read);
         return (reading);
     }
-    //% color=#8470FF
-    //% block="Serial write line %text"
+    
+    
+    /**
+    * The string used to mark a new line, default is \r\n
+    *  Serial Write line
+    */
+    export let NEW_LINE = "\r\n";
+    export let NEW_LINE_DELIMITER: Delimiters = Delimiters.NewLine;
+    let writeLinePadding = 32;
+
+    /**
+     * Print a line of text to the serial port
+     * @param value to send over serial
+     */
+    //% weight=90
+    //% help=serial/write-line blockGap=8
+    //% blockId=serial_writeline block="serial|write line %text"
+    //% text.shadowOptions.toString=true
     //% group="Read Sensor"
-    export function serialWriteLine(text: any): void {
-        serial.writeLine(text);
+    //% color=#8470FF
+    export function writeLine(text: string): void {
+        if (!text) text = "";
+        serial.writeString(text);
+        // pad data to the 32 byte boundary
+        // to ensure apps receive the packet
+        if (writeLinePadding > 0) {
+            let r = (writeLinePadding - (text.length + NEW_LINE.length) % writeLinePadding) % writeLinePadding;
+            for (let i = 0; i < r; ++i)
+                serial.writeString(" ");
+        }
+        serial.writeString(NEW_LINE);
     }
+
+
+
+
 
     function signal_dht11(pin: DigitalPin): void {
         pins.digitalWritePin(pin, 0);
