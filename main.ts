@@ -238,7 +238,7 @@ namespace GigoSensor {
         }
         serial.writeString(NEW_LINE);
     }
-
+    //ส่งข้อมูล
 
 
 
