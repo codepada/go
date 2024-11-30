@@ -815,6 +815,89 @@ namespace LCD1602 {
 
 //% color=#E7734B icon="\uf11b"
 namespace Joystick {
+
+    //button ALL
+    export enum DfButton {
+        //% block="red"
+        Red,
+        //% block="blue"
+        Blue,
+        //% block="green"
+        Green,
+        //% block="yellow"
+        Yellow,
+        //% block="buttonA"
+        A,
+        //% block="buttonB"
+        B,
+        //% block="Joy"
+        Joy,
+    }
+
+    export let EnButtonChannels: { [key: number]: DigitalPin } = {
+        [DfButton.Red]: DigitalPin.P15,
+        [DfButton.Blue]: DigitalPin.P16,
+        [DfButton.Green]: DigitalPin.P13,
+        [DfButton.Yellow]: DigitalPin.P14,
+        [DfButton.A]: DigitalPin.P5,
+        [DfButton.B]: DigitalPin.P11,
+        [DfButton.Joy]: DigitalPin.P8,
+    };
+
+    // เก็บสถานะของปุ่มก่อนหน้า
+    let buttonStates: { [key: number]: boolean } = {
+        [DfButton.Red]: false,
+        [DfButton.Blue]: false,
+        [DfButton.Green]: false,
+        [DfButton.Yellow]: false,
+        [DfButton.A]: false,
+        [DfButton.B]: false,
+        [DfButton.Joy]: false,
+    };
+
+    export enum EnButtonState {
+        //% block="Press"
+        Press,
+        //% block="Release"
+        Release
+    }
+
+    /**
+     * ตรวจสอบสถานะปุ่ม
+     * - `Press`: ทำงานเมื่อปุ่มถูกกดหรือกดค้าง
+     * - `Release`: ทำงานเมื่อปุ่มถูกปล่อย
+     */
+    //% block="button %num| is %state"
+    //% group="DFrobot"
+    //% color=#383838
+    export function ButtonDF(num: DfButton, state: EnButtonState): boolean {
+        let pin = EnButtonChannels[num];
+        pins.setPull(pin, PinPullMode.PullUp);
+        let currentState = pins.digitalReadPin(pin) == 0;
+
+        if (state == EnButtonState.Press) {
+            // ตรวจสอบสถานะ "กดปุ่ม" หรือ "กดค้าง"
+            if (currentState && !buttonStates[num]) {
+                buttonStates[num] = true; // อัปเดตสถานะเป็นกด
+                return true; // สัญญาณว่ากดปุ่มครั้งแรก
+            } else if (currentState) {
+                return true; // กดค้าง
+            }
+        } else if (state == EnButtonState.Release) {
+            // ตรวจสอบสถานะ "ปล่อยปุ่ม"
+            if (!currentState && buttonStates[num]) {
+                buttonStates[num] = false; // อัปเดตสถานะเป็นปล่อย
+                return true; // สัญญาณว่าปล่อยปุ่ม
+            }
+        }
+
+        return false; // ไม่ตรงกับสถานะที่เลือก
+    }
+
+
+
+
+
     // joystick control
     export enum Joymove {
         //% blockId="Nostate" block="stop"
@@ -827,38 +910,6 @@ namespace Joystick {
         Left,
         //% block="Right"
         Right,
-    }
-
-    export enum DfButton {
-        //% block="red"
-        Red,
-        //% block="blue"
-        Blue,
-        //% block="green"
-        Green,
-        //% block="yellow"
-        Yellow,
-        //% block="A"
-        A,
-        //% block="B"
-        B,
-    }
-    export let EnButtonChannels: { [key: number]: DigitalPin } = {
-        [DfButton.Red]: DigitalPin.P15,
-        [DfButton.Blue]: DigitalPin.P16,
-        [DfButton.Green]: DigitalPin.P13,
-        [DfButton.Yellow]: DigitalPin.P14,
-        [DfButton.A]: DigitalPin.P5,
-        [DfButton.B]: DigitalPin.P11
-    }
-    // Store the previous state of the buttons
-    let buttonStates: { [key: number]: boolean } = {
-        [DfButton.Red]: false,
-        [DfButton.Blue]: false,
-        [DfButton.Green]: false,
-        [DfButton.Yellow]: false,
-        [DfButton.A]: false,
-        [DfButton.B]: false
     }
 
     export enum EnRocker {
@@ -876,50 +927,14 @@ namespace Joystick {
         Press
     }
 
-    export enum EnButtonState {
-        //% blockId="Press" block="Press"
-        Press = 0,
-        //% blockId="Realse" block="Realse"
-        Realse = 1
-    }
+
     export enum EnButtonStateDF {
         Press = 0,
         Release = 1
     }
-    export enum EnButton {
-
-        B1 = 0,
-        B2,
-        B3,
-        B4
-    }
-    //% group="DFrobot"
-    //% color=#383838
-    //% block="button %num| is %value"
-    export function ButtonDF(num: DfButton, value: EnButtonStateDF): boolean {
-        let pin = EnButtonChannels[num];
-        pins.setPull(pin, PinPullMode.PullUp);
-        let currentState = pins.digitalReadPin(pin) == 0;
-
-        // Check for button press or release
-        if (value == EnButtonStateDF.Press && currentState && !buttonStates[num]) {
-            buttonStates[num] = true;
-            return true;
-        } else if (value == EnButtonStateDF.Release && !currentState && buttonStates[num]) {
-            buttonStates[num] = false;
-            return true;
-        }
-        return false;
-    }
-
-    //% color=#383838
-    //% block="joystick is pressed"
-    //% group="DFrobot"
-    export function joypressed(): boolean {
-        pins.setPull(DigitalPin.P8, PinPullMode.PullUp);
-        let read = DigitalPin.P8;
-        return pins.digitalReadPin(read) == 0;
-    }
+   
+    
+   
     //% color=#383838
     //% block="joystick is %pin"
     //% group="DFrobot"
@@ -953,6 +968,15 @@ namespace Joystick {
     }
 
     //---------------------------------------------------
+
+    export enum EnButton {
+
+        B1 = 0,
+        B2,
+        B3,
+        B4
+    }
+
     //% group="GHBit"
     //% blockId=ghBit_Rocker block="rocker|value %value"
     //% weight=96
