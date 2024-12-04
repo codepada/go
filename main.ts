@@ -898,18 +898,92 @@ namespace Joystick {
 
 
 
-    // joystick control
-    export enum Joymove {
-        //% blockId="Nostate" block="stop"
-        Stop,
-        //% block="Up"
-        Up,
-        //% block="Down"
-        Down,
-        //% block="Left"
-        Left,
-        //% block="Right"
-        Right,
+    //---------------------------------------------------
+    //joy move 
+    export enum DfJOY {
+        //% block="left"
+        LEFT,
+        //% block="right"
+        RIGHT,
+        //% block="up"
+        UP,
+        //% block="down"
+        DOWN,
+    }
+
+
+
+    // เก็บสถานะของปุ่มก่อนหน้า
+    let joyStates: { [key: number]: boolean } = {
+        [DfJOY.LEFT]: false,
+        [DfJOY.RIGHT]: false,
+        [DfJOY.UP]: false,
+        [DfJOY.DOWN]: false,
+
+    };
+
+    export enum EnJOYState {
+        //% block="move"
+        Move,
+        //% block="Release"
+        Release
+    }
+
+
+    //% block="joy %state Direction %num|  "
+    //% group="DFrobot"
+    //% color=#383838
+    export function JoyDF(state: EnJOYState, num: DfJOY): boolean {
+        let currentState = pins.analogReadPin(AnalogPin.P1); // อ่านค่าจาก AnalogPin.P1
+
+        if (num == DfJOY.LEFT) {
+            if (state == EnJOYState.Move && currentState < 300) {
+                joyStates[num] = true; // อัปเดตสถานะว่า "กด"
+                return true;
+            } else if (state == EnJOYState.Release && joyStates[num] && currentState >= 300) {
+                joyStates[num] = false; // อัปเดตสถานะว่า "ปล่อย"
+                return true;
+            }
+        } else if (num == DfJOY.RIGHT) {
+            if (state == EnJOYState.Move && currentState > 600) {
+                joyStates[num] = true; // อัปเดตสถานะว่า "กด"
+                return true;
+            } else if (state == EnJOYState.Release && joyStates[num] && currentState <= 600) {
+                joyStates[num] = false; // อัปเดตสถานะว่า "ปล่อย"
+                return true;
+            }
+        }
+
+        let currentStateY = pins.analogReadPin(AnalogPin.P2);
+        if (num == DfJOY.DOWN) {
+            if (state == EnJOYState.Move && currentStateY < 300) {
+                joyStates[num] = true; // อัปเดตสถานะว่า "กด"
+                return true;
+            } else if (state == EnJOYState.Release && joyStates[num] && currentStateY >= 300) {
+                joyStates[num] = false; // อัปเดตสถานะว่า "ปล่อย"
+                return true;
+            }
+        } else if (num == DfJOY.UP) {
+            if (state == EnJOYState.Move && currentStateY > 600) {
+                joyStates[num] = true; // อัปเดตสถานะว่า "กด"
+                return true;
+            } else if (state == EnJOYState.Release && joyStates[num] && currentStateY <= 600) {
+                joyStates[num] = false; // อัปเดตสถานะว่า "ปล่อย"
+                return true;
+            }
+        }
+
+        return false; // ไม่ตรงกับเงื่อนไขใด ๆ
+    }
+
+    //---------------------------------------------------
+
+    export enum EnButton {
+
+        B1 = 0,
+        B2,
+        B3,
+        B4
     }
 
     export enum EnRocker {
@@ -925,56 +999,6 @@ namespace Joystick {
         Right,
         //% blockId="Press" block="Press"
         Press
-    }
-
-
-    export enum EnButtonStateDF {
-        Press = 0,
-        Release = 1
-    }
-   
-    
-   
-    //% color=#383838
-    //% block="joystick is %pin"
-    //% group="DFrobot"
-    export function joystickmove(pin: Joymove): boolean {
-        let x = pins.analogReadPin(AnalogPin.P1);
-        let y = pins.analogReadPin(AnalogPin.P2);
-        let now_state = Joymove.Stop;
-        if (x < 300) {
-
-            now_state = Joymove.Left;
-
-        }
-        else if (x > 600) {
-
-            now_state = Joymove.Right;
-        }
-        else {
-            if (y < 300) {
-                now_state = Joymove.Down;
-            }
-            else if (y > 600) {
-                now_state = Joymove.Up;
-            }
-        }
-
-        if (now_state == pin)
-            return true;
-        else
-            return false;
-
-    }
-
-    //---------------------------------------------------
-
-    export enum EnButton {
-
-        B1 = 0,
-        B2,
-        B3,
-        B4
     }
 
     //% group="GHBit"
