@@ -914,7 +914,7 @@ namespace Joystick {
 
 
     // เก็บสถานะของปุ่มก่อนหน้า
-    let joyStates: { [key: number]: boolean } = {
+    export let joyStates: { [key: number]: boolean } = {
         [DfJOY.LEFT]: false,
         [DfJOY.RIGHT]: false,
         [DfJOY.UP]: false,
