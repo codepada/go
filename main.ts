@@ -206,8 +206,8 @@ namespace GigoSensor {
         let reading = pins.digitalReadPin(read);
         return (reading);
     }
-    
-    
+
+
     /**
     * The string used to mark a new line, default is \r\n
     *  Serial Write line
@@ -1098,3 +1098,138 @@ namespace Joystick {
 }
 
 
+
+//% color="#E7734B" icon="\uf14e"
+namespace customCompass {
+
+    let _initialHeading: number = 0; // มุมเริ่มต้นที่ตั้งค่าเมื่อกดปุ่ม (Global variable)
+    let _previousHeading: number = 0; // มุมก่อนหน้าสำหรับคำนวณ delta (Global variable)
+    let _degreesRotated: number = 0; // องศาที่หมุนไปแล้วจากจุดเริ่มต้น (Global variable), ถูกจำกัดช่วง
+    let _errorMargin: number = 10;   // ค่าความคลาดเคลื่อนที่ยอมรับได้ (สามารถปรับได้)
+
+    // ตัวแปรสำหรับตรวจสอบว่าคาลิเบรตไปแล้วหรือยัง
+    let _isCalibrated: boolean = false;
+
+    /**
+     * ตั้งค่าความคลาดเคลื่อนที่ยอมรับได้ (ค่า Default คือ 10 องศา)
+     * @param margin ค่าความคลาดเคลื่อน เช่น 5
+     */
+    //% block="ตั้งค่าความคลาดเคลื่อน |%margin| องศา"
+    //% margin.min=1 margin.max=30 margin.defl=10
+    //% group="ตั้งค่า"
+    export function setErrorMargin(margin: number) {
+        _errorMargin = Math.max(1, margin); // ตรวจสอบให้แน่ใจว่าค่าไม่ติดลบหรือเป็น 0
+    }
+
+    /**
+     * ทำการคาลิเบรตเข็มทิศของ Micro:bit ควรเรียกใช้เพียงครั้งเดียวใน On Start
+     */
+    //% block="เริ่มใช้งานเข็มทิศ"
+    //% group="ตั้งค่า"
+    export function calibrateCompassNow() {
+        if (!_isCalibrated) {
+            input.calibrateCompass();
+            _isCalibrated = true; // ตั้งค่าเป็น true เมื่อคาลิเบรตเสร็จสิ้น
+            basic.pause(500); // ให้เวลาสำหรับการคาลิเบรต
+            basic.clearScreen();
+            basic.showIcon(IconNames.Yes); // Feedback ว่าคาลิเบรตแล้ว
+            basic.pause(200);
+            basic.clearScreen();
+        } else {
+            basic.showIcon(IconNames.Heart); // แสดงว่าคาลิเบรตแล้ว (ถ้าถูกเรียกซ้ำ)
+            basic.pause(200);
+            basic.clearScreen();
+        }
+    }
+
+    /**
+     * ตั้งค่ามุมปัจจุบันของเข็มทิศเป็นจุดเริ่มต้น (0 องศา) สำหรับการวัดการหมุน
+     * **ไม่ทำการคาลิเบรต**
+     */
+    //% block="ตั้งค่ามุมเริ่มต้น"
+    //% group="ตั้งค่า"
+    export function setInitialCompassHeadingNow() {
+        // ไม่มีการตรวจสอบ _isCalibrated หรือการเรียก calibrateCompass() ที่นี่แล้ว
+        // การคาลิเบรตจะถูกจัดการโดยบล็อก calibrateCompassNow() แยกต่างหาก
+
+        _initialHeading = input.compassHeading();
+        _previousHeading = _initialHeading;
+        _degreesRotated = 0; // รีเซ็ตค่าการหมุนเมื่อตั้งค่าเริ่มต้นใหม่
+        basic.showIcon(IconNames.Yes); // Feedback ว่าตั้งค่าแล้ว
+        basic.pause(200);
+        basic.clearScreen();
+    }
+
+    /**
+     * คำนวณและอัปเดตองศาที่หมุนไปแล้ว ควรเรียกใช้ในบล็อก "forever"
+     * **ค่าที่หมุนจะถูกจำกัดให้อยู่ในช่วง -180 ถึง 180 องศา**
+     */
+    //% block="อัปเดตค่าการหมุนเข็มทิศ"
+    //% group="การทำงานหลัก"
+    export function updateCompassRotation() {
+        // หากยังไม่ได้คาลิเบรต ให้หยุดการคำนวณ โดยไม่มีการแสดงผลใดๆ
+        if (!_isCalibrated) {
+            return;
+        }
+
+        let currentHeading = input.compassHeading();
+        let deltaHeading = currentHeading - _previousHeading;
+
+        // จัดการการข้าม 0/360 องศา (หามุมที่สั้นที่สุด)
+        if (deltaHeading > 180) {
+            deltaHeading -= 360;
+        } else if (deltaHeading < -180) {
+            deltaHeading += 360;
+        }
+
+        _degreesRotated += deltaHeading;
+
+        // *** การปรับแก้สำคัญ: จำกัด _degreesRotated ให้อยู่ในช่วง -180 ถึง 180 องศา ***
+        // นี่คือ Logic ที่ทำให้โปรแกรม "สนใจ" แค่การหมุนภายใน 1 รอบ
+        // หากหมุนเกิน 180 องศาในทิศทางใดทิศทางหนึ่ง จะถูกปรับให้เป็นมุมที่เทียบเท่ากันในอีกทิศทาง
+        if (_degreesRotated > 180) {
+            _degreesRotated -= 360; // เช่น หมุนไป 200 องศา (ขวา) จะกลายเป็น -160 องศา (ซ้าย)
+        } else if (_degreesRotated < -180) {
+            _degreesRotated += 360; // เช่น หมุนไป -200 องศา (ซ้าย) จะกลายเป็น 160 องศา (ขวา)
+        }
+
+        _previousHeading = currentHeading;
+    }
+
+    /**
+     * ตรวจสอบว่า Micro:bit หมุนไปถึงมุมที่กำหนดจากจุดเริ่มต้นแล้วหรือยัง
+     * จะตรวจสอบค่าบวกสำหรับหมุนขวา และค่าลบสำหรับหมุนซ้าย
+     * @param targetAngle มุมเป้าหมายที่ต้องการตรวจสอบ (องศา) เช่น 90 หรือ -45
+     */
+    //% block="หมุนไปถึงมุม |%targetAngle| องศา"
+    //% targetAngle.min=-360 targetAngle.max=360 targetAngle.defl=90
+    //% group="ตรวจสอบมุม"
+    //% weight=50
+    export function isRotatedToAngle(targetAngle: number): boolean {
+        let checkValue = _degreesRotated;
+
+        return (checkValue >= (targetAngle - _errorMargin) && checkValue <= (targetAngle + _errorMargin));
+    }
+
+    /**
+     * รับค่าองศาที่หมุนไปแล้วจากจุดเริ่มต้น (ถูกจำกัดในช่วง -180 ถึง 180)
+     */
+    //% block="องศาที่หมุนไปแล้ว"
+    //% group="ตรวจสอบมุม"
+
+    export function getDegreesRotated(): number {
+        return _degreesRotated;
+    }
+
+    /**
+     * รับค่ามุมเริ่มต้นเข็มทิศที่ตั้งค่าไว้
+     */
+    //% block="มุมเริ่มต้นเข็มทิศ"
+    //% group="ตรวจสอบมุม"
+
+    export function getInitialCompassHeading(): number {
+        return _initialHeading;
+    }
+
+
+}
