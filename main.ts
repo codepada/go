@@ -929,7 +929,7 @@ namespace Joystick {
 
     //% block="joy %state Direction %num|  "
     //% group="Joystick:bit"
-    //% color=#383838
+    //% color=#0fbc11
     export function Joyjoybit(state: EnJOYStateJoybit, num: joybitJOY): boolean {
         let currentState = pins.analogReadPin(AnalogPin.P1); // อ่านค่าจาก AnalogPin.P1
 
