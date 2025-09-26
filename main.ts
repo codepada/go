@@ -45,7 +45,7 @@ namespace GigoMQTT {
         basic.pause(4000)
         let config_data = "CONFIG_DATA:" + uniqueId_var + "," + ssid_var + "," + password_var + "," + mqttBroker_var + "," + mqttPort_var;
         serial.writeLine(config_data);
-        basic.showString("Config Sent!");
+        basic.showString("Config Send!");
     }
 
     //% block="on MQTT data received"
