@@ -4,7 +4,7 @@
 
 
 //% color="#E7734B" weight=100 icon="\uf1eb" groups='["Connect", "Broadcast", "Send", "Receive"]'
-namespace MQTT {
+namespace GigoMQTT {
 
     let uniqueId_var = "";
     let ssid_var = "";
