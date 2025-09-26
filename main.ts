@@ -815,7 +815,163 @@ namespace LCD1602 {
 
 //% color=#E7734B icon="\uf11b"
 namespace Joystick {
+    //button ALL
+    export enum JoystickbitButton {
+        //% block="C"
+        C,
+        //% block="D"
+        D,
+        //% block="E"
+        E,
+        //% block="F"
+        F,
+        //% block="buttonA"
+        A,
+        //% block="buttonB"
+        B,
 
+    }
+
+    export let joybitButtonChannels: { [key: number]: DigitalPin } = {
+        [JoystickbitButton.C]: DigitalPin.P12,
+        [JoystickbitButton.D]: DigitalPin.P13,
+        [JoystickbitButton.E]: DigitalPin.P14,
+        [JoystickbitButton.F]: DigitalPin.P15,
+        [JoystickbitButton.A]: DigitalPin.P5,
+        [JoystickbitButton.B]: DigitalPin.P11,
+
+    };
+
+    // เก็บสถานะของปุ่มก่อนหน้า
+    let buttonStatesJoybit: { [key: number]: boolean } = {
+        [JoystickbitButton.C]: false,
+        [JoystickbitButton.D]: false,
+        [JoystickbitButton.E]: false,
+        [JoystickbitButton.F]: false,
+        [JoystickbitButton.A]: false,
+        [JoystickbitButton.B]: false,
+    };
+
+    export enum joybitButtonState {
+        //% block="Press"
+        Press,
+        //% block="Release"
+        Release
+    }
+
+    /**
+     * ตรวจสอบสถานะปุ่ม
+     * - `Press`: ทำงานเมื่อปุ่มถูกกดหรือกดค้าง
+     * - `Release`: ทำงานเมื่อปุ่มถูกปล่อย
+     */
+    //% block="button %num| is %state"
+    //% group="Joystick:bit"
+    //% color=#0fbc11
+    export function Buttonjoybit(num: JoystickbitButton, state: joybitButtonState): boolean {
+        let pin = joybitButtonChannels[num];
+        pins.setPull(pin, PinPullMode.PullUp);
+        let currentState = pins.digitalReadPin(pin) == 0;
+
+        if (state == joybitButtonState.Press) {
+            // ตรวจสอบสถานะ "กดปุ่ม" หรือ "กดค้าง"
+            if (currentState && !buttonStatesJoybit[num]) {
+                buttonStatesJoybit[num] = true; // อัปเดตสถานะเป็นกด
+                return true; // สัญญาณว่ากดปุ่มครั้งแรก
+            } else if (currentState) {
+                return true; // กดค้าง
+            }
+        } else if (state == joybitButtonState.Release) {
+            // ตรวจสอบสถานะ "ปล่อยปุ่ม"
+            if (!currentState && buttonStatesJoybit[num]) {
+                buttonStatesJoybit[num] = false; // อัปเดตสถานะเป็นปล่อย
+                return true; // สัญญาณว่าปล่อยปุ่ม
+            }
+        }
+
+        return false; // ไม่ตรงกับสถานะที่เลือก
+    }
+
+
+
+
+
+    //---------------------------------------------------
+    //joy move 
+    export enum joybitJOY {
+        //% block="Left"
+        LEFT,
+        //% block="Right"
+        RIGHT,
+        //% block="Up"
+        UP,
+        //% block="Down"
+        DOWN,
+    }
+
+
+
+    // เก็บสถานะของปุ่มก่อนหน้า
+    export let joyStatesjoybit: { [key: number]: boolean } = {
+        [joybitJOY.LEFT]: false,
+        [joybitJOY.RIGHT]: false,
+        [joybitJOY.UP]: false,
+        [joybitJOY.DOWN]: false,
+
+    };
+
+    export enum EnJOYStateJoybit {
+        //% block="Move"
+        Move,
+        //% block="Release"
+        Release
+    }
+
+
+    //% block="joy %state Direction %num|  "
+    //% group="Joystick:bit"
+    //% color=#383838
+    export function Joyjoybit(state: EnJOYStateJoybit, num: joybitJOY): boolean {
+        let currentState = pins.analogReadPin(AnalogPin.P1); // อ่านค่าจาก AnalogPin.P1
+
+        if (num == joybitJOY.RIGHT) {
+            if (state == EnJOYStateJoybit.Move && currentState < 300) {
+                joyStatesjoybit[num] = true; // อัปเดตสถานะว่า "กด"
+                return true;
+            } else if (state == EnJOYStateJoybit.Release && joyStatesjoybit[num] && currentState >= 300) {
+                joyStatesjoybit[num] = false; // อัปเดตสถานะว่า "ปล่อย"
+                return true;
+            }
+        } else if (num == joybitJOY.LEFT) {
+            if (state == EnJOYStateJoybit.Move && currentState > 600) {
+                joyStatesjoybit[num] = true; // อัปเดตสถานะว่า "กด"
+                return true;
+            } else if (state == EnJOYStateJoybit.Release && joyStatesjoybit[num] && currentState <= 600) {
+                joyStatesjoybit[num] = false; // อัปเดตสถานะว่า "ปล่อย"
+                return true;
+            }
+        }
+
+        let currentStateY = pins.analogReadPin(AnalogPin.P2);
+        if (num == joybitJOY.DOWN) {
+            if (state == EnJOYStateJoybit.Move && currentStateY < 300) {
+                joyStatesjoybit[num] = true; // อัปเดตสถานะว่า "กด"
+                return true;
+            } else if (state == EnJOYStateJoybit.Release && joyStatesjoybit[num] && currentStateY >= 300) {
+                joyStatesjoybit[num] = false; // อัปเดตสถานะว่า "ปล่อย"
+                return true;
+            }
+        } else if (num == joybitJOY.UP) {
+            if (state == EnJOYStateJoybit.Move && currentStateY > 600) {
+                joyStatesjoybit[num] = true; // อัปเดตสถานะว่า "กด"
+                return true;
+            } else if (state == EnJOYStateJoybit.Release && joyStatesjoybit[num] && currentStateY <= 600) {
+                joyStatesjoybit[num] = false; // อัปเดตสถานะว่า "ปล่อย"
+                return true;
+            }
+        }
+
+        return false; // ไม่ตรงกับเงื่อนไขใด ๆ
+    }
     //button ALL
     export enum DfButton {
         //% block="red"
