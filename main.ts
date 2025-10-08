@@ -2046,7 +2046,7 @@ namespace Joystick {
     export function Joyjoybit(state: EnJOYStateJoybit, num: joybitJOY): boolean {
         let currentState = pins.analogReadPin(AnalogPin.P1); // อ่านค่าจาก AnalogPin.P1
 
-        if (num == joybitJOY.LEFT) {
+        if (num == joybitJOY.RIGHT) {
             if (state == EnJOYStateJoybit.Move && currentState < 300) {
                 joyStatesjoybit[num] = true; // อัปเดตสถานะว่า "กด"
                 return true;
@@ -2054,7 +2054,7 @@ namespace Joystick {
                 joyStatesjoybit[num] = false; // อัปเดตสถานะว่า "ปล่อย"
                 return true;
             }
-        } else if (num == joybitJOY.RIGHT) {
+        } else if (num == joybitJOY.LEFT) {
             if (state == EnJOYStateJoybit.Move && currentState > 600) {
                 joyStatesjoybit[num] = true; // อัปเดตสถานะว่า "กด"
                 return true;
