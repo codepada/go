@@ -307,6 +307,36 @@ namespace GigoWorkshop {
         [GgsonarPort.C]: DigitalPin.P15,
         [GgsonarPort.D]: DigitalPin.P0,
     }
+
+    export enum GgsonarDigitalpin {
+        //% block="P0"
+        P0,
+        //% block="P1"
+        P1,
+        //% block="P2"
+        P2,
+        //% block="P8"
+        P8,
+        //% block="P13"
+        P13,
+        //% block="P14"
+        P14,
+        //% block="P15"
+        P15,
+        //% block="P16"
+        P16,
+    }
+    export let GgsonarOinChanel: { [key: number]: DigitalPin } = {
+        [GgsonarDigitalpin.P0]: DigitalPin.P0,
+        [GgsonarDigitalpin.P1]: DigitalPin.P1,
+        [GgsonarDigitalpin.P2]: DigitalPin.P2,
+        [GgsonarDigitalpin.P8]: DigitalPin.P8,
+        [GgsonarDigitalpin.P13]: DigitalPin.P13,
+        [GgsonarDigitalpin.P14]: DigitalPin.P14,
+        [GgsonarDigitalpin.P15]: DigitalPin.P15,
+        [GgsonarDigitalpin.P16]: DigitalPin.P16,
+        
+    }
     //sonar
     export enum PingUnitgigo {
         //% block="μs"
@@ -345,7 +375,7 @@ namespace GigoWorkshop {
     //% color=#6356b3
     //% blockId=sonar_ping block="trig pin %trig|echo pin %echo|unit %unit"
     //% group="Ultrasonic Sensor"
-    export function ping(trig: DigitalPin, echo: DigitalPin, unit: PingUnitgigo, maxCmDistance = 500): number {
+    export function ping(trig: GgsonarDigitalpin, echo: GgsonarDigitalpin, unit: PingUnitgigo, maxCmDistance = 500): number {
         // send pulse
         pins.setPull(trig, PinPullMode.PullNone);
         pins.digitalWritePin(trig, 0);
