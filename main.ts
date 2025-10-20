@@ -1033,6 +1033,32 @@ namespace GigoMQTT {
         basic.pause(100); // Small pause for serial to be ready
     }
 
+    // ----------------------------------------------------------------
+    // ฟังก์ชันใหม่: ใช้ตำแหน่ง A-D สำหรับกำหนดขา Tx/Rx
+    // ----------------------------------------------------------------
+
+    /**
+     * กำหนดค่าเริ่มต้น UART โดยใช้คู่ขาที่กำหนดไว้ล่วงหน้าตามตำแหน่ง A, B, C, D
+     * @param channel ตำแหน่งของพอร์ตที่ใช้กำหนดขา Tx/Rx
+     */
+    //% block="initialize UART port %channel"
+    //% group="Connect"
+    //% channel.defl=SonarPort4mqtt.A
+    export function initializeUARTByPort(channel: SonarPort4mqtt): void {
+        // ดึงขา Tx (Trig) และ Rx (Echo) ตามตำแหน่งที่เลือก
+        // DigitalPin สามารถถูกส่งผ่านเป็น SerialPin ได้ในบริบทนี้
+        let txPin = GgtrigChanel[channel];
+        let rxPin = GgechoChanel[channel];
+
+        // Initialize UART ด้วยขาที่ดึงมา
+        serial.redirect(
+            txPin as any, // Tx pin (ใช้ as any เพื่อความเข้ากันได้ของ type DigitalPin/SerialPin)
+            rxPin as any, // Rx pin
+            BaudRate.BaudRate115200
+        );
+        basic.pause(100); // หยุดเล็กน้อยเพื่อให้ Serial พร้อมใช้งาน
+    }
+
     //% block="connect"
     //% group="Connect"
     export function connect(): void {
@@ -1071,6 +1097,211 @@ namespace GigoMQTT {
 
 
     }
+
+    function sendToMqtt(key: string, value: number): void {
+
+        // 1. ทำความสะอาดชื่อเซ็นเซอร์ให้เป็น key ที่ใช้ได้ (e.g., "Light Level" -> "light_level")
+        let sensor_name = key.toLowerCase().split(" ").join("_");
+
+        // 2. สร้าง String Payload ภายใน: "key:value" (e.g., "temperature:25")
+        let sensor_data_content = sensor_name + ':' + value;
+
+        // 3. สร้าง JSON สุดท้ายสำหรับการส่ง MQTT
+        // รูปแบบที่ได้คือ: {"deviceId": "...", "data":"temperature:25"}
+        // *ข้อสำคัญ: สังเกตว่าค่าของ 'data' ถูกครอบด้วยเครื่องหมายคำพูด (") ทำให้เป็น String ธรรมดา*
+        let status_json = '{"deviceId": "' + uniqueId_var + '", "data":"' + sensor_data_content + '"}';
+
+        // 4. ส่งข้อมูลออกทาง Serial
+        serial.writeLine(status_json + "\n");
+    }
+
+
+    //% group="Basic Sensors"
+    //% block="Send Temperature (°C) | to MQTT"
+    //% weight=100
+    export function sendTemperature(): void {
+        sendToMqtt("Temperature", input.temperature());
+    }
+
+    //% group="Basic Sensors"
+    //% block="Send Light Level (0-255) | to MQTT"
+    //% weight=99
+    export function sendLightLevel(): void {
+        sendToMqtt("Light Level", input.lightLevel());
+    }
+
+    //% group="Basic Sensors"
+    //% block="Send Sound Level (0-255) | to MQTT"
+    //% weight=98
+    export function sendSoundLevel(): void {
+        sendToMqtt("Sound Level", input.soundLevel());
+    }
+
+    // --------------------------------------------------
+    // --- Group: Movement (Accelerometer/Compass) ---
+    // --------------------------------------------------
+
+    //% group="Movement"
+    //% block="Send Heading (0-359°) | to MQTT"
+    //% weight=80
+    export function sendCompassHeading(): void {
+        sendToMqtt("Heading", input.compassHeading());
+    }
+
+    //% group="Movement"
+    //% block="Send Acceleration X (m-g) | to MQTT"
+    //% weight=79
+    export function sendAccelerationX(): void {
+        sendToMqtt("Acceleration X", input.acceleration(Dimension.X));
+    }
+
+    //% group="Movement"
+    //% block="Send Acceleration Y (m-g) | to MQTT"
+    //% weight=78
+    export function sendAccelerationY(): void {
+        sendToMqtt("Acceleration Y", input.acceleration(Dimension.Y));
+    }
+    //% group="Movement"
+    //% block="Send Acceleration Z (m-g) | to MQTT"
+    //% weight=77
+    export function sendAccelerationZ(): void {
+        sendToMqtt("Acceleration Z", input.acceleration(Dimension.Z));
+    }
+
+    //% group="Movement"
+    //% block="Send Rotation Pitch (°) | to MQTT"
+    //% weight=76
+    export function sendRotationPitch(): void {
+        sendToMqtt("Rotation Pitch", input.rotation(Rotation.Pitch));
+    }
+
+    //% group="Movement"
+    //% block="Send Rotation Roll (°) | to MQTT"
+    //% weight=75
+    export function sendRotationRoll(): void {
+        sendToMqtt("Rotation Roll", input.rotation(Rotation.Roll));
+    }
+
+    //% group="Movement"
+    //% block="Send Magnetic Strength (µT) to MQTT"
+    //% weight=74
+    export function MagneticTotalStrength(): void {
+        // 1. อ่านค่าแรงแม่เหล็กในแต่ละแกน (หน่วยเป็น micro-Tesla, µT)
+        let x = input.magneticForce(Dimension.X);
+        let y = input.magneticForce(Dimension.Y);
+        let z = input.magneticForce(Dimension.Z);
+
+        // 2. คำนวณแรงแม่เหล็กรวม (Total Strength)
+        // โดยใช้สูตร Total Strength = sqrt(X^2 + Y^2 + Z^2)
+        let totalStrength = Math.sqrt(x * x + y * y + z * z);
+        // 3. ปัดเศษค่าให้เป็นจำนวนเต็ม (เช่น 53.04 -> 53)
+        let roundedStrength = Math.round(totalStrength);
+        // 4. ส่งค่าที่คำนวณได้ไปยัง MQTT
+        sendToMqtt("Magnetic_Strength", roundedStrength);
+    }
+
+
+
+
+
+
+
+    export enum SonarPort4mqtt {
+        //% block="A"
+        A,
+        //% block="B"
+        B,
+        //% block="C"
+        C,
+        //% block="D"
+        D,
+    }
+    export let GgtrigChanel: { [key: number]: DigitalPin } = {
+        [SonarPort4mqtt.A]: DigitalPin.P1,
+        [SonarPort4mqtt.B]: DigitalPin.P8,
+        [SonarPort4mqtt.C]: DigitalPin.P14,
+        [SonarPort4mqtt.D]: DigitalPin.P16,
+    }
+    export let GgechoChanel: { [key: number]: DigitalPin } = {
+        [SonarPort4mqtt.A]: DigitalPin.P2,
+        [SonarPort4mqtt.B]: DigitalPin.P13,
+        [SonarPort4mqtt.C]: DigitalPin.P15,
+        [SonarPort4mqtt.D]: DigitalPin.P0,
+    }
+
+
+    export enum PingUnitgigo {
+        //% block="cm"
+        Centimeters,
+        //% block="μs"
+        MicroSeconds,
+        //% block="inches"
+        Inches
+    }
+
+    export function pinggigo(channel: SonarPort4mqtt, unit: PingUnitgigo, maxCmDistance = 500): number {
+        let trig = GgtrigChanel[channel];
+        let echo = GgechoChanel[channel];
+        // send pulse
+        pins.setPull(trig, PinPullMode.PullNone);
+        pins.digitalWritePin(trig, 0);
+        control.waitMicros(2);
+        pins.digitalWritePin(trig, 1);
+        control.waitMicros(10);
+        pins.digitalWritePin(trig, 0);
+
+        // read pulse
+        const d = pins.pulseIn(echo, PulseValue.High, maxCmDistance * 58);
+
+        switch (unit) {
+            case PingUnitgigo.Centimeters: return Math.idiv(d, 58);
+            case PingUnitgigo.Inches: return Math.idiv(d, 148);
+            default: return d;
+        }
+    }
+
+    // --- ฟังก์ชันใหม่สำหรับส่ง MQTT ---
+    //% block="Send Ultrasonic port | %channel | unit %unit | to MQTT"
+    //% group="Basic Sensors"
+    //% unit.defl=PingUnitgigo.Centimeters
+    export function sendSonarMQTT(channel: SonarPort4mqtt, unit: PingUnitgigo): void {
+        // 1. วัดระยะทางและกำหนดหน่วย (เหมือนเดิม)
+        let distance = pinggigo(channel, unit);
+        let unit_name = "";
+        switch (unit) {
+            case PingUnitgigo.Centimeters: unit_name = "cm"; break;
+            case PingUnitgigo.Inches: unit_name = "inches"; break;
+            case PingUnitgigo.MicroSeconds: unit_name = "us"; break;
+            default: unit_name = "unknown"; break;
+        }
+
+        // 2. *** ส่วนที่แก้ไข *** ดึงชื่อพอร์ต (A, B, C, D)
+        let channel_name: string;
+
+        // ใช้ Switch เพื่อ map ค่า Enum เป็น String ที่มนุษย์อ่านได้
+        switch (channel) {
+            case SonarPort4mqtt.A: channel_name = "A"; break;
+            case SonarPort4mqtt.B: channel_name = "B"; break;
+            case SonarPort4mqtt.C: channel_name = "C"; break;
+            case SonarPort4mqtt.D: channel_name = "D"; break;
+            default: channel_name = "Unknown"; break;
+        }
+
+        // 3. สร้างส่วนข้อมูลเซ็นเซอร์ (Non-JSON Format)
+        let sensor_data_content = '';
+        // สร้าง String ในรูปแบบ "distance: [value] [unit]"
+        sensor_data_content += 'distance:' + distance;
+
+        // 4. สร้าง JSON สุดท้ายสำหรับการส่ง MQTT
+        // *** ต้องใส่เครื่องหมายคำพูด (") ครอบ sensor_data_content เพื่อให้เป็น String ธรรมดา ***
+        let status_json = '{"deviceId": "' + uniqueId_var + '", "data":"' + sensor_data_content + '"}';
+        //                                                           ^ เปิด    ^ ปิด
+
+        // 5. ส่งข้อมูลออกทาง Serial
+        serial.writeLine(status_json + "\n");
+    }
+
+
 
     // --- ส่วนโค้ดสำหรับบล็อกที่มีเมนูให้เลือก (Dropdown) ---
     export enum PinChannel {
@@ -1141,9 +1372,93 @@ namespace GigoMQTT {
             }
         }
     }
+
+    export enum PinanalogChannel {
+        //% block="P0"
+        P0,
+        //% block="P1"
+        P1,
+        //% block="P2"
+        P2
+    }
+    let PinanalogChannels: { [key: number]: AnalogPin } = {
+        [PinanalogChannel.P0]: AnalogPin.P0,
+        [PinanalogChannel.P1]: AnalogPin.P1,
+        [PinanalogChannel.P2]: AnalogPin.P2
+
+    }
+    function getPinanalogStringName(pinIndex: PinanalogChannel): string {
+        // ฟังก์ชันนี้จะแปลงดัชนี Enum ให้เป็นชื่อสตริง "P0", "P14" ฯลฯ
+        switch (pinIndex) {
+            case PinanalogChannel.P0: return "0";
+            case PinanalogChannel.P1: return "1";
+            case PinanalogChannel.P2: return "2";
+
+            default: return "";
+        }
+    }
+
+    //% group="I/O (Pins)"
+    //% block="Send Analog Pin %pin | to MQTT"
+    //% weight=61
+    export function sendAnalogPinValue(pin: PinanalogChannel): void { // <-- เปลี่ยนชนิดเป็น PinChannel
+        // 1. แปลง PinChannel เป็น AnalogPin ที่ถูกต้อง (ต้องแน่ใจว่าผู้ใช้เลือก P0, P1, หรือ P2)
+        let actualPin = PinanalogChannels[pin];
+
+        // *คำเตือน*: หากผู้ใช้เลือก P8, P12, ฯลฯ ที่ไม่มีใน PinanalogChannels, actualPin จะเป็น undefined! 
+        // แต่เนื่องจากคุณใช้ fieldEditor=grid คาดหวังว่า UI จะกรองให้เลือกได้เฉพาะ P0, P1, P2
+        // ถ้าอยากให้ปลอดภัยควรมีการตรวจสอบ if (actualPin)
+
+        // 2. อ่านค่าด้วย AnalogPin ที่แปลงแล้ว
+        let value = pins.analogReadPin(actualPin);
+        let pinName = getPinanalogStringName(pin)
+        // 3. ปรับการตั้งชื่อ Key
+        let key = "Analog pin" + pinName;
+
+        sendToMqtt(key, value);
+    }
+
+    function getPinStringName(pinIndex: PinChannel): string {
+        // ฟังก์ชันนี้จะแปลงดัชนี Enum ให้เป็นชื่อสตริง "P0", "P14" ฯลฯ
+        switch (pinIndex) {
+            case PinChannel.P0: return "0";
+            case PinChannel.P1: return "1";
+            case PinChannel.P2: return "2";
+            case PinChannel.P8: return "8";
+            case PinChannel.P12: return "12";
+            case PinChannel.P13: return "13";
+            case PinChannel.P14: return "14";
+            case PinChannel.P15: return "15";
+            case PinChannel.P16: return "16";
+            default: return "";
+        }
+    }
+
+    // --- โค้ดที่แก้ไข ---
+
+    // (ใช้ getPinStringName เหมือนเดิม เพื่อให้ได้ "P15")
+
+    //% group="I/O (Pins)"
+    //% block="Send Digital Pin %pin | to MQTT"
+    //% weight=60 
+    export function sendDigitalPinValue(pin: PinChannel): void {
+        // ... (ขั้นตอน 1 และ 2 เหมือนเดิม)
+        let actualPin = PinChannels[pin];
+        let value = pins.digitalReadPin(actualPin);
+
+        // 3. ดึงชื่อพินที่เป็นสตริง (เช่น "P15")
+        let pinName = getPinStringName(pin);
+
+        // 4. สร้าง Key: พยายามใช้ตัวอักษรใหญ่ในตำแหน่งที่ไม่ถูกแปลง
+        //    *หมายเหตุ: นี่คือการพยายามหาช่องโหว่การจัดรูปแบบของ Extension*
+        let key = "digital" + " Pin" + pinName; // ลองใช้ Pin ตัวใหญ่
+
+        // หรือลองใช้ช่องว่างและตัวใหญ่ แล้วหวังว่าจะมีแค่ช่องว่างที่ถูกแปลง
+        // let key = "digital " + pinName; // จะถูกแปลงเป็น digital_p15
+
+        sendToMqtt(key, value);
+    }
 }
-
-
 
 
 //% color=#E7734B icon="\uf110"
