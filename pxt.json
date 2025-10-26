@@ -1,6 +1,6 @@
 {
     "name": "Pada Education ",
-    "version": "3.1.0",
+    "version": "3.1.1",
     "description": "Blocks provided by Pada Education",
     "license": "MIT",
     "dependencies": {
