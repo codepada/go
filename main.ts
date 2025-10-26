@@ -1065,7 +1065,7 @@ namespace GigoMQTT {
         basic.pause(4000)
         let config_data = "CONFIG_DATA:" + uniqueId_var + "," + ssid_var + "," + password_var + "," + mqttBroker_var + "," + mqttPort_var;
         serial.writeLine(config_data);
-        basic.showString("Config Send!");
+        basic.showString("Config");
     }
 
     //% block="on MQTT data received"
@@ -1080,7 +1080,7 @@ namespace GigoMQTT {
                 onReceivedHandler(processedData);
                 if (processedData === "WIFI_CONNECTED") {
                     basic.showIcon(IconNames.Yes)
-                    basic.showString("WIFI-OK");
+                    
                 }
 
             }
