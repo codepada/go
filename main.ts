@@ -998,7 +998,7 @@ namespace GigoWorkshop {
 
 
 //% color="#E7734B" weight=100 icon="\uf1eb" groups='["Connect", "Broadcast", "Send", "Receive"]'
-namespace GigoMQTT {
+namespace GigoIOT {
 
     let uniqueId_var = "";
     let ssid_var = "";
@@ -1006,6 +1006,9 @@ namespace GigoMQTT {
     let mqttBroker_var = "broker.hivemq.com";
     let mqttPort_var = "1883";
     let onReceivedHandler: (data: string) => void;
+    // เพิ่มตัวแปรสำหรับเก็บ Handler ของบล็อกใหม่
+    let onDataMatchHandler: { [key: string]: () => void } = {};
+
 
     //% block="Set connection info|uniqueId %uniqueId|SSID %ssid|Password %password"
     //% uniqueId.defl="microbit-control"
@@ -1068,7 +1071,7 @@ namespace GigoMQTT {
         basic.showString("Config");
     }
 
-    //% block="on MQTT data received"
+    //% block="Data received"
     //% draggableParameters
     //% group="Receive"
     export function onEsp32DataReceived(handler: (data: string) => void): void {
@@ -1080,11 +1083,102 @@ namespace GigoMQTT {
                 onReceivedHandler(processedData);
                 if (processedData === "WIFI_CONNECTED") {
                     basic.showIcon(IconNames.Yes)
-                    
+
                 }
 
             }
+            // ส่วนเพิ่มเติม: ตรวจสอบข้อมูลที่ได้รับกับ Handler ที่ถูกลงทะเบียนไว้
+            if (onDataMatchHandler[processedData]) {
+                onDataMatchHandler[processedData]();
+            }
         });
+    }
+
+    // ----------------------------------------------------------------
+    // --- ส่วนที่แก้ไข: สร้าง Enum ให้มีค่าเป็นตัวเลข (Number Literal) ---
+    // ----------------------------------------------------------------
+
+    export enum MqttCommand {
+        // ให้ enum มีค่าเป็นตัวเลข 0, 1, 2, ...
+        // แต่ block comment ยังเป็นชื่อเดิม
+        //% block="UP_PRESSED"
+        UpPressed, // 0 
+        //% block="UP_RELEASED"
+        UpReleased, // 1
+        //% block="RIGHT_PRESSED"
+        RightPressed, // 2
+        //% block="RIGHT_RELEASED"
+        RightReleased, // 3
+        //% block="DOWN_PRESSED"
+        DownPressed, // 4
+        //% block="DOWN_RELEASED"
+        DownReleased, // 5
+        //% block="LEFT_PRESSED"
+        LeftPressed, // 6
+        //% block="LEFT_RELEASED"
+        LeftReleased, // 7
+        //% block="H_PRESSED"
+        HPressed, // 8
+        //% block="H_RELEASED"
+        HReleased, // 9
+        //% block="J_PRESSED"
+        JPressed, // 10
+        //% block="J_RELEASED"
+        JReleased, // 11
+        //% block="K_PRESSED"
+        KPressed, // 12
+        //% block="K_RELEASED"
+        KReleased, // 13
+        //% block="L_PRESSED"
+        LPressed, // 14
+        //% block="L_RELEASED"
+        LReleased, // 15
+    }
+    /**
+     * Helper function เพื่อแปลงค่า Enum ตัวเลขกลับไปเป็น String ข้อความ MQTT
+     * @param command ค่า Enum ที่เป็นตัวเลข
+     */
+    export function MqttCommandMapper(command: MqttCommand): string {
+        switch (command) {
+            case MqttCommand.UpPressed: return "UP_PRESSED";
+            case MqttCommand.UpReleased: return "UP_RELEASED";
+            case MqttCommand.RightPressed: return "RIGHT_PRESSED";
+            case MqttCommand.RightReleased: return "RIGHT_RELEASED";
+            case MqttCommand.DownPressed: return "DOWN_PRESSED";
+            case MqttCommand.DownReleased: return "DOWN_RELEASED";
+            case MqttCommand.LeftPressed: return "LEFT_PRESSED";
+            case MqttCommand.LeftReleased: return "LEFT_RELEASED";
+            case MqttCommand.HPressed: return "H_PRESSED";
+            case MqttCommand.HReleased: return "H_RELEASED";
+            case MqttCommand.JPressed: return "J_PRESSED";
+            case MqttCommand.JReleased: return "J_RELEASED";
+            case MqttCommand.KPressed: return "K_PRESSED";
+            case MqttCommand.KReleased: return "K_RELEASED";
+            case MqttCommand.LPressed: return "L_PRESSED";
+            case MqttCommand.LReleased: return "L_RELEASED";
+            default: return "";
+        }
+    }
+
+    // ----------------------------------------------------------------
+    // --- ส่วนที่แก้ไข: onMqttDataIs ใช้ MqttCommandMapper ---
+    // ----------------------------------------------------------------
+
+    //% block="Data is %data"
+    //% draggableParameters
+    //% group="Receive"
+    //% weight=90 
+    export function onMqttDataIs(data: MqttCommand, handler: () => void): void {
+        // 1. แปลงค่า Enum (ตัวเลข) ให้เป็น String ข้อความ MQTT ที่ถูกต้อง
+        const mqttString = MqttCommandMapper(data);
+
+        // 2. เก็บ handler โดยใช้ String ข้อความ MQTT เป็น key
+        onDataMatchHandler[mqttString] = handler;
+
+        // ตรวจสอบและเริ่มต้นการฟังข้อมูล Serial หากยังไม่ได้เริ่ม
+        if (!onReceivedHandler) {
+            onEsp32DataReceived(() => { });
+        }
     }
 
 
@@ -1117,21 +1211,21 @@ namespace GigoMQTT {
 
 
     //% group="Basic Sensors"
-    //% block="Send Temperature (°C) | to MQTT"
+    //% block="Send Temperature (°C)"
     //% weight=100
     export function sendTemperature(): void {
         sendToMqtt("Temperature", input.temperature());
     }
 
     //% group="Basic Sensors"
-    //% block="Send Light Level (0-255) | to MQTT"
+    //% block="Send Light Level (0-255)"
     //% weight=99
     export function sendLightLevel(): void {
         sendToMqtt("Light Level", input.lightLevel());
     }
 
     //% group="Basic Sensors"
-    //% block="Send Sound Level (0-255) | to MQTT"
+    //% block="Send Sound Level (0-255)"
     //% weight=98
     export function sendSoundLevel(): void {
         sendToMqtt("Sound Level", input.soundLevel());
@@ -1142,48 +1236,48 @@ namespace GigoMQTT {
     // --------------------------------------------------
 
     //% group="Movement"
-    //% block="Send Heading (0-359°) | to MQTT"
+    //% block="Send Heading (0-359°)"
     //% weight=80
     export function sendCompassHeading(): void {
         sendToMqtt("Heading", input.compassHeading());
     }
 
     //% group="Movement"
-    //% block="Send Acceleration X (m-g) | to MQTT"
+    //% block="Send Acceleration X (m-g)"
     //% weight=79
     export function sendAccelerationX(): void {
         sendToMqtt("Acceleration X", input.acceleration(Dimension.X));
     }
 
     //% group="Movement"
-    //% block="Send Acceleration Y (m-g) | to MQTT"
+    //% block="Send Acceleration Y (m-g)"
     //% weight=78
     export function sendAccelerationY(): void {
         sendToMqtt("Acceleration Y", input.acceleration(Dimension.Y));
     }
     //% group="Movement"
-    //% block="Send Acceleration Z (m-g) | to MQTT"
+    //% block="Send Acceleration Z (m-g)"
     //% weight=77
     export function sendAccelerationZ(): void {
         sendToMqtt("Acceleration Z", input.acceleration(Dimension.Z));
     }
 
     //% group="Movement"
-    //% block="Send Rotation Pitch (°) | to MQTT"
+    //% block="Send Rotation Pitch (°)"
     //% weight=76
     export function sendRotationPitch(): void {
         sendToMqtt("Rotation Pitch", input.rotation(Rotation.Pitch));
     }
 
     //% group="Movement"
-    //% block="Send Rotation Roll (°) | to MQTT"
+    //% block="Send Rotation Roll (°)"
     //% weight=75
     export function sendRotationRoll(): void {
         sendToMqtt("Rotation Roll", input.rotation(Rotation.Roll));
     }
 
     //% group="Movement"
-    //% block="Send Magnetic Strength (µT) to MQTT"
+    //% block="Send Magnetic Strength (µT)"
     //% weight=74
     export function MagneticTotalStrength(): void {
         // 1. อ่านค่าแรงแม่เหล็กในแต่ละแกน (หน่วยเป็น micro-Tesla, µT)
@@ -1261,7 +1355,7 @@ namespace GigoMQTT {
     }
 
     // --- ฟังก์ชันใหม่สำหรับส่ง MQTT ---
-    //% block="Send Ultrasonic port | %channel | unit %unit | to MQTT"
+    //% block="Send Ultrasonic port | %channel | unit %unit"
     //% group="Basic Sensors"
     //% unit.defl=PingUnitgigo.Centimeters
     export function sendSonarMQTT(channel: SonarPort4mqtt, unit: PingUnitgigo): void {
@@ -1399,7 +1493,7 @@ namespace GigoMQTT {
     }
 
     //% group="I/O (Pins)"
-    //% block="Send Analog Pin %pin | to MQTT"
+    //% block="Send Analog Pin %pin"
     //% weight=61
     export function sendAnalogPinValue(pin: PinanalogChannel): void { // <-- เปลี่ยนชนิดเป็น PinChannel
         // 1. แปลง PinChannel เป็น AnalogPin ที่ถูกต้อง (ต้องแน่ใจว่าผู้ใช้เลือก P0, P1, หรือ P2)
@@ -1439,7 +1533,7 @@ namespace GigoMQTT {
     // (ใช้ getPinStringName เหมือนเดิม เพื่อให้ได้ "P15")
 
     //% group="I/O (Pins)"
-    //% block="Send Digital Pin %pin | to MQTT"
+    //% block="Send Digital Pin %pin"
     //% weight=60 
     export function sendDigitalPinValue(pin: PinChannel): void {
         // ... (ขั้นตอน 1 และ 2 เหมือนเดิม)
@@ -1459,6 +1553,7 @@ namespace GigoMQTT {
         sendToMqtt(key, value);
     }
 }
+
 
 
 //% color=#E7734B icon="\uf110"
