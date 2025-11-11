@@ -335,7 +335,7 @@ namespace GigoWorkshop {
         [GgsonarDigitalpin.P14]: DigitalPin.P14,
         [GgsonarDigitalpin.P15]: DigitalPin.P15,
         [GgsonarDigitalpin.P16]: DigitalPin.P16,
-        
+
     }
     //sonar
     export enum PingUnitgigo {
@@ -2646,7 +2646,7 @@ namespace Joystick {
         let currentState = pins.analogReadPin(AnalogPin.P1); // อ่านค่าจาก AnalogPin.P1
 
         if (num == DfJOY.LEFT) {
-            if (state == EnJOYState.Move && currentState < 300) {
+            if (state == EnJOYState.Move && currentState < 150) {
                 joyStates[num] = true; // อัปเดตสถานะว่า "กด"
                 return true;
             } else if (state == EnJOYState.Release && joyStates[num] && currentState >= 300) {
@@ -2654,7 +2654,7 @@ namespace Joystick {
                 return true;
             }
         } else if (num == DfJOY.RIGHT) {
-            if (state == EnJOYState.Move && currentState > 600) {
+            if (state == EnJOYState.Move && currentState > 850) {
                 joyStates[num] = true; // อัปเดตสถานะว่า "กด"
                 return true;
             } else if (state == EnJOYState.Release && joyStates[num] && currentState <= 600) {
@@ -2665,7 +2665,7 @@ namespace Joystick {
 
         let currentStateY = pins.analogReadPin(AnalogPin.P2);
         if (num == DfJOY.DOWN) {
-            if (state == EnJOYState.Move && currentStateY < 300) {
+            if (state == EnJOYState.Move && currentStateY < 150) {
                 joyStates[num] = true; // อัปเดตสถานะว่า "กด"
                 return true;
             } else if (state == EnJOYState.Release && joyStates[num] && currentStateY >= 300) {
@@ -2673,7 +2673,7 @@ namespace Joystick {
                 return true;
             }
         } else if (num == DfJOY.UP) {
-            if (state == EnJOYState.Move && currentStateY > 600) {
+            if (state == EnJOYState.Move && currentStateY > 850) {
                 joyStates[num] = true; // อัปเดตสถานะว่า "กด"
                 return true;
             } else if (state == EnJOYState.Release && joyStates[num] && currentStateY <= 600) {
