@@ -293,7 +293,7 @@ namespace AILens {
     /**
     * TODO: Waiting for module initialize.
     */
-    //% block="Initialize AI-Lens"
+    //% block="Start AI-Lens"
     //% group="Basic" weight=100
     //% color=#00B1ED
     export function initModule(): void {
