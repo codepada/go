@@ -310,7 +310,7 @@ namespace AILens {
     * TODO: Switch recognition objects.
     * @param fun Function list eg: FuncList.Face
     */
-    //% block="Switch function as %fun"
+    //% block="Mode %fun"
     //% fun.defl=AILens.FuncList.Card
     //% fun.fieldEditor="gridpicker"
     //% fun.fieldOptions.columns=3
