@@ -1,18 +1,18 @@
 
 
-//AI lens
 //% color=#0031AF icon="\uf06e" 
-//% groups=["Basic", "Ball", "Face", "Card", "Color", "Tracking", "Learn"]
+//% groups='["Basic", "Ball", "Face", "Card", "Color", "Tracking", "Learn"]'
 //% block="AI-Lens"
 namespace AILens {
-
     const CameraAdd = 0X14;
     let DataBuff = pins.createBuffer(9);
-
+    /**
+    * Status List of Ball
+    */
     export enum FuncList {
         //% block="Card recognition"
         Card = 2,
-        //% block="Face recognition"
+        //% block="Face recognition" 
         Face = 6,
         //% block="Ball recognition"
         Ball = 7,
@@ -23,7 +23,9 @@ namespace AILens {
         //% block="Learn Object"
         Things = 10
     }
-
+    /**
+    * Status List of Ball
+    */
     export enum Ballstatus {
         //% block="X"
         X = 2,
@@ -31,12 +33,14 @@ namespace AILens {
         Y = 3,
         //% block="Size"
         Size = 4,
-        //% block="Confidence level"
+        //% block="Confidence level "
         Confidence = 6,
         //% block="Ball ID"
         ID = 8
     }
-
+    /**
+    * Status List of Face
+    */
     export enum Facestatus {
         //% block="X"
         X = 2,
@@ -46,12 +50,14 @@ namespace AILens {
         W = 4,
         //% block="H"
         H = 5,
-        //% block="Confidence level"
+        //% block="Confidence level "
         Confidence = 6,
         //% block="Face ID"
         ID = 8
     }
-
+    /**
+    * Status List of Card
+    */
     export enum Cardstatus {
         //% block="X"
         X = 2,
@@ -59,12 +65,14 @@ namespace AILens {
         Y = 3,
         //% block="Size"
         Size = 4,
-        //% block="Confidence level"
+        //% block="Confidence level "
         Confidence = 6,
         //% block="Card ID"
         ID = 8
     }
-
+    /**
+    * Status List of Color
+    */
     export enum Colorstatus {
         //% block="X"
         X = 2,
@@ -72,12 +80,14 @@ namespace AILens {
         Y = 3,
         //% block="Size"
         Size = 4,
-        //% block="Confidence level"
+        //% block="Confidence level "
         Confidence = 6,
         //% block="Color ID"
         ID = 8
     }
-
+    /**
+    * Status List of Color
+    */
     export enum ColorLs {
         //% block="Black"
         black = 4,
@@ -101,19 +111,20 @@ namespace AILens {
         //% block="Len"
         len = 3
     }
-
     export enum LineTrend {
-        //% block="None"
-        none = 0,
         //% block="Left"
-        left = 1,
+        left,
         //% block="Right"
-        right = 2,
+        right,
         //% block="Front"
-        front = 3
+        front,
+        //% block="None"
+        none
     }
-
-    export enum NumberCards {
+    /**
+    * Number Cards List
+    */
+    export enum numberCards {
         //% block="0"
         zero = 1,
         //% block="1"
@@ -135,8 +146,10 @@ namespace AILens {
         //% block="9"
         nine = 10
     }
-
-    export enum LetterCards {
+    /*
+    * Letters Cards List
+    */
+    export enum letterCards {
         //% block="A"
         A = 1,
         //% block="B"
@@ -148,8 +161,10 @@ namespace AILens {
         //% block="E"
         E = 5
     }
-
-    export enum TrafficCards {
+    /*
+    * Traffic Cards List
+    */
+    export enum trafficCards {
         //% block="Forward"
         forward = 18,
         //% block="Back"
@@ -161,8 +176,10 @@ namespace AILens {
         //% block="Turn right"
         turnright = 17
     }
-
-    export enum OtherCards {
+    /*
+    * Other Cards List
+    */
+    export enum otherCards {
         //% block="Mouse"
         mouse = 1,
         //% block="micro:bit"
@@ -194,47 +211,41 @@ namespace AILens {
         //% block="Cup"
         cup = 15
     }
-
-    export enum LearnID {
+    export enum learnID {
         ID1 = 1,
         ID2 = 2,
         ID3 = 3,
         ID4 = 4,
         ID5 = 5
     }
-
-    export enum BallColorList {
+    export enum ballColorList {
         //% block="Red"
         Red = 2,
         //% block="Blue"
         Blue = 1
     }
 
-
-
-
-
+    /**
+    * TODO: Waiting for module initialize.
+    */
     //% block="Start AI-Lens"
-    //% group="Basic" weight=100
+    //% group="Basic" weight=100 
     //% color=#00B1ED
     export function initModule(): void {
-        let ok = false
-
-        for (let i = 0; i < 20; i++) {
-            if (pins.i2cReadNumber(CameraAdd, NumberFormat.Int8LE)) {
-                ok = true
-                break
+        let timeout = input.runningTime()
+        while (!(pins.i2cReadNumber(CameraAdd, NumberFormat.Int8LE))) {
+            if (input.runningTime() - timeout > 30000) {
+                while (true) {
+                    basic.showString("Init AILens Error!")
+                }
             }
-            basic.pause(50)
-        }
-
-        if (!ok) {
-            basic.showIcon(IconNames.No)
         }
     }
-
-    //% block="Mode %fun"
-    //% fun.defl=AILens.FuncList.Card
+    /**
+    * TODO: Switch recognition objects.
+    * @param fun Function list 
+    */
+    //% block="Switch function as %fun"
     //% fun.fieldEditor="gridpicker"
     //% fun.fieldOptions.columns=3
     //% group="Basic" weight=95 
@@ -246,16 +257,20 @@ namespace AILens {
         pins.i2cWriteBuffer(CameraAdd, funcBuff)
     }
 
-
+    /**
+    * TODO: Get the image in a frame
+    */
     //% block="Get one image from AI-Lens"
-    //% group="Basic" weight=90 
+    //% group="Basic" weight=90
     //% color=#00B1ED
     export function cameraImage(): void {
         DataBuff = pins.i2cReadBuffer(CameraAdd, 9)
         basic.pause(30)
     }
 
-
+    /**
+    * TODO: Judge the image contains a ball
+    */
     //% block="Image contains ball(s)"
     //% group="Ball" weight=85 
     //% color=#00B1ED
@@ -265,9 +280,9 @@ namespace AILens {
     //% block="Image contains %ballcolor ball"
     //% group="Ball" weight=84
     //% ballcolor.fieldEditor="gridpicker"
-    //% ballcolor.fieldOptions.columns=2 
+    //% ballcolor.fieldOptions.columns=2
     //% color=#00B1ED
-    export function ballColor(ballcolor: BallColorList): boolean {
+    export function ballColor(ballcolor: ballColorList): boolean {
         if (DataBuff[0] == 7) {
             return ballcolor == DataBuff[1]
         }
@@ -286,7 +301,9 @@ namespace AILens {
             return 0
         }
     }
-
+    /**
+    * TODO: In the image get ball(s)' info
+    */
     //% block="In the image get ball(s)' info: %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
@@ -320,7 +337,9 @@ namespace AILens {
     }
 
 
-
+    /**
+    * TODO: Judge whether there is a face in the picture
+    */
     //% block="Image contains a face"
     //% group="Face" weight=75 
     //% color=#00B1ED
@@ -338,7 +357,10 @@ namespace AILens {
             return 0
         }
     }
-
+    /**
+    * TODO: Judge whether there is a face in the picture
+    * @param status Facestatus
+    */
     //% block="In the image get face(s)' info: %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
@@ -373,52 +395,64 @@ namespace AILens {
             return 0
         }
     }
-
+    /**
+    * TODO: Judge whether there is a digital card in the screen
+    * @param status numberCards
+    */
     //% block="Image contains number card(s): %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
     //% group="Card" weight=65 
     //% color=#00B1ED
-    export function numberCard(status: NumberCards): boolean {
+    export function numberCard(status: numberCards): boolean {
         if (DataBuff[0] == 2) {
             return status == DataBuff[1]
         }
         else
             return false
     }
-
+    /**
+    * TODO: Judge whether there is a letter card in the screen
+    * @param status letterCards
+    */
     //% block="Image contains letter card(s): %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
-    //% group="Card" weight=60 
+    //% group="Card" weight=60
     //% color=#00B1ED
-    export function letterCard(status: LetterCards): boolean {
+    export function letterCard(status: letterCards): boolean {
         if (DataBuff[0] == 4) {
             return status == DataBuff[1]
         }
         else
             return false
     }
-
+    /**
+    * TODO: Judge whether there is a traffic card in the screen
+    * @param status trafficCards
+    */
     //% block="Image contains traffic card(s): %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
     //% group="Card" weight=55 
     //% color=#00B1ED
-    export function trafficCard(status: TrafficCards): boolean {
+    export function trafficCard(status: trafficCards): boolean {
         if (DataBuff[0] == 3) {
             return status == DataBuff[1]
         }
         else
             return false
     }
-
+    /**
+    * TODO: Judge whether there is a other card in the screen
+    * @param status otherCards
+    */
     //% block="Image contains other card(s): %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
     //% group="Card" 
     //% color=#00B1ED
-    export function otherCard(status: OtherCards): boolean {
+    export function otherCard(status: otherCards): boolean {
         if (DataBuff[0] == 3) {
             return status == DataBuff[1]
         }
@@ -436,7 +470,10 @@ namespace AILens {
             return 0
         }
     }
-
+    /**
+    * TODO: Card parameters in the screen
+    * @param status otherCards
+    */
     //% block="In the image get Card(s)' info: %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
@@ -467,7 +504,10 @@ namespace AILens {
         else
             return 0
     }
-
+    /**
+    * TODO: Judge whether there is a color in the screen
+    * @param status ColorLs
+    */
     //% block="Image contains color card(s): %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
@@ -491,7 +531,10 @@ namespace AILens {
             return 0
         }
     }
-
+    /**
+    * TODO: color parameters in the screen
+    * @param status Colorstatus
+    */
     //% block="In the image get color card(s)' info: %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
@@ -523,7 +566,10 @@ namespace AILens {
             return 0
         }
     }
-
+    /**
+    * TODO: line parameters in the screen
+    * @param status Linestatus
+    */
     //% block="In the image get line(s)' info: %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
@@ -549,12 +595,15 @@ namespace AILens {
         else
             return 0
     }
-
+    /**
+    * TODO: line parameters in the screen
+    * @param status Linestatus
+    */
     //% block="Image contains line's direction towards %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=2
     //% group="Tracking"
-    //% weight=34 
+    //% weight=34
     //% color=#00B1ED
     export function lineDirection(status: LineTrend): boolean {
         if (DataBuff[0] == 8) {
@@ -595,19 +644,24 @@ namespace AILens {
         return false
     }
 
-
+    /**
+    * TODO: Learn an object in a picture
+    * @param thingsID Edit a label for the object
+    */
     //% block="Learn an object with: %thingsID"
-    //% thingsID.fieldEditor="gridpicker"
-    //% thingsID.fieldOptions.columns=3
+    //% status.fieldEditor="gridpicker"
+    //% status.fieldOptions.columns=3
     //% group="Learn" weight=20 
     //% color=#00B1ED
-    export function learnObject(thingsID: LearnID): void {
+    export function learnObject(thingsID: learnID): void {
         let thingsBuf = pins.createBuffer(9)
         thingsBuf[0] = 10
         thingsBuf[1] = thingsID
         pins.i2cWriteBuffer(CameraAdd, thingsBuf)
     }
-
+    /**
+    * TODO: Clear Learned Objects
+    */
     //% block="Clear learned objects"
     //% group="Learn" weight=15 
     //% color=#00B1ED
@@ -617,13 +671,15 @@ namespace AILens {
         thingsBuf[1] = 10
         pins.i2cWriteBuffer(CameraAdd, thingsBuf)
     }
-
+    /**
+    * TODO: Judge whether there are any learned objects in the picture
+    */
     //% block="Image contains learned objects: %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
     //% group="Learn" weight=14 
     //% color=#00B1ED
-    export function objectCheck(status: LearnID): boolean {
+    export function objectCheck(status: learnID): boolean {
         if (DataBuff[0] == 10 && status == DataBuff[1]) {
             if (objectConfidence(status) >= 83) {
                 return true
@@ -635,11 +691,13 @@ namespace AILens {
         else
             return false
     }
-
+    /**
+    * TODO: Judge whether there are any learned objects in the picture
+    */
     //% block="In the image get learn object %thingsID Confidence"
     //% group="Learn" weight=10 
     //% color=#00B1ED
-    export function objectConfidence(thingsID: LearnID): number {
+    export function objectConfidence(thingsID: learnID): number {
         if (DataBuff[0] == 10 && DataBuff[2] < 30) {
             if (DataBuff[1] == thingsID) {
                 return 100 - DataBuff[2]
