@@ -1,6 +1,6 @@
 
 
-//% color=#0031AF icon="\uf06e" 
+//% color=#0031AF icon="\uf06e" weight=47
 //% groups='["Basic", "Ball", "Face", "Card", "Color", "Tracking", "Learn"]'
 //% block="AI-Lens"
 namespace AILens {
@@ -713,7 +713,7 @@ namespace AILens {
 
 
 
-//% weight=0 color=#3CB371 icon="\uf135"  groups='["Gigo Motor","Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
+//% weight=50 color=#3CB371 icon="\uf135"  groups='["Gigo Motor","Motor for workshop", "Ultrasonic Sensor", "RGB LED", "Color Sensor"]'
 namespace GigoWorkshop {
 
     //external button for roboticworkshop
@@ -834,65 +834,91 @@ namespace GigoWorkshop {
     I2C(20,19)
     */
     // motor for gigotools kit 
-    export enum GgMotorChannel {
+    export enum WorkshopMotorChannel {
         //% block="A (P2,P1)"
-        A,
+        A = 0,
         //% block="B (P13,P8)"
-        B,
+        B = 1,
         //% block="C (P15,P14)"
-        C,
+        C = 2,
         //% block="D (P0,P16)"
-        D,
+        D = 3,
     }
-    export enum GgMotorShaftDirection {
+    // Legacy alias for old JavaScript/Python projects.
+    export let GgMotorChannel = {
+        A: 0,
+        B: 1,
+        C: 2,
+        D: 3,
+    }
+    export enum WorkshopMotorDirection {
         //% block="Left"
-        LOW,
+        Left = 0,
         //% block="Right"
-        HIGH,
+        Right = 1,
 
     }
-    export let GgmotorSpeedPins: { [key: number]: AnalogPin } = {
-        [GgMotorChannel.A]: AnalogPin.P1,
-        [GgMotorChannel.B]: AnalogPin.P8,
-        [GgMotorChannel.C]: AnalogPin.P14,
-        [GgMotorChannel.D]: AnalogPin.P16,
+    // Legacy alias for old JavaScript/Python projects.
+    export let GgMotorShaftDirection = {
+        LOW: 0,
+        HIGH: 1,
     }
-    export let GgmotorChannels: { [key: number]: DigitalPin } = {
-        [GgMotorChannel.A]: DigitalPin.P2,
-        [GgMotorChannel.B]: DigitalPin.P13,
-        [GgMotorChannel.C]: DigitalPin.P15,
-        [GgMotorChannel.D]: DigitalPin.P0,
+    export let WorkshopMotorSpeedPins: { [key: number]: AnalogPin } = {
+        [WorkshopMotorChannel.A]: AnalogPin.P1,
+        [WorkshopMotorChannel.B]: AnalogPin.P8,
+        [WorkshopMotorChannel.C]: AnalogPin.P14,
+        [WorkshopMotorChannel.D]: AnalogPin.P16,
     }
+    export let WorkshopMotorDirectionPins: { [key: number]: DigitalPin } = {
+        [WorkshopMotorChannel.A]: DigitalPin.P2,
+        [WorkshopMotorChannel.B]: DigitalPin.P13,
+        [WorkshopMotorChannel.C]: DigitalPin.P15,
+        [WorkshopMotorChannel.D]: DigitalPin.P0,
+    }
+    export let GgmotorSpeedPins = WorkshopMotorSpeedPins;
+    export let GgmotorChannels = WorkshopMotorDirectionPins;
 
 
-    export enum ServoNew {
+    export enum WorkshopServoPin {
         //% block="P1"
-        P1,
+        P1 = 0,
         //% block="P2"
-        P2,
+        P2 = 1,
         //% block="P8"
-        P8,
+        P8 = 2,
         //% block="P13"
-        P13,
+        P13 = 3,
         //% block="P14"
-        P14,
+        P14 = 4,
         //% block="P15"
-        P15,
+        P15 = 5,
         //% block="P16"
-        P16,
+        P16 = 6,
         //% block="P0"
-        P0,
+        P0 = 7,
     }
-    export let servoNewchanel: { [key: number]: AnalogPin } = {
-        [ServoNew.P1]: AnalogPin.P1,
-        [ServoNew.P2]: AnalogPin.P2,
-        [ServoNew.P8]: AnalogPin.P8,
-        [ServoNew.P13]: AnalogPin.P13,
-        [ServoNew.P14]: AnalogPin.P14,
-        [ServoNew.P15]: AnalogPin.P15,
-        [ServoNew.P16]: AnalogPin.P16,
-        [ServoNew.P0]: AnalogPin.P0,
+    // Legacy alias for old JavaScript/Python projects.
+    export let ServoNew = {
+        P1: 0,
+        P2: 1,
+        P8: 2,
+        P13: 3,
+        P14: 4,
+        P15: 5,
+        P16: 6,
+        P0: 7,
     }
+    export let WorkshopServoPins: { [key: number]: AnalogPin } = {
+        [WorkshopServoPin.P1]: AnalogPin.P1,
+        [WorkshopServoPin.P2]: AnalogPin.P2,
+        [WorkshopServoPin.P8]: AnalogPin.P8,
+        [WorkshopServoPin.P13]: AnalogPin.P13,
+        [WorkshopServoPin.P14]: AnalogPin.P14,
+        [WorkshopServoPin.P15]: AnalogPin.P15,
+        [WorkshopServoPin.P16]: AnalogPin.P16,
+        [WorkshopServoPin.P0]: AnalogPin.P0,
+    }
+    export let servoNewchanel = WorkshopServoPins;
 
 
 
@@ -901,8 +927,8 @@ namespace GigoWorkshop {
     //% degrees.min=0 degrees.max=180
     //% degrees.defl=90
     //% group="Motor for workshop"
-    export function servo(pin: ServoNew, degrees: number): void {
-        let pinsmini = servoNewchanel[pin];
+    export function servo(pin: WorkshopServoPin, degrees: number): void {
+        let pinsmini = WorkshopServoPins[pin];
         return pins.servoWritePin(pinsmini, degrees);
 
     }
@@ -912,21 +938,21 @@ namespace GigoWorkshop {
     //% speed.defl=100
     //% direction.min=0 direction.max=1
     //% group="Motor for workshop"
-    export function motorControl3(channel: GgMotorChannel, direction: number, speed: number): void {
-        let dirPin = GgmotorChannels[channel];
-        let speedPin = GgmotorSpeedPins[channel];
+    export function motorControl3(channel: WorkshopMotorChannel, direction: number, speed: number): void {
+        let dirPin = WorkshopMotorDirectionPins[channel];
+        let speedPin = WorkshopMotorSpeedPins[channel];
 
         pins.digitalWritePin(dirPin, direction);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 100, 0, 1023));
     }
 
 
-    //% direction.defl=GgMotorShaftDirection.HIGH
+    //% direction.defl=WorkshopMotorDirection.Right
     //% block="stop motor $channel"
     //% group="Motor for workshop"
-    export function motorStop2(channel: GgMotorChannel): void {
-        let dirPin = GgmotorChannels[channel];
-        let speedPin = GgmotorSpeedPins[channel];
+    export function motorStop2(channel: WorkshopMotorChannel): void {
+        let dirPin = WorkshopMotorDirectionPins[channel];
+        let speedPin = WorkshopMotorSpeedPins[channel];
 
         pins.digitalWritePin(dirPin, 0);
         pins.analogWritePin(speedPin, 0);
@@ -935,25 +961,32 @@ namespace GigoWorkshop {
     //% block="motor $channel direction $direction speed $speed" 
     //% speed.min=0 speed.max=100
     //% speed.defl=100
-    //% direction.defl=GgMotorShaftDirection.HIGH
+    //% direction.defl=WorkshopMotorDirection.Right
     //% group="Motor for workshop"
-    export function motorControl4(channel: GgMotorChannel, direction: GgMotorShaftDirection, speed: number): void {
-        let dirPin = GgmotorChannels[channel];
-        let speedPin = GgmotorSpeedPins[channel];
+    export function motorControl4(channel: WorkshopMotorChannel, direction: WorkshopMotorDirection, speed: number): void {
+        let dirPin = WorkshopMotorDirectionPins[channel];
+        let speedPin = WorkshopMotorSpeedPins[channel];
 
         pins.digitalWritePin(dirPin, direction);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 100, 0, 1023));
     }
 
-    export enum GgMotorChannelwork {
+    export enum WorkshopMotorPort {
         //% block="A"
-        A,
+        A = 0,
         //% block="B"
-        B,
+        B = 1,
         //% block="C"
-        C,
+        C = 2,
         //% block="D"
-        D,
+        D = 3,
+    }
+    // Legacy alias for old JavaScript/Python projects.
+    export let GgMotorChannelwork = {
+        A: 0,
+        B: 1,
+        C: 2,
+        D: 3,
     }
 
     //% color=#6356b3
@@ -961,9 +994,9 @@ namespace GigoWorkshop {
     //% speed.min=0 speed.max=100
     //% speed.defl=100
     //% group="Motor for workshop"
-    export function motorControl5(channel: GgMotorChannelwork, direction: number, speed: number): void {
-        let dirPin = GgmotorChannels[channel];
-        let speedPin = GgmotorSpeedPins[channel];
+    export function motorControl5(channel: WorkshopMotorPort, direction: number, speed: number): void {
+        let dirPin = WorkshopMotorDirectionPins[channel];
+        let speedPin = WorkshopMotorSpeedPins[channel];
 
         pins.digitalWritePin(dirPin, direction);
         pins.analogWritePin(speedPin, pins.map(speed, 0, 100, 0, 1023));
@@ -1118,32 +1151,40 @@ namespace GigoWorkshop {
     //----------------------------------
 
 
-    export enum LEDChannelWS {
+    export enum WorkshopLedChannel {
         //% block="A (P2)"
-        A,
+        A = 0,
         //% block="B (P13)"
-        B,
+        B = 1,
         //% block="C (P15)"
-        C,
+        C = 2,
         //% block="D (P0)"
-        D,
+        D = 3,
     }
-    export let LEDChannelsWS: { [key: number]: DigitalPin } = {
-        [LEDChannelWS.A]: DigitalPin.P2,
-        [LEDChannelWS.B]: DigitalPin.P13,
-        [LEDChannelWS.C]: DigitalPin.P15,
-        [LEDChannelWS.D]: DigitalPin.P0,
+    // Legacy alias for old JavaScript/Python projects.
+    export let LEDChannelWS = {
+        A: 0,
+        B: 1,
+        C: 2,
+        D: 3,
+    }
+    export let WorkshopLedPins: { [key: number]: DigitalPin } = {
+        [WorkshopLedChannel.A]: DigitalPin.P2,
+        [WorkshopLedChannel.B]: DigitalPin.P13,
+        [WorkshopLedChannel.C]: DigitalPin.P15,
+        [WorkshopLedChannel.D]: DigitalPin.P0,
 
     }
+    export let LEDChannelsWS = WorkshopLedPins;
 
     //----------------------------------
     //% color=#FACB09
-    //% block="led $leds status $status"
+    //% block="workshop led $leds status $status"
     //% status.min=0 status.max=1
-    //% leds.defl=LEDChannelWS.D
+    //% leds.defl=WorkshopLedChannel.D
     //% group="Led"
-    export function ledtest(leds: LEDChannelWS, status: number): void {
-        let ledg = LEDChannelsWS[leds];
+    export function workshopLedWrite(leds: WorkshopLedChannel, status: number): void {
+        let ledg = WorkshopLedPins[leds];
         pins.digitalWritePin(ledg, status);
 
     }
@@ -1152,19 +1193,19 @@ namespace GigoWorkshop {
 
     //% color=#FACB09
     //toggle led
-    //% block="led %pin $ledstate"
+    //% block="workshop led %pin $ledstate"
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
-    //% pin.defl=LEDChannelWS.D
+    //% pin.defl=WorkshopLedChannel.D
     //% group="Led"
-    export function ledBrightness(pin: LEDChannelWS, ledstate: boolean): void {
+    export function workshopLed(pin: WorkshopLedChannel, ledstate: boolean): void {
         if (ledstate) {
-            let pinled = LEDChannelsWS[pin];
+            let pinled = WorkshopLedPins[pin];
             pins.digitalWritePin(pinled, 1);
 
         }
         else {
-            let pinled = LEDChannelsWS[pin];
+            let pinled = WorkshopLedPins[pin];
             pins.digitalWritePin(pinled, 0);
 
         }
@@ -1710,7 +1751,7 @@ namespace GigoWorkshop {
 }
 
 
-//% color="#E7734B" weight=100 icon="\uf1eb" groups='["Connect", "Broadcast", "Send", "Receive"]'
+//% color="#E7734B" weight=49 icon="\uf1eb" groups='["Connect", "Broadcast", "Send", "Receive"]'
 namespace GigoIOT {
 
     let uniqueId_var = "";
@@ -1759,12 +1800,12 @@ namespace GigoIOT {
      */
     //% block="initialize UART port %channel"
     //% group="Connect"
-    //% channel.defl=SonarPort4mqtt.A
-    export function initializeUARTByPort(channel: SonarPort4mqtt): void {
+    //% channel.defl=IoTPort.A
+    export function initializeUARTByPort(channel: IoTPort): void {
         // ดึงขา Tx (Trig) และ Rx (Echo) ตามตำแหน่งที่เลือก
         // DigitalPin สามารถถูกส่งผ่านเป็น SerialPin ได้ในบริบทนี้
-        let txPin = GgtrigChanel[channel];
-        let rxPin = GgechoChanel[channel];
+        let txPin = IoTPortTxPins[channel];
+        let rxPin = IoTPortRxPins[channel];
 
         // Initialize UART ด้วยขาที่ดึงมา
         serial.redirect(
@@ -1876,7 +1917,7 @@ namespace GigoIOT {
     // ----------------------------------------------------------------
     // --- ส่วนที่แก้ไข: onMqttDataIs ใช้ MqttCommandMapper ---
     // ----------------------------------------------------------------
-
+    /** 
     //% block="Data is %data"
     //% draggableParameters
     //% group="Receive"
@@ -1893,7 +1934,7 @@ namespace GigoIOT {
             onEsp32DataReceived(() => { });
         }
     }
-
+    */
 
     //% block="send data %data "
     //% data.shadowOptions.toString=true
@@ -1947,33 +1988,55 @@ namespace GigoIOT {
     // --------------------------------------------------
     // --- Group: Movement (Accelerometer/Compass) ---
     // --------------------------------------------------
+    /** 
+   //% group="Movement"
+   //% block="Send Heading (0-359°)"
+   //% weight=80
+   export function sendCompassHeading(): void {
+       sendToMqtt("Heading", input.compassHeading());
+   }
 
-    //% group="Movement"
-    //% block="Send Heading (0-359°)"
-    //% weight=80
-    export function sendCompassHeading(): void {
-        sendToMqtt("Heading", input.compassHeading());
-    }
+   //% group="Movement"
+   //% block="Send Acceleration X (m-g)"
+   //% weight=79
+   export function sendAccelerationX(): void {
+       sendToMqtt("Acceleration X", input.acceleration(Dimension.X));
+   }
+   
+   //% group="Movement"
+   //% block="Send Acceleration Y (m-g)"
+   //% weight=78
+   export function sendAccelerationY(): void {
+       sendToMqtt("Acceleration Y", input.acceleration(Dimension.Y));
+   }
+   //% group="Movement"
+   //% block="Send Acceleration Z (m-g)"
+   //% weight=77
+   export function sendAccelerationZ(): void {
+       sendToMqtt("Acceleration Z", input.acceleration(Dimension.Z));
+   }
 
-    //% group="Movement"
-    //% block="Send Acceleration X (m-g)"
-    //% weight=79
-    export function sendAccelerationX(): void {
-        sendToMqtt("Acceleration X", input.acceleration(Dimension.X));
-    }
+   //% group="Movement"
+   //% block="Send Magnetic Strength (µT)"
+   //% weight=74
+   export function MagneticTotalStrength(): void {
+       // 1. อ่านค่าแรงแม่เหล็กในแต่ละแกน (หน่วยเป็น micro-Tesla, µT)
+       let x = input.magneticForce(Dimension.X);
+       let y = input.magneticForce(Dimension.Y);
+       let z = input.magneticForce(Dimension.Z);
 
-    //% group="Movement"
-    //% block="Send Acceleration Y (m-g)"
-    //% weight=78
-    export function sendAccelerationY(): void {
-        sendToMqtt("Acceleration Y", input.acceleration(Dimension.Y));
-    }
-    //% group="Movement"
-    //% block="Send Acceleration Z (m-g)"
-    //% weight=77
-    export function sendAccelerationZ(): void {
-        sendToMqtt("Acceleration Z", input.acceleration(Dimension.Z));
-    }
+       // 2. คำนวณแรงแม่เหล็กรวม (Total Strength)
+       // โดยใช้สูตร Total Strength = sqrt(X^2 + Y^2 + Z^2)
+       let totalStrength = Math.sqrt(x * x + y * y + z * z);
+       // 3. ปัดเศษค่าให้เป็นจำนวนเต็ม (เช่น 53.04 -> 53)
+       let roundedStrength = Math.round(totalStrength);
+       // 4. ส่งค่าที่คำนวณได้ไปยัง MQTT
+       sendToMqtt("Magnetic_Strength", roundedStrength);
+   }
+
+
+   */
+
 
     //% group="Movement"
     //% block="Send Rotation Pitch (°)"
@@ -1989,23 +2052,6 @@ namespace GigoIOT {
         sendToMqtt("Rotation Roll", input.rotation(Rotation.Roll));
     }
 
-    //% group="Movement"
-    //% block="Send Magnetic Strength (µT)"
-    //% weight=74
-    export function MagneticTotalStrength(): void {
-        // 1. อ่านค่าแรงแม่เหล็กในแต่ละแกน (หน่วยเป็น micro-Tesla, µT)
-        let x = input.magneticForce(Dimension.X);
-        let y = input.magneticForce(Dimension.Y);
-        let z = input.magneticForce(Dimension.Z);
-
-        // 2. คำนวณแรงแม่เหล็กรวม (Total Strength)
-        // โดยใช้สูตร Total Strength = sqrt(X^2 + Y^2 + Z^2)
-        let totalStrength = Math.sqrt(x * x + y * y + z * z);
-        // 3. ปัดเศษค่าให้เป็นจำนวนเต็ม (เช่น 53.04 -> 53)
-        let roundedStrength = Math.round(totalStrength);
-        // 4. ส่งค่าที่คำนวณได้ไปยัง MQTT
-        sendToMqtt("Magnetic_Strength", roundedStrength);
-    }
 
 
 
@@ -2013,42 +2059,80 @@ namespace GigoIOT {
 
 
 
-    export enum SonarPort4mqtt {
+
+    export enum IoTPort {
         //% block="A"
-        A,
+        A = 0,
         //% block="B"
-        B,
+        B = 1,
         //% block="C"
-        C,
+        C = 2,
         //% block="D"
-        D,
+        D = 3,
     }
-    export let GgtrigChanel: { [key: number]: DigitalPin } = {
-        [SonarPort4mqtt.A]: DigitalPin.P1,
-        [SonarPort4mqtt.B]: DigitalPin.P8,
-        [SonarPort4mqtt.C]: DigitalPin.P14,
-        [SonarPort4mqtt.D]: DigitalPin.P16,
+    export enum UltrasonicPort {
+        //% block="A"
+        A = 0,
+        //% block="B"
+        B = 1,
+        //% block="C"
+        C = 2,
+        //% block="D"
+        D = 3,
     }
-    export let GgechoChanel: { [key: number]: DigitalPin } = {
-        [SonarPort4mqtt.A]: DigitalPin.P2,
-        [SonarPort4mqtt.B]: DigitalPin.P13,
-        [SonarPort4mqtt.C]: DigitalPin.P15,
-        [SonarPort4mqtt.D]: DigitalPin.P0,
+    export let IoTPortTxPins: { [key: number]: DigitalPin } = {
+        [IoTPort.A]: DigitalPin.P1,
+        [IoTPort.B]: DigitalPin.P8,
+        [IoTPort.C]: DigitalPin.P14,
+        [IoTPort.D]: DigitalPin.P16,
     }
+    export let IoTPortRxPins: { [key: number]: DigitalPin } = {
+        [IoTPort.A]: DigitalPin.P2,
+        [IoTPort.B]: DigitalPin.P13,
+        [IoTPort.C]: DigitalPin.P15,
+        [IoTPort.D]: DigitalPin.P0,
+    }
+    export let UltrasonicTrigPins: { [key: number]: DigitalPin } = {
+        [UltrasonicPort.A]: DigitalPin.P1,
+        [UltrasonicPort.B]: DigitalPin.P8,
+        [UltrasonicPort.C]: DigitalPin.P14,
+        [UltrasonicPort.D]: DigitalPin.P16,
+    }
+    export let UltrasonicEchoPins: { [key: number]: DigitalPin } = {
+        [UltrasonicPort.A]: DigitalPin.P2,
+        [UltrasonicPort.B]: DigitalPin.P13,
+        [UltrasonicPort.C]: DigitalPin.P15,
+        [UltrasonicPort.D]: DigitalPin.P0,
+    }
+    // Legacy aliases for old JavaScript/Python projects.
+    export let SonarPort4mqtt = {
+        A: 0,
+        B: 1,
+        C: 2,
+        D: 3,
+    }
+    export let GgtrigChanel = UltrasonicTrigPins;
+    export let GgechoChanel = UltrasonicEchoPins;
 
 
-    export enum PingUnitgigo {
+    export enum IotDistanceUnit {
         //% block="cm"
-        Centimeters,
+        Centimeters = 0,
         //% block="μs"
-        MicroSeconds,
+        MicroSeconds = 1,
         //% block="inches"
-        Inches
+        Inches = 2
+    }
+    // Legacy alias for old JavaScript/Python projects.
+    export let PingUnitgigo = {
+        Centimeters: 0,
+        MicroSeconds: 1,
+        Inches: 2,
     }
 
-    export function pinggigo(channel: SonarPort4mqtt, unit: PingUnitgigo, maxCmDistance = 500): number {
-        let trig = GgtrigChanel[channel];
-        let echo = GgechoChanel[channel];
+    export function pinggigo(channel: UltrasonicPort, unit: IotDistanceUnit, maxCmDistance = 500): number {
+        let trig = UltrasonicTrigPins[channel];
+        let echo = UltrasonicEchoPins[channel];
         // send pulse
         pins.setPull(trig, PinPullMode.PullNone);
         pins.digitalWritePin(trig, 0);
@@ -2061,8 +2145,8 @@ namespace GigoIOT {
         const d = pins.pulseIn(echo, PulseValue.High, maxCmDistance * 58);
 
         switch (unit) {
-            case PingUnitgigo.Centimeters: return Math.idiv(d, 58);
-            case PingUnitgigo.Inches: return Math.idiv(d, 148);
+            case IotDistanceUnit.Centimeters: return Math.idiv(d, 58);
+            case IotDistanceUnit.Inches: return Math.idiv(d, 148);
             default: return d;
         }
     }
@@ -2070,15 +2154,15 @@ namespace GigoIOT {
     // --- ฟังก์ชันใหม่สำหรับส่ง MQTT ---
     //% block="Send Ultrasonic port | %channel | unit %unit"
     //% group="Basic Sensors"
-    //% unit.defl=PingUnitgigo.Centimeters
-    export function sendSonarMQTT(channel: SonarPort4mqtt, unit: PingUnitgigo): void {
+    //% unit.defl=IotDistanceUnit.Centimeters
+    export function sendSonarMQTT(channel: UltrasonicPort, unit: IotDistanceUnit): void {
         // 1. วัดระยะทางและกำหนดหน่วย (เหมือนเดิม)
         let distance = pinggigo(channel, unit);
         let unit_name = "";
         switch (unit) {
-            case PingUnitgigo.Centimeters: unit_name = "cm"; break;
-            case PingUnitgigo.Inches: unit_name = "inches"; break;
-            case PingUnitgigo.MicroSeconds: unit_name = "us"; break;
+            case IotDistanceUnit.Centimeters: unit_name = "cm"; break;
+            case IotDistanceUnit.Inches: unit_name = "inches"; break;
+            case IotDistanceUnit.MicroSeconds: unit_name = "us"; break;
             default: unit_name = "unknown"; break;
         }
 
@@ -2087,10 +2171,10 @@ namespace GigoIOT {
 
         // ใช้ Switch เพื่อ map ค่า Enum เป็น String ที่มนุษย์อ่านได้
         switch (channel) {
-            case SonarPort4mqtt.A: channel_name = "A"; break;
-            case SonarPort4mqtt.B: channel_name = "B"; break;
-            case SonarPort4mqtt.C: channel_name = "C"; break;
-            case SonarPort4mqtt.D: channel_name = "D"; break;
+            case UltrasonicPort.A: channel_name = "A"; break;
+            case UltrasonicPort.B: channel_name = "B"; break;
+            case UltrasonicPort.C: channel_name = "C"; break;
+            case UltrasonicPort.D: channel_name = "D"; break;
             default: channel_name = "Unknown"; break;
         }
 
@@ -2180,26 +2264,33 @@ namespace GigoIOT {
         }
     }
 
-    export enum PinanalogChannel {
+    export enum PinAnalogChannel {
         //% block="P0"
-        P0,
+        P0 = 0,
         //% block="P1"
-        P1,
+        P1 = 1,
         //% block="P2"
-        P2
+        P2 = 2
     }
-    let PinanalogChannels: { [key: number]: AnalogPin } = {
-        [PinanalogChannel.P0]: AnalogPin.P0,
-        [PinanalogChannel.P1]: AnalogPin.P1,
-        [PinanalogChannel.P2]: AnalogPin.P2
+    // Legacy alias for old JavaScript/Python projects.
+    export let PinanalogChannel = {
+        P0: 0,
+        P1: 1,
+        P2: 2,
+    }
+    let PinAnalogChannels: { [key: number]: AnalogPin } = {
+        [PinAnalogChannel.P0]: AnalogPin.P0,
+        [PinAnalogChannel.P1]: AnalogPin.P1,
+        [PinAnalogChannel.P2]: AnalogPin.P2
 
     }
-    function getPinanalogStringName(pinIndex: PinanalogChannel): string {
+    let PinanalogChannels = PinAnalogChannels;
+    function getPinAnalogStringName(pinIndex: PinAnalogChannel): string {
         // ฟังก์ชันนี้จะแปลงดัชนี Enum ให้เป็นชื่อสตริง "P0", "P14" ฯลฯ
         switch (pinIndex) {
-            case PinanalogChannel.P0: return "0";
-            case PinanalogChannel.P1: return "1";
-            case PinanalogChannel.P2: return "2";
+            case PinAnalogChannel.P0: return "0";
+            case PinAnalogChannel.P1: return "1";
+            case PinAnalogChannel.P2: return "2";
 
             default: return "";
         }
@@ -2208,9 +2299,9 @@ namespace GigoIOT {
     //% group="I/O (Pins)"
     //% block="Send Analog Pin %pin"
     //% weight=61
-    export function sendAnalogPinValue(pin: PinanalogChannel): void { // <-- เปลี่ยนชนิดเป็น PinChannel
+    export function sendAnalogPinValue(pin: PinAnalogChannel): void { // <-- เปลี่ยนชนิดเป็น PinChannel
         // 1. แปลง PinChannel เป็น AnalogPin ที่ถูกต้อง (ต้องแน่ใจว่าผู้ใช้เลือก P0, P1, หรือ P2)
-        let actualPin = PinanalogChannels[pin];
+        let actualPin = PinAnalogChannels[pin];
 
         // *คำเตือน*: หากผู้ใช้เลือก P8, P12, ฯลฯ ที่ไม่มีใน PinanalogChannels, actualPin จะเป็น undefined! 
         // แต่เนื่องจากคุณใช้ fieldEditor=grid คาดหวังว่า UI จะกรองให้เลือกได้เฉพาะ P0, P1, P2
@@ -2218,7 +2309,7 @@ namespace GigoIOT {
 
         // 2. อ่านค่าด้วย AnalogPin ที่แปลงแล้ว
         let value = pins.analogReadPin(actualPin);
-        let pinName = getPinanalogStringName(pin)
+        let pinName = getPinAnalogStringName(pin)
         // 3. ปรับการตั้งชื่อ Key
         let key = "Analog pin" + pinName;
 
@@ -2269,61 +2360,83 @@ namespace GigoIOT {
 
 
 
-//% color=#E7734B icon="\uf110"
+//% color=#E7734B icon="\uf110" weight=40
 namespace GigoLED {
     //----------------------------------
 
     //led old
-    export enum LEDChannel {
+    export enum LedChannel {
         //% block="A (P19)"
-        A,
+        A = 0,
         //% block="B (P14)"
-        B,
+        B = 1,
         //% block="C (P2)"
-        C,
+        C = 2,
         //% block="D (P8)"
-        D,
+        D = 3,
         //% block="E (P15)"
-        E,
+        E = 4,
         //% block="F (P13)"
-        F,
+        F = 5,
         //% block="G (P12)"
-        G,
+        G = 6,
         //% block="H (P1)"
-        H,
+        H = 7,
     }
-    export let LEDChannels: { [key: number]: DigitalPin } = {
-        [LEDChannel.A]: DigitalPin.P19,
-        [LEDChannel.B]: DigitalPin.P14,
-        [LEDChannel.C]: DigitalPin.P2,
-        [LEDChannel.D]: DigitalPin.P8,
-        [LEDChannel.E]: DigitalPin.P15,
-        [LEDChannel.F]: DigitalPin.P13,
-        [LEDChannel.G]: DigitalPin.P12,
-        [LEDChannel.H]: DigitalPin.P1,
+    // Legacy alias for old JavaScript/Python projects.
+    export let LEDChannel = {
+        A: 0,
+        B: 1,
+        C: 2,
+        D: 3,
+        E: 4,
+        F: 5,
+        G: 6,
+        H: 7,
     }
-    export enum LEDShaftonoff {
+    export let LedChannels: { [key: number]: DigitalPin } = {
+        [LedChannel.A]: DigitalPin.P19,
+        [LedChannel.B]: DigitalPin.P14,
+        [LedChannel.C]: DigitalPin.P2,
+        [LedChannel.D]: DigitalPin.P8,
+        [LedChannel.E]: DigitalPin.P15,
+        [LedChannel.F]: DigitalPin.P13,
+        [LedChannel.G]: DigitalPin.P12,
+        [LedChannel.H]: DigitalPin.P1,
+    }
+    export let LEDChannels = LedChannels;
+    export enum LedState {
         //% block="off"
-        LOW,
+        Off = 0,
         //% block="on"
-        HIGH,
+        On = 1,
 
+    }
+    // Legacy alias for old JavaScript/Python projects.
+    export let LEDShaftonoff = {
+        LOW: 0,
+        HIGH: 1,
     }
     //----------------------------------
     //% color=#FACB09
     //% block="led $leds status $status"
     //% status.min=0 status.max=1
-    //% leds.defl=LEDChannel.D
+    //% leds.defl=LedChannel.D
     //% group="Led"
-    export function ledtest(leds: LEDChannel, status: number): void {
-        let ledg = LEDChannels[leds];
+    export function ledWrite(leds: LedChannel, status: number): void {
+        let ledg = LedChannels[leds];
         pins.digitalWritePin(ledg, status);
 
     }
 
 
-    export function led(leds: LEDChannel, status: LEDShaftonoff): void {
-        let ledg = LEDChannels[leds];
+    export function ledtest(leds: number, status: number): void {
+        ledWrite(leds, status);
+    }
+
+
+    export function led(leds: LedChannel, status: LedState): void {
+        let ledg = LedChannels[leds];
         pins.digitalWritePin(ledg, status);
 
     }
@@ -2332,23 +2445,27 @@ namespace GigoLED {
     //% blockId=led block="led %pin $ledstate"
     //% ledstate.shadow="toggleOnOff"
     //% expandableArgumentMode="toggle"
-    //% pin.defl=LEDChannel.D
+    //% pin.defl=LedChannel.D
     //% group="Led"
-    export function ledBrightness(pin: LEDChannel, ledstate: boolean): void {
+    export function ledOnOff(pin: LedChannel, ledstate: boolean): void {
         if (ledstate) {
-            let pinled = LEDChannels[pin];
+            let pinled = LedChannels[pin];
             pins.digitalWritePin(pinled, 1);
 
         }
         else {
-            let pinled = LEDChannels[pin];
+            let pinled = LedChannels[pin];
             pins.digitalWritePin(pinled, 0);
 
         }
     }
+
+    export function ledBrightness(pin: number, ledstate: boolean): void {
+        ledOnOff(pin, ledstate);
+    }
 }
 
-//% color=#E7734B icon="\uf2db"
+//% color=#E7734B icon="\uf2db" weight=44
 namespace GigoSensor {
     //external button
     export enum ButtonChannel {
@@ -2727,29 +2844,36 @@ namespace GigoSensor {
 
 
 
-//% color=#E7734B  icon="\uf48b"
-//% groups="['Motor','Servo','Led', 'Read Sensor','MLX90614 IR thermometer','Logic Sensor','I2C LCD 1602']"
+//% color=#E7734B  icon="\uf48b" weight=45
+//% groups='["Motor","Servo","Led","Read Sensor","MLX90614 IR thermometer","Logic Sensor","I2C LCD 1602"]'
 namespace GigoMotor {
     // motor control
     export enum MotorChannel {
         //% block="E (P15,P16)"
         E,
-        //% block="F (P13,P14)""
+        //% block="F (P13,P14)"
         F,
-        //% block="G (P12,P2)""
+        //% block="G (P12,P2)"
         G,
-        //% block="H (P1,P8)""
+        //% block="H (P1,P8)"
         H,
     }
-    export enum MotorShaftDirection {
+    export enum MotorDirection {
         //% block="Left"
-        LOW,
+        Left = 0,
         //% block="Right"
-        HIGH,
+        Right = 1,
+    }
+    // Legacy alias for old JavaScript/Python projects.
+    export let MotorShaftDirection = {
+        LOW: 0,
+        HIGH: 1,
     }
     export let MotorSDD: { [key: number]: number } = {
         [MotorShaftDirection.LOW]: 0,
         [MotorShaftDirection.HIGH]: 1,
+        [MotorDirection.Left]: 0,
+        [MotorDirection.Right]: 1,
     }
     export let MotorSpeedPins: { [key: number]: AnalogPin } = {
         [MotorChannel.E]: AnalogPin.P16,
@@ -2765,7 +2889,7 @@ namespace GigoMotor {
     }
 
     //% color=#E7734B
-    //% direction.defl=MotorShaftDirection.HIGH
+    //% direction.defl=MotorDirection.Right
     //% block="stop motor $channel"
     //% group="Motor"
     export function motorStop1(channel: MotorChannel): void {
@@ -2795,10 +2919,10 @@ namespace GigoMotor {
     //% block="motor $channel direction $direction speed $speed"
     //% speed.min=0 speed.max=100
     //% speed.defl=100
-    //% direction.defl=motor.MotorShaftDirection.HIGH
+    //% direction.defl=MotorDirection.Right
     //% group="Motor"
 
-    export function motorControl2(channel: MotorChannel, direction: MotorShaftDirection, speed: number): void {
+    export function motorControl2(channel: MotorChannel, direction: MotorDirection, speed: number): void {
         let dirPin = MotorChannels[channel];
         let speedPin = MotorSpeedPins[channel];
         let direct = MotorSDD[direction];
@@ -2807,37 +2931,48 @@ namespace GigoMotor {
     }
 
     //servo180
-    export enum ServoChannel {
+    export enum Servo180Pin {
         //% block="P1"
-        P1,
+        P1 = 0,
         //% block="P8"
-        P8,
+        P8 = 1,
         //% block="P12"
-        P12,
+        P12 = 2,
         //% block="P2"
-        P2,
+        P2 = 3,
         //% block="P13"
-        P13,
+        P13 = 4,
         //% block="P14"
-        P14,
+        P14 = 5,
         //% block="P15"
-        P15,
+        P15 = 6,
         //% block="P16"
-        P16,
+        P16 = 7,
+    }
+    // Legacy alias for old JavaScript/Python projects.
+    export let ServoChannel = {
+        P1: 0,
+        P8: 1,
+        P12: 2,
+        P2: 3,
+        P13: 4,
+        P14: 5,
+        P15: 6,
+        P16: 7,
     }
     export let ServoChannels: { [key: number]: AnalogPin } = {
-        [ServoChannel.P1]: AnalogPin.P1,
-        [ServoChannel.P8]: AnalogPin.P8,
-        [ServoChannel.P12]: AnalogPin.P12,
-        [ServoChannel.P2]: AnalogPin.P2,
-        [ServoChannel.P13]: AnalogPin.P13,
-        [ServoChannel.P14]: AnalogPin.P14,
-        [ServoChannel.P15]: AnalogPin.P15,
-        [ServoChannel.P16]: AnalogPin.P16,
+        [Servo180Pin.P1]: AnalogPin.P1,
+        [Servo180Pin.P8]: AnalogPin.P8,
+        [Servo180Pin.P12]: AnalogPin.P12,
+        [Servo180Pin.P2]: AnalogPin.P2,
+        [Servo180Pin.P13]: AnalogPin.P13,
+        [Servo180Pin.P14]: AnalogPin.P14,
+        [Servo180Pin.P15]: AnalogPin.P15,
+        [Servo180Pin.P16]: AnalogPin.P16,
     }
     //----------------------------------
 
-    export enum ServoconChannel {
+    export enum ContinuousServoChannel {
         //% block="P1"
         P1,
         //% block="P8"
@@ -2854,6 +2989,42 @@ namespace GigoMotor {
         P15,
         //% block="P16"
         P16,
+    }
+    export let ContinuousServoChannels: { [key: number]: AnalogPin } = {
+        [ContinuousServoChannel.P1]: AnalogPin.P1,
+        [ContinuousServoChannel.P8]: AnalogPin.P8,
+        [ContinuousServoChannel.P12]: AnalogPin.P12,
+        [ContinuousServoChannel.P2]: AnalogPin.P2,
+        [ContinuousServoChannel.P13]: AnalogPin.P13,
+        [ContinuousServoChannel.P14]: AnalogPin.P14,
+        [ContinuousServoChannel.P15]: AnalogPin.P15,
+        [ContinuousServoChannel.P16]: AnalogPin.P16,
+    }
+    export enum ContinuousServoDirection {
+        //% block="Right"
+        Right = 0,
+        //% block="Left"
+        Left = 180,
+        //% block="Stop"
+        Stop = 90,
+
+    }
+    export let ContinuousServoDegrees: { [key: number]: number } = {
+        [ContinuousServoDirection.Right]: 0,
+        [ContinuousServoDirection.Left]: 180,
+        [ContinuousServoDirection.Stop]: 90,
+
+    }
+    // Legacy aliases for projects that referenced the old JavaScript/Python names.
+    export let ServoconChannel = {
+        P1: 0,
+        P8: 1,
+        P12: 2,
+        P2: 3,
+        P13: 4,
+        P14: 5,
+        P15: 6,
+        P16: 7,
     }
     export let ServoconChannels: { [key: number]: AnalogPin } = {
         [ServoconChannel.P1]: AnalogPin.P1,
@@ -2865,45 +3036,40 @@ namespace GigoMotor {
         [ServoconChannel.P15]: AnalogPin.P15,
         [ServoconChannel.P16]: AnalogPin.P16,
     }
-    export enum SvconShaft {
-        //% block="Right"
-        Right = 0,
-        //% block="Left"
-        Left = 180,
-        //% block="Stop"
-        Stop = 90,
-
+    export let SvconShaft = {
+        Right: 0,
+        Left: 180,
+        Stop: 90,
     }
     export let DegreesCon: { [key: number]: number } = {
         [SvconShaft.Right]: 0,
         [SvconShaft.Left]: 180,
         [SvconShaft.Stop]: 90,
-
     }
 
     //% color=#E84E19
-    //% block"servo180 $pinSmini degrees $degrees"
+    //% block="servo 180 pin $pinSmini degrees $degrees"
     //% degrees.min=20 degrees.max=160
     //% degrees.defl=90
     //% group="Servo"
-    export function miniServo(pinSmini: ServoChannel, degrees: number): void {
+    export function miniServo(pinSmini: Servo180Pin, degrees: number): void {
         let pinsmini = ServoChannels[pinSmini];
         pins.servoWritePin(pinsmini, degrees);
 
     }
     //% color=#E84E19
-    //% block"continuous Servo $pinSV direction $direction"
-    //% direction.defl=90
+    //% block="continuous servo pin $pinSV direction $direction"
+    //% direction.defl=ContinuousServoDirection.Stop
     //% group="Servo"
-    export function continuousServo(pinSV: ServoChannel, direction: SvconShaft): void {
-        let pinservo = ServoChannels[pinSV];
+    export function continuousServo(pinSV: ContinuousServoChannel, direction: ContinuousServoDirection): void {
+        let pinservo = ContinuousServoChannels[pinSV];
         pins.servoWritePin(pinservo, direction);
 
     }
 }
 
 
-//% color=#E7734B icon="\uf26c"
+//% color=#E7734B icon="\uf26c" weight=44
 namespace LCD1602 {
     //LCD i2c
 
@@ -3079,7 +3245,7 @@ namespace LCD1602 {
 }
 
 
-//% color=#E7734B icon="\uf11b"
+//% color=#E7734B icon="\uf11b" weight=49
 namespace Joystick {
     //button ALL
     export enum JoystickbitButton {
@@ -3521,7 +3687,7 @@ namespace Joystick {
 
 
 
-//% color="#E7734B" icon="\uf14e"
+//% color="#E7734B" icon="\uf14e" weight=39
 namespace customCompass {
 
     let _initialHeading: number = 0; // มุมเริ่มต้นที่ตั้งค่าเมื่อกดปุ่ม (Global variable)
